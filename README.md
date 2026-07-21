@@ -29,7 +29,7 @@
 
 ## 一套跨学科恋爱知识库
 
-项目内置19份核心知识文档和15份实用沟通资料，覆盖：
+项目内置19份核心知识文档和16份实用沟通资料，覆盖：
 
 | 领域 | 主要内容 |
 | --- | --- |
@@ -95,7 +95,7 @@ goutoujunshi/
 ├── agents/openai.yaml         # Codex 展示与默认提示词
 ├── references/
 │   ├── knowledge/             # 19份关系科学与跨学科知识文档
-│   └── practical/             # 15份实用沟通与策略资料
+│   └── practical/             # 16份实用沟通与策略资料
 ├── documentation/             # 架构、流程、安全边界与测试说明
 └── scripts/validate_skill.py  # 项目完整性检查
 ```

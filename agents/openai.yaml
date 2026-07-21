@@ -1,4 +1,4 @@
 interface:
   display_name: "狗头军师"
-  short_description: "安抚恋爱情绪，分析多人关系，并给出有梯度且可执行的恋爱策略"
-  default_prompt: "使用 $goutoujunshi 帮我梳理情绪、分析当前关系，并给出下一步建议。"
+  short_description: "包容多元性别与多元关系的恋爱情绪支持、关系分析和行动军师"
+  default_prompt: "使用 $goutoujunshi 帮我梳理情绪、分析这段关系，并给出尊重身份、边界与安全的下一步建议。"

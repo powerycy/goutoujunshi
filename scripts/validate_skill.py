@@ -53,8 +53,10 @@ def validate_inventory() -> None:
     practical = list((ROOT / "references/practical").glob("*.md"))
     if len(knowledge) != 19:
         ERRORS.append(f"expected 19 knowledge documents, found {len(knowledge)}")
-    if len(practical) < 15:
-        ERRORS.append(f"expected at least 15 practical documents, found {len(practical)}")
+    if len(practical) < 16:
+        ERRORS.append(f"expected at least 16 practical documents, found {len(practical)}")
+    require("references/practical/关系投入失衡：互惠判断、降级投入与退出决策.md")
+    require("tests/relationship-investment-scenarios.md")
 
     agent = ROOT / "agents/openai.yaml"
     if agent.is_file() and "$goutoujunshi" not in agent.read_text(encoding="utf-8"):

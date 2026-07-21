@@ -4,6 +4,8 @@
 
 [![GitHub Stars](https://img.shields.io/github/stars/powerycy/goutoujunshi?style=social)](https://github.com/powerycy/goutoujunshi/stargazers)
 
+![Goutou Junshi — Inclusive relationship copilot](assets/devpost-cover.png)
+
 如果它让你在感情里少一次内耗、多一次清醒，欢迎点亮一个🌟 **Star**。你的支持会让更多正在关系里犹豫的人找到它，也会推动知识库继续更新。
 
 很多恋爱建议只有两个答案：“勇敢去追”或“赶紧分手”。狗头军师试图做得更认真一点：先接住用户的情绪，再把事实、猜测和未知拆开；既分析心动，也计算现实、互惠、风险、机会成本和长期选择权；最后给出可以真正执行的下一步。
@@ -122,3 +124,13 @@ goutoujunshi/
 - 把它发给那个总在深夜替朋友分析感情的人。
 
 本项目提供关系教育与决策支持，不替代心理治疗、医疗诊断、律师意见、警方或紧急服务。
+
+## OpenAI Build Week 2026
+
+狗头军师以 **Apps for Your Life** 赛道参加 OpenAI Build Week。Codex 与 GPT-5.6 同时是项目的开发环境和运行载体：它们用于设计渐进式知识路由、发现多元性别与安全路径缺口、校验 Skill 结构、运行真实场景前向测试，并完成评审材料。
+
+- [English Devpost submission copy](documentation/build-week-submission.md)
+- [Three-minute demo script](documentation/demo-script.md)
+- [Independent forward evaluation](documentation/build-week-evaluation.md)
+- [Judging and testing guide](documentation/judging-and-testing.md)
+- [Cover asset generation record](documentation/asset-prompt.md)

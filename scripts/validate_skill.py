@@ -53,8 +53,8 @@ def validate_inventory() -> None:
     practical = list((ROOT / "references/practical").glob("*.md"))
     if len(knowledge) != 19:
         ERRORS.append(f"expected 19 knowledge documents, found {len(knowledge)}")
-    if len(practical) < 18:
-        ERRORS.append(f"expected at least 18 practical documents, found {len(practical)}")
+    if len(practical) < 19:
+        ERRORS.append(f"expected at least 19 practical documents, found {len(practical)}")
     require("references/practical/关系投入失衡：互惠判断、降级投入与退出决策.md")
     require("references/practical/场景感、松弛感与社交校准：从接话到关系推进.md")
     require("references/practical/实战话术编排器：从一句回复到后续分支.md")

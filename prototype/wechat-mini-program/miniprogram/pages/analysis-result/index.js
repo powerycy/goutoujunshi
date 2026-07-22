@@ -14,5 +14,5 @@ Page({
   },
   goHome() { wx.reLaunch({ url: '/pages/home/index' }) },
   goHistory() { wx.redirectTo({ url: '/pages/history/index' }) },
-  newCase() { wx.redirectTo({ url: '/pages/case-intake/index' }) }
+  newCase() { wx.reLaunch({ url: '/pages/home/index' }) }
 })

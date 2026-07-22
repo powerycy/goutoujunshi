@@ -5,7 +5,7 @@
       <text>狗头军师</text>
     </view>
     <button class="me-icon-button" bindtap="goMe" aria-label="我的">
-      <image src="/assets/person-icon.png" mode="aspectFit" />
+      <image src="/assets/person-solid-icon-v2.png" mode="aspectFit" />
     </button>
   </view>
 

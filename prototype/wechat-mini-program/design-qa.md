@@ -1,54 +1,57 @@
-**Visual Baselines**
+**Visual Truth**
 
-- Home: `design-qa-assets/home-main-final.png`
-- My: `design-qa-assets/me-final.png`
-- User annotations override the source by removing the example and bottom tabs, replacing the large “我的” treatment with username, and collapsing secondary account functions.
+- Product direction: restrained Apple-style WeChat Mini Program with one green accent, quiet white surfaces, compact account controls, and no dashboard-style decoration.
+- Latest annotations override earlier mockups: balance is display-only, recharge is the only purchase entry, history and product suggestions are always visible, and there is no `更多` disclosure.
 
-**Implementation Evidence**
+**Typography System**
 
-- `design-qa-assets/home-final.png`
-- `design-qa-assets/me-final.png`
-- `design-qa-assets/me-expanded-final.png`
-- `design-qa-assets/pricing-final.png`
-- Viewport: WeChat DevTools iPhone 12/13 Pro simulator, 390 x 833 captured pixels at the tool's 74% display scale.
-- Source pixels: home 853 x 1844; my 852 x 1846. Comparison normalized by screen proportions and app-owned content. The standalone simulator's top and bottom tool chrome were excluded from layout judgments.
-- States: home empty; my collapsed; my expanded with claimed gifts; pricing with 6 yuan selected; pricing interaction also tested with 12 yuan selected and purchase records expanded.
+- Display: `40rpx` for the primary screen heading.
+- Title: `32rpx` for account names and section-level headings.
+- Emphasis: `34rpx` for prices and important numeric values.
+- Body: `28rpx` for rows, controls, answers, and input copy.
+- Secondary: `24rpx` for supporting values and explanatory copy.
+- Caption: `22rpx` for hints, counters, labels, and privacy notes.
+- Chevron and control icon sizes are independent of text tokens.
 
-**Full-View Comparison**
+**Current Evidence**
 
-- The implementation retains the source's white field, black/gray typography, single green accent, generous whitespace, centered product statement, and bottom composer.
-- Intentional annotation changes are present: no example copy, no bottom navigation, a compact right-side account icon, username-first profile header, and secondary rows behind one “更多” disclosure.
-- Recharge follows the same visual system: three equal tracks, one selected green state, one primary action, then quiet divided rows.
+- Home: `design-qa-assets/home-mobile-final.png`.
+- Home account-entry correction: `design-qa-assets/home-account-icon-final.png`.
+- Home composer position correction: `design-qa-assets/home-composer-position-final.png`.
+- Account: `design-qa-assets/me-mobile-final.png`.
+- Recharge: `design-qa-assets/pricing-mobile-final.png`.
+- History: `design-qa-assets/history-mobile-final.png`.
+- Reward confirmation: `design-qa-assets/beta-reward-mobile-final.png`.
+- Analysis in progress: `design-qa-assets/analysis-loading-mobile-final.png`.
+- Historical result error state: `design-qa-assets/analysis-result-mobile-final.png`.
+- Removed legacy intake audit: `design-qa-assets/legacy-case-intake-audit.png`.
+- Viewport: WeChat DevTools iPhone 12/13 Pro standalone simulator, 390 x 833 at 74% display scale.
+- A same-viewport comparison was performed against `home-final-v2.png` and `me-expanded-final-v2.png` after the latest annotations were applied.
 
-**Focused Region Comparison**
+**Checks**
 
-- Top navigation: compact branded mark and account icon remain optically balanced without a text button.
-- Composer: two-line prompt, minimum-count status, and stable send target fit without affecting the conversation layout. The standalone tool bar can cover the very bottom of its detached preview; the embedded simulator confirmed the full composer inside the app viewport.
-- Account rows: 48px-equivalent tap rhythm, thin dividers, right-aligned values, and no nested cards.
-- Recharge grid: 1/6/12 yuan options remain equal width; 6 yuan is the default; 12 yuan selection updates the CTA; purchase records expand without overflow.
+- Home keeps one dominant composer, a compact person account icon, a centered product statement, and no overlapping lower toolbar.
+- The home account entry uses a clear system person silhouette, fixed to the content area's `32rpx` right inset and vertically aligned with the brand row; its invisible tap target remains `64rpx`.
+- The composer bottom inset is `40rpx + safe-area-inset-bottom`; it sits close to the Home Indicator without touching or being covered by it.
+- Account balance has no tap binding or chevron. Recharge is the only entry with a green price hint and navigation chevron.
+- History judgment and product suggestions are visible directly. `更多` and its disclosure state have been removed.
+- Delete-account copy and the privacy note are centered and fit their containers.
+- Recharge keeps three stable price tracks: `¥1/10`, `¥6/30`, and `¥12/75`; selection does not shift layout.
+- Home, account, recharge, history, reward, analysis-progress, and historical-result screens consume the shared typography tokens instead of defining page-specific text sizes.
+- The duplicate case-intake page and redirect-only analysis page are no longer registered. New questions always return to the home composer.
+- The analysis-progress page no longer exposes Skill routing or knowledge-file implementation details.
+- The historical-result surface now uses white bands, gray body copy, green section indices, and the same buttons as the rest of the product; the paper folder, stamp, serif type, and yellow treatment are gone.
+- White, neutral gray, and `#18c463`/`#18b85f` remain consistent across the inspected screens.
+- No clipping, overlap, blank stable state, or malformed text was found in the accepted screenshots.
 
-**Comparison History**
+**Verification**
 
-- P1: Home account button rendered as a wide native-button pill. Fixed by constraining the hit target and showing only the small logo icon. Post-fix evidence: `home-final.png`.
-- P1: Product suggestion and customer-service rows rendered narrower than adjacent rows. Fixed by using full-width row interactions. Post-fix evidence: `me-expanded-final.png`.
-- P1: Recharge CTA used native intrinsic width. Fixed with a full-width app-owned action surface. Post-fix evidence: `pricing-final.png`.
-- P1: Native send control rendered as a wide disabled pill. Fixed with a fixed-dimension app-owned send control and explicit disabled state; interaction remains guarded in page logic.
+- WeChat DevTools compile completed successfully under base library `3.17.0`.
+- Automated checks: 16 passed, 0 failed.
+- Remaining console warnings are WeChat tourist-mode limitations; they are not layout or WXSS failures.
 
-**Required Fidelity Surfaces**
+**Evidence Limit**
 
-- Fonts and typography: PingFang SC/system fallbacks, zero letter spacing, compact account hierarchy, and readable 21-34rpx UI sizes are consistent.
-- Spacing and layout rhythm: 32rpx page margins, 92-112rpx rows, 16rpx card radii, and thin dividers are consistent; expanded content remains scrollable.
-- Colors and tokens: white, near-black, neutral gray, and `#18c463`/`#18b85f` are used consistently; error states are quiet neutral surfaces.
-- Image quality and asset fidelity: the generated dog-head raster is reused consistently and remains sharp at all rendered sizes; no CSS or inline-SVG replacement art is used.
-- Copy and content: account, gift, recharge, purchase-record, whole-order refund, and product-suggestion labels match the latest product decisions.
-- Accessibility and interaction: primary controls have practical mobile targets; send has an accessible label/disabled state; disclosure, tier selection, suggestion modal, history, recharge, and purchase-record navigation were exercised.
-
-**Findings**
-
-- No actionable P0, P1, or P2 visual differences remain after the fixes above.
-
-**Follow-up Polish**
-
-- P3: Replace the placeholder “微信用户” only after the user grants WeChat profile access; the page already exposes a compact sync affordance.
+- The clean simulator session had no delivered historical record, so the historical-result error state was captured directly. Delivered, blocked, and failed layouts share the audited result shell and evidence-section component, but realistic long-answer wrapping still needs a delivered fixture before release-candidate sign-off.
 
 final result: passed

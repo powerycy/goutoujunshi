@@ -10,25 +10,25 @@
   min-height: 112rpx;
   border-bottom: 2rpx solid #eeeeee;
   color: #444;
-  font-size: 29rpx;
+  font-size: var(--type-body);
 }
 
 .balance-value {
   color: #3f3f3f;
-  font-size: 42rpx;
+  font-size: var(--type-emphasis);
   font-weight: 750;
   line-height: 1;
 }
 
 .balance-unit {
   color: #7d7d7d;
-  font-size: 23rpx;
+  font-size: var(--type-caption);
 }
 
 .section-label {
   margin: 40rpx 0 18rpx;
   color: #777;
-  font-size: 24rpx;
+  font-size: var(--type-caption);
 }
 
 .package-grid {
@@ -51,7 +51,7 @@
 .package-label {
   height: 32rpx;
   color: #8a8a8a;
-  font-size: 19rpx;
+  font-size: var(--type-caption);
   line-height: 32rpx;
 }
 
@@ -67,19 +67,42 @@
 
 .price {
   color: #3f3f3f;
-  font-size: 38rpx;
+  font-size: var(--type-emphasis);
   font-weight: 750;
 }
 
 .price text {
   margin-right: 4rpx;
-  font-size: 22rpx;
+  font-size: var(--type-caption);
 }
 
 .coin-copy {
   margin-top: 10rpx;
   color: #777;
-  font-size: 21rpx;
+  font-size: var(--type-caption);
+}
+
+.invite-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 92rpx;
+  margin-top: 24rpx;
+  border-bottom: 2rpx solid #eeeeee;
+  color: #555;
+  font-size: var(--type-body);
+}
+
+.invite-field input {
+  width: 300rpx;
+  height: 72rpx;
+  color: #3f3f3f;
+  font-size: var(--type-secondary);
+  text-align: right;
+}
+
+.invite-field input::placeholder {
+  color: #aaa;
 }
 
 .buy-button {
@@ -92,7 +115,7 @@
   border-radius: 16rpx;
   background: #18c463;
   color: #fff;
-  font-size: 28rpx;
+  font-size: var(--type-body);
   font-weight: 700;
   box-sizing: border-box;
 }
@@ -113,13 +136,13 @@
   min-height: 96rpx;
   border-bottom: 2rpx solid #eeeeee;
   color: #444;
-  font-size: 28rpx;
+  font-size: var(--type-body);
 }
 
 .info-value,
 .chevron {
   color: #8f8f8f;
-  font-size: 24rpx;
+  font-size: var(--type-secondary);
 }
 
 .chevron {
@@ -138,20 +161,43 @@
 
 .empty-record {
   color: #777;
-  font-size: 25rpx;
+  font-size: var(--type-secondary);
+}
+
+.purchase-record,
+.purchase-record > view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.purchase-record {
+  min-height: 72rpx;
+  color: #555;
+  font-size: var(--type-secondary);
+}
+
+.purchase-record > view {
+  gap: 18rpx;
+}
+
+.record-date,
+.record-status {
+  color: #999;
+  font-size: var(--type-caption);
 }
 
 .refund-note {
   margin-top: 14rpx;
   color: #a0a0a0;
-  font-size: 21rpx;
+  font-size: var(--type-caption);
   line-height: 1.65;
 }
 
 .pricing-footnote {
   padding: 30rpx 12rpx 0;
   color: #9a9a9a;
-  font-size: 21rpx;
+  font-size: var(--type-caption);
   line-height: 1.6;
   text-align: center;
 }
@@ -162,5 +208,5 @@
   border-radius: 16rpx;
   background: #f6f7f6;
   color: #727272;
-  font-size: 22rpx;
+  font-size: var(--type-caption);
 }

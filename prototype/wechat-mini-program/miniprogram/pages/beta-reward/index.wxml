@@ -2,19 +2,15 @@
   <view class="reward-head page-enter">
     <image class="reward-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
     <view class="title">{{title}}</view>
-    <view class="lead">当前为界面测试，没有唤起微信支付，也没有扣款。</view>
+    <view class="lead">本次为封闭内测，没有唤起微信支付，也没有扣款。</view>
   </view>
 
   <view wx:if="{{reward.eligible}}" class="reward-list">
-    <view class="reward-row">
-      <text>可用狗头</text>
-      <text>{{reward.trialAnalysisRemaining || 0}}</text>
-    </view>
     <view wx:for="{{giftItems}}" wx:key="*this" class="reward-row">
       <text>赠品</text>
       <text>{{item}}</text>
     </view>
-    <view class="reward-note">赠品不可退款，也不折算现金。</view>
+    <view class="reward-note">正式上线后，内测用户首次充值可享充多少送多少。赠品不可退款，也不折算现金。</view>
   </view>
 
   <view wx:else class="reward-list">

@@ -9,9 +9,13 @@
   </view>
 
   <view class="asset-list">
-    <view class="menu-row" bindtap="goPricing">
+    <view class="menu-row balance-row">
       <text>狗头余额</text>
-      <view class="row-side"><text class="balance-count">{{dogheadCount}}</text><text class="chevron">›</text></view>
+      <text class="balance-count">{{dogheadCount}}</text>
+    </view>
+    <view class="menu-row balance-row">
+      <text>赠品</text>
+      <text class="balance-count">{{giftSummary}}</text>
     </view>
     <view class="menu-row" bindtap="goPricing">
       <text>充值</text>
@@ -19,23 +23,17 @@
     </view>
   </view>
 
-  <view class="more-group">
-    <view class="more-trigger" bindtap="toggleMore">
-      <text>更多</text>
-      <view class="row-side"><text>历史 · 建议 · 账户</text><text class="chevron {{moreOpen ? 'open' : ''}}">›</text></view>
+  <view class="utility-list">
+    <view class="menu-row" bindtap="goHistory">
+      <text>历史判断</text>
+      <text class="chevron">›</text>
     </view>
-    <view wx:if="{{moreOpen}}" class="more-list">
-      <view class="menu-row compact-row" bindtap="goHistory">
-        <text>历史判断</text>
-        <text class="chevron">›</text>
-      </view>
-      <view class="menu-row compact-row" bindtap="suggestProduct">
-        <text>产品建议</text>
-        <text class="chevron">›</text>
-      </view>
-      <button class="delete-account" bindtap="deleteAccount">删除账号与历史</button>
-      <view class="quiet-note">请使用代号描述他人。删除账号会清除可识别的历史内容。</view>
+    <view class="menu-row" bindtap="suggestProduct">
+      <text>产品建议</text>
+      <text class="chevron">›</text>
     </view>
+    <button class="delete-account" bindtap="deleteAccount">删除账号与历史</button>
+    <view class="quiet-note">请使用代号描述他人。删除账号会清除可识别的历史内容。</view>
   </view>
 
   <view wx:if="{{error}}" class="danger-note">{{error}}</view>

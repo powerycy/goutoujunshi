@@ -2,6 +2,6 @@
   <view class="stamp">内测</view>
   <view class="copy">
     <view class="title">创始内测官</view>
-    <view class="detail">免费分析 {{benefit.trialAnalysisRemaining}} 次 · 正式版 10 狗头（到账后60天有效）已预留</view>
+    <view class="detail">赠品分析券 {{benefit.trialAnalysisRemaining}} 次 · 正式上线后首次充值充多少送多少</view>
   </view>
 </view>

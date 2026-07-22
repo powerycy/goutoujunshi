@@ -31,6 +31,32 @@ test('充值假门使用当前专业版文案与三档价格',()=>{
   assert.ok(!/humor_v\d|double_coin_v1/.test(source))
 })
 
+test('个人中心只保留一个充值入口且直接展示次要功能',()=>{
+  const source=fs.readFileSync(path.join(root,'pages/me/index.wxml'),'utf8')
+  assert.ok(!/<view class="menu-row" bindtap="goPricing">\s*<text>狗头余额<\/text>/.test(source))
+  assert.ok(!/更多|toggleMore|moreOpen/.test(source))
+  assert.match(source,/<view class="menu-row" bindtap="goHistory">/)
+  assert.match(source,/<view class="menu-row" bindtap="suggestProduct">/)
+})
+
+test('核心页面共用统一字号层级',()=>{
+  const pages=['home','me','pricing','history','beta-reward','analysis-loading','analysis-result']
+  const explicitTextSize=/font-size:\s*(?:[12]\d|3[0-9]|40)rpx/
+  for(const page of pages){
+    const source=fs.readFileSync(path.join(root,`pages/${page}/index.wxss`),'utf8')
+    assert.ok(!explicitTextSize.test(source),`${page} should use shared type tokens`)
+  }
+})
+
+test('当前提问流程不再注册旧问题表单或跳转占位页',()=>{
+  const app=JSON.parse(fs.readFileSync(path.join(root,'app.json'),'utf8'))
+  assert.equal(app.pages[0],'pages/home/index')
+  assert.ok(!app.pages.includes('pages/case-intake/index'))
+  assert.ok(!app.pages.includes('pages/analysis/index'))
+  const result=fs.readFileSync(path.join(root,'pages/analysis-result/index.js'),'utf8')
+  assert.ok(!result.includes('/pages/case-intake/index'))
+})
+
 test('WXML 不使用未注册的 HTML 标签',()=>{
   const forbidden=/<\/?(?:div|span|small|b|strong|p|h[1-6])(?:\s|>)/
   for(const file of files(root).filter((item)=>item.endsWith('.wxml'))) assert.ok(!forbidden.test(fs.readFileSync(file,'utf8')),file)

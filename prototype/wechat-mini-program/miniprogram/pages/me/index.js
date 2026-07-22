@@ -8,11 +8,10 @@ Page({
     error: '',
     loggedIn: false,
     dogheadCount: 0,
+    giftSummary: '无',
     displayName: '微信用户',
     avatarUrl: '',
-    profileHint: '微信账号已登录',
-    giftSummary: '无',
-    moreOpen: false
+    profileHint: '微信账号已登录'
   },
 
   onShow() { this.load() },
@@ -23,17 +22,14 @@ Page({
       const benefit = await Beta.getMine()
       const profile = wx.getStorageSync('goutoujunshi_wechat_profile_v1') || {}
       const loggedIn = Boolean(session && session.token)
-      const gifts = []
-      if (benefit.freeAnalysisEligible && benefit.trialAnalysisTotal) gifts.push(`${benefit.trialAnalysisTotal} 次券`)
-      if (benefit.launchBonusCoins) gifts.push(`${benefit.launchBonusCoins} 个狗头`)
       this.setData({
         benefit,
         loggedIn,
         dogheadCount: benefit.dogheadBalance || 0,
+        giftSummary: benefit.trialAnalysisRemaining > 0 ? `${benefit.trialAnalysisRemaining} 次券` : '无',
         displayName: profile.nickName || '微信用户',
         avatarUrl: profile.avatarUrl || '',
         profileHint: profile.nickName ? '微信账号已登录' : (loggedIn ? '点击同步微信昵称' : '点击微信登录'),
-        giftSummary: gifts.length ? gifts.join(' · ') : '无',
         error: ''
       })
       wx.setNavigationBarTitle({ title: profile.nickName || '微信用户' })
@@ -73,7 +69,6 @@ Page({
     }
   },
 
-  toggleMore() { this.setData({ moreOpen: !this.data.moreOpen }) },
   suggestProduct() {
     wx.showModal({
       title: '产品建议',
@@ -84,10 +79,12 @@ Page({
       success: (result) => {
         const content = String(result.content || '').trim()
         if (!result.confirm || !content) return
-        const suggestions = wx.getStorageSync('goutoujunshi_suggestions_v1') || []
-        suggestions.unshift({ content, createdAt: Date.now() })
-        wx.setStorageSync('goutoujunshi_suggestions_v1', suggestions.slice(0, 20))
-        wx.showToast({ title: '已收到，谢谢', icon: 'success' })
+        try {
+          await Api.post('/v1/suggestions', { content }, 'product_suggestion')
+          wx.showToast({ title: '已收到，谢谢', icon: 'success' })
+        } catch (error) {
+          wx.showToast({ title: '提交失败，请稍后再试', icon: 'none' })
+        }
       }
     })
   },

@@ -17,14 +17,14 @@
 
 .reward-head .title {
   margin-top: 0;
-  font-size: 38rpx;
+  font-size: var(--type-title);
 }
 
 .lead {
   max-width: 560rpx;
   margin-top: 20rpx;
   color: #888;
-  font-size: 25rpx;
+  font-size: var(--type-secondary);
   line-height: 1.65;
 }
 
@@ -40,7 +40,7 @@
   min-height: 104rpx;
   border-bottom: 2rpx solid #eeeeee;
   color: #111;
-  font-size: 29rpx;
+  font-size: var(--type-body);
 }
 
 .reward-row text:last-child {
@@ -51,7 +51,7 @@
 .reward-note {
   padding-top: 18rpx;
   color: #9a9a9a;
-  font-size: 23rpx;
+  font-size: var(--type-caption);
   line-height: 1.6;
 }
 

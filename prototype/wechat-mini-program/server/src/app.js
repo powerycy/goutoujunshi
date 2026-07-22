@@ -15,10 +15,10 @@ function safeProperties(properties){const result={};for(const [key,value] of Obj
 
 function createContext(overrides={}){
   const config=loadConfig(overrides.config||{});const db=createDatabase(overrides.databaseUrl||config.databaseUrl,config)
-  const cryptoService=createCryptoService(config.dataEncryptionKey);const auth=createAuthService(db,config);const beta=createBetaService(db)
+  const cryptoService=createCryptoService(config.dataEncryptionKey);const auth=createAuthService(db,config);const beta=createBetaService(db,config)
   const skillRouter=createSkillRouter(config);const gateway=overrides.gateway||createStepfunGateway(config)
   const analysis=createAnalysisService(db,config,cryptoService,skillRouter,gateway)
-  return{config,db,auth,beta,analysis}
+  return{config,db,auth,beta,analysis,cryptoService}
 }
 
 function createServer(context){
@@ -42,10 +42,17 @@ function createServer(context){
       else if(request.method==='GET'&&path==='/v1/analyses')result=context.analysis.list(user)
       else if(request.method==='GET'&&path.startsWith('/v1/analyses/'))result=context.analysis.get(user,path.split('/').pop())
       else if(request.method==='DELETE'&&path.startsWith('/v1/analyses/'))result=context.analysis.remove(user,path.split('/').pop())
+      else if(request.method==='POST'&&path==='/v1/suggestions'){
+        const content=String(body.content||'').trim()
+        if(!content||content.length>1000){json(response,400,{code:'INVALID_SUGGESTION',message:'建议内容需为 1 到 1000 字'});return}
+        context.db.prepare('INSERT INTO product_suggestions(id,user_id,encrypted_content,created_at) VALUES(?,?,?,?)')
+          .run(`suggestion_${crypto.randomUUID().replaceAll('-','')}`,user.id,context.cryptoService.encrypt(content),new Date().toISOString())
+        result={received:true};status=201
+      }
       else if(request.method==='POST'&&path==='/v1/events/batch'){
         let accepted=0;for(const event of (body.events||[]).slice(0,50)){if(!event.eventId||!event.eventName)continue;context.db.prepare('INSERT OR IGNORE INTO product_events(event_id,user_id,event_name,safe_properties_json,occurred_at) VALUES(?,?,?,?,?)').run(event.eventId,user.id,String(event.eventName).slice(0,60),JSON.stringify(safeProperties(event.properties)),event.occurredAt||new Date().toISOString());accepted++}result={accepted};status=202
       }else if(request.method==='DELETE'&&path==='/v1/me'){
-        context.db.exec('BEGIN IMMEDIATE');try{context.db.prepare("UPDATE analyses SET deleted_at=?,encrypted_question='deleted',encrypted_result=NULL WHERE user_id=?").run(new Date().toISOString(),user.id);context.db.prepare("UPDATE users SET status='deleted',deleted_at=? WHERE id=?").run(new Date().toISOString(),user.id);context.db.exec('COMMIT')}catch(e){context.db.exec('ROLLBACK');throw e}result={deleted:true}
+        context.db.exec('BEGIN IMMEDIATE');try{const deletedAt=new Date().toISOString();context.db.prepare("UPDATE analyses SET deleted_at=?,encrypted_question='deleted',encrypted_result=NULL WHERE user_id=?").run(deletedAt,user.id);context.db.prepare("UPDATE product_suggestions SET encrypted_content='deleted' WHERE user_id=?").run(user.id);context.db.prepare("UPDATE users SET openid_hash=?,status='deleted',deleted_at=? WHERE id=?").run(`deleted_${crypto.randomUUID().replaceAll('-','')}`,deletedAt,user.id);context.db.exec('COMMIT')}catch(e){context.db.exec('ROLLBACK');throw e}result={deleted:true}
       }else{json(response,404,{code:'NOT_FOUND',message:'接口不存在'});return}
       if(isWrite)context.db.prepare('INSERT INTO idempotency_records(user_id,route_key,idempotency_key,status_code,response_json,created_at) VALUES(?,?,?,?,?,?)').run(user.id,routeKey,idem,status,JSON.stringify(result),new Date().toISOString())
       json(response,status,result)
@@ -53,6 +60,6 @@ function createServer(context){
   })
 }
 
-if(require.main===module){const context=createContext();const server=createServer(context);server.listen(context.config.port,'127.0.0.1',()=>console.log(`狗头军师本地 API：http://127.0.0.1:${context.config.port}（${context.config.modelMode}）`))}
+if(require.main===module){const context=createContext();const server=createServer(context);server.listen(context.config.port,context.config.host,()=>console.log(`狗头军师 API：${context.config.host}:${context.config.port}（${context.config.modelMode}）`))}
 
 module.exports={createContext,createServer}

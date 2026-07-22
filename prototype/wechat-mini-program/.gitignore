@@ -3,5 +3,6 @@ project.private.config.json
 server/data/*.sqlite
 server/data/*.sqlite-shm
 server/data/*.sqlite-wal
+server/data/invites-*.txt
 server/coverage/
 .DS_Store

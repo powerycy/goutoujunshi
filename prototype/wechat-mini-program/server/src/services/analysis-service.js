@@ -17,7 +17,7 @@ function createAnalysisService(db, config, cryptoService, skillRouter, modelGate
       }
       db.exec('ROLLBACK')
     } catch(error) { db.exec('ROLLBACK'); throw error }
-    const e=new Error('当前账号没有可用的免费分析次数；正式收费尚未开放。'); e.code='ANALYSIS_ACCESS_REQUIRED'; e.statusCode=403; throw e
+    const e=new Error('当前账号没有可用的分析券；正式充值尚未开放。'); e.code='ANALYSIS_ACCESS_REQUIRED'; e.statusCode=403; throw e
   }
   function release(userId, grant) {
     if(grant==='trial_credit') db.prepare('UPDATE beta_cohort_members SET trial_analysis_reserved=MAX(0,trial_analysis_reserved-1) WHERE user_id=?').run(userId)

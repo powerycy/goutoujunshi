@@ -15,6 +15,12 @@ function createDatabase(filename, config) {
       campaign_key TEXT PRIMARY KEY, quota_total INTEGER NOT NULL CHECK(quota_total >= 0),
       claimed_count INTEGER NOT NULL DEFAULT 0 CHECK(claimed_count >= 0 AND claimed_count <= quota_total), created_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS beta_invite_codes (
+      code_hash TEXT PRIMARY KEY, code_hint TEXT NOT NULL, batch TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'available', created_at TEXT NOT NULL, expires_at TEXT,
+      redeemed_by TEXT REFERENCES users(id), redeemed_at TEXT,
+      CHECK(status IN ('available','redeemed','revoked'))
+    );
     CREATE TABLE IF NOT EXISTS beta_cohort_members (
       user_id TEXT PRIMARY KEY REFERENCES users(id), cohort TEXT NOT NULL, joined_at TEXT NOT NULL,
       selected_package TEXT NOT NULL, trial_analysis_total INTEGER NOT NULL DEFAULT 0,
@@ -43,17 +49,23 @@ function createDatabase(filename, config) {
       event_id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), event_name TEXT NOT NULL,
       safe_properties_json TEXT NOT NULL, occurred_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS product_suggestions (
+      id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id),
+      encrypted_content TEXT NOT NULL, created_at TEXT NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS idempotency_records (
       user_id TEXT NOT NULL, route_key TEXT NOT NULL, idempotency_key TEXT NOT NULL,
       status_code INTEGER NOT NULL, response_json TEXT NOT NULL, created_at TEXT NOT NULL,
       PRIMARY KEY(user_id, route_key, idempotency_key)
     );
   `)
+  const memberColumns = db.prepare('PRAGMA table_info(beta_cohort_members)').all().map((column) => column.name)
+  if (!memberColumns.includes('invite_code_hash')) db.exec('ALTER TABLE beta_cohort_members ADD COLUMN invite_code_hash TEXT')
   const now = new Date().toISOString()
   db.prepare(`INSERT INTO beta_campaigns(campaign_key, quota_total, claimed_count, created_at)
     VALUES('founding_beta_2026', ?, 0, ?) ON CONFLICT(campaign_key) DO NOTHING`).run(config.betaCampaignQuota, now)
-  // 当前没有真实旧用户；将本地开发期的双倍权益口径统一迁移为正式版 10 狗头/60 天活动额度。
-  db.prepare("UPDATE beta_cohort_members SET benefit_version='launch_credit_10_60d_v1' WHERE benefit_version='double_coin_v1'").run()
+  db.prepare("UPDATE beta_campaigns SET quota_total=? WHERE campaign_key='founding_beta_2026' AND claimed_count=0").run(config.betaCampaignQuota)
+  db.prepare("UPDATE beta_cohort_members SET benefit_version='founding_beta_3_analyses_v1' WHERE benefit_version IN ('double_coin_v1','launch_credit_10_60d_v1')").run()
   return db
 }
 

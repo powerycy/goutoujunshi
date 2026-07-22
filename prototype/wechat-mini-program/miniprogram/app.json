@@ -1,14 +1,12 @@
 {
   "pages": [
     "pages/home/index",
-    "pages/case-intake/index",
-    "pages/analysis-loading/index",
-    "pages/analysis-result/index",
     "pages/pricing/index",
     "pages/beta-reward/index",
     "pages/history/index",
     "pages/me/index",
-    "pages/analysis/index"
+    "pages/analysis-loading/index",
+    "pages/analysis-result/index"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

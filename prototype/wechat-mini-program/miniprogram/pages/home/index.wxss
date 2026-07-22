@@ -3,15 +3,17 @@
   flex-direction: column;
   height: 100vh;
   min-height: 0;
-  padding: 28rpx 32rpx calc(24rpx + env(safe-area-inset-bottom));
+  padding: 28rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
 }
 
 .home-nav {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   flex: 0 0 auto;
+  width: 100%;
   height: 72rpx;
+  box-sizing: border-box;
 }
 
 .brand-lockup {
@@ -19,7 +21,7 @@
   align-items: center;
   gap: 12rpx;
   color: #3f3f3f;
-  font-size: 31rpx;
+  font-size: var(--type-body);
   font-weight: 750;
 }
 
@@ -29,13 +31,17 @@
 }
 
 .me-icon-button {
+  position: fixed;
+  top: 32rpx;
+  right: 32rpx;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 58rpx;
-  min-width: 58rpx;
-  max-width: 58rpx;
-  height: 58rpx;
+  width: 64rpx;
+  min-width: 64rpx;
+  max-width: 64rpx;
+  height: 64rpx;
   margin: 0;
   padding: 0;
   border-radius: 50%;
@@ -44,8 +50,8 @@
 }
 
 .me-icon-button image {
-  width: 46rpx;
-  height: 46rpx;
+  width: 42rpx;
+  height: 42rpx;
 }
 
 .conversation {
@@ -74,7 +80,7 @@
 .hero-title {
   max-width: 620rpx;
   color: #3f3f3f;
-  font-size: 44rpx;
+  font-size: var(--type-display);
   font-weight: 760;
   line-height: 1.38;
 }
@@ -94,7 +100,7 @@
   border-radius: 26rpx;
   background: #f4f6f4;
   color: #414141;
-  font-size: 29rpx;
+  font-size: var(--type-body);
   line-height: 1.6;
 }
 
@@ -108,7 +114,7 @@
   gap: 14rpx;
   margin-bottom: 24rpx;
   color: #3f3f3f;
-  font-size: 33rpx;
+  font-size: var(--type-title);
   font-weight: 760;
 }
 
@@ -124,7 +130,7 @@
 .answer-lead {
   margin-bottom: 30rpx;
   color: #3f3f3f;
-  font-size: 31rpx;
+  font-size: var(--type-body);
   font-weight: 680;
   line-height: 1.7;
 }
@@ -137,14 +143,14 @@
 .answer-title {
   margin-bottom: 14rpx;
   color: #18b85f;
-  font-size: 29rpx;
+  font-size: var(--type-body);
   font-weight: 760;
 }
 
 .answer-copy,
 .answer-item {
   color: #4a4a4a;
-  font-size: 28rpx;
+  font-size: var(--type-body);
   line-height: 1.72;
 }
 
@@ -167,7 +173,7 @@
 .answer-note {
   margin-top: 12rpx;
   color: #9a9a9a;
-  font-size: 22rpx;
+  font-size: var(--type-caption);
   line-height: 1.6;
 }
 
@@ -199,7 +205,7 @@
   border-radius: 18rpx;
   background: #f6f7f6;
   color: #727272;
-  font-size: 23rpx;
+  font-size: var(--type-caption);
 }
 
 .api-warning button {
@@ -208,7 +214,7 @@
   border-radius: 999rpx;
   background: transparent;
   color: #18b85f;
-  font-size: 22rpx;
+  font-size: var(--type-caption);
   line-height: 52rpx;
 }
 
@@ -229,7 +235,7 @@
   height: 170rpx;
   min-height: 170rpx;
   color: #444;
-  font-size: 29rpx;
+  font-size: var(--type-body);
   line-height: 1.55;
   box-sizing: border-box;
 }
@@ -249,7 +255,7 @@
 
 .composer-bottom text {
   color: #989898;
-  font-size: 22rpx;
+  font-size: var(--type-caption);
 }
 
 .send-button {

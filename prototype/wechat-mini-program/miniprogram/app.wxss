@@ -1,4 +1,10 @@
 page {
+  --type-display: 40rpx;
+  --type-title: 32rpx;
+  --type-body: 28rpx;
+  --type-secondary: 24rpx;
+  --type-caption: 22rpx;
+  --type-emphasis: 34rpx;
   min-height: 100%;
   background: #ffffff;
   color: #444444;
@@ -31,7 +37,7 @@ button::after {
 
 .eyebrow {
   color: #18c463;
-  font-size: 24rpx;
+  font-size: var(--type-secondary);
   font-weight: 700;
   letter-spacing: 4rpx;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -39,7 +45,7 @@ button::after {
 
 .title {
   margin-top: 18rpx;
-  font-size: 52rpx;
+  font-size: var(--type-display);
   font-weight: 800;
   line-height: 1.18;
   font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
@@ -48,7 +54,7 @@ button::after {
 .subtitle {
   margin-top: 20rpx;
   color: #6f6f6f;
-  font-size: 28rpx;
+  font-size: var(--type-body);
   line-height: 1.7;
 }
 
@@ -61,7 +67,7 @@ button::after {
 
 .meta-label {
   color: #8b7769;
-  font-size: 22rpx;
+  font-size: var(--type-caption);
   letter-spacing: 2rpx;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -73,7 +79,7 @@ button::after {
   justify-content: center;
   height: 92rpx;
   border-radius: 20rpx;
-  font-size: 30rpx;
+  font-size: var(--type-body);
   font-weight: 700;
 }
 
@@ -98,7 +104,7 @@ button::after {
   border-left: 6rpx solid #18c463;
   background: #f2fbf6;
   color: #3e6d50;
-  font-size: 23rpx;
+  font-size: var(--type-caption);
   line-height: 1.65;
 }
 
@@ -109,7 +115,7 @@ button::after {
   border-radius: 20rpx;
   background: #fff6f5;
   color: #8a2d26;
-  font-size: 25rpx;
+  font-size: var(--type-secondary);
   line-height: 1.65;
 }
 
@@ -119,7 +125,7 @@ button::after {
   gap: 36rpx;
   margin-top: 34rpx;
   color: #7b6b60;
-  font-size: 24rpx;
+  font-size: var(--type-secondary);
 }
 
 .page-enter {

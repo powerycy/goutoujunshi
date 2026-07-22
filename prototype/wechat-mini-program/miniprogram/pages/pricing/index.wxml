@@ -13,14 +13,20 @@
       data-package-id="{{item.id}}"
       bindtap="choosePackage"
     >
-      <view class="package-label {{item.id === 'cny_1' ? 'accent' : ''}}">{{item.label}}</view>
+      <view class="package-label {{item.isIntro ? 'accent' : ''}}">{{item.label}}</view>
       <view class="price"><text>¥</text>{{item.price}}</view>
       <view class="coin-copy">{{item.coins}} 个狗头</view>
     </view>
   </view>
 
-  <view class="buy-button {{submitting ? 'disabled' : ''}}" bindtap="submitRecharge">
+  <view wx:if="{{!benefit.eligible}}" class="invite-field">
+    <text>内测邀请码</text>
+    <input maxlength="24" value="{{inviteCode}}" placeholder="请输入邀请码" bindinput="updateInviteCode" />
+  </view>
+
+  <view class="buy-button {{submitting || benefit.eligible ? 'disabled' : ''}}" bindtap="submitRecharge">
     <text wx:if="{{submitting}}">处理中...</text>
+    <text wx:elif="{{benefit.eligible}}">内测赠品已领取</text>
     <text wx:else>充值 ¥{{selectedPrice}}</text>
   </view>
 
@@ -34,11 +40,15 @@
       <text class="chevron {{recordsOpen ? 'open' : ''}}">›</text>
     </view>
     <view wx:if="{{recordsOpen}}" class="records-panel">
-      <view class="empty-record">暂无购买记录</view>
-      <view class="refund-note">未使用的订单可整单申请退款。赠品不计入退款金额。</view>
+      <view wx:if="{{!purchaseRecords.length}}" class="empty-record">暂无购买记录</view>
+      <view wx:for="{{purchaseRecords}}" wx:key="index" class="purchase-record">
+        <view><text>¥{{item.price}}</text><text class="record-date">{{item.date}}</text></view>
+        <text class="record-status">{{item.status}}</text>
+      </view>
+      <view class="refund-note">正式订单未使用时可整单申请退款。赠品不计入退款金额。</view>
     </view>
   </view>
 
-  <view class="pricing-footnote">分析未成功交付，不扣狗头。当前为界面测试，不会唤起微信支付。</view>
+  <view class="pricing-footnote">分析未成功交付，不扣狗头。</view>
   <view wx:if="{{error}}" class="danger-note">{{error}}</view>
 </view>

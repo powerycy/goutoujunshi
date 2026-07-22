@@ -1,0 +1,9 @@
+.git
+.DS_Store
+prototype/wechat-mini-program/design-audit
+prototype/wechat-mini-program/design-qa-assets
+prototype/wechat-mini-program/server/.env
+prototype/wechat-mini-program/server/data
+**/*.sqlite
+**/*.sqlite-shm
+**/*.sqlite-wal

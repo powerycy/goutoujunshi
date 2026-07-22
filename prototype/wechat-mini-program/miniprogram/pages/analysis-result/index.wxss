@@ -1,10 +1,64 @@
-.result-head { position:relative; padding-right:130rpx; }
-.delivery-stamp { position:absolute; right:0; bottom:0; display:flex; flex-direction:column; align-items:center; justify-content:center; width:118rpx; height:118rpx; border:4rpx double #c2602c; border-radius:50%; color:#c2602c; font-size:24rpx; font-weight:800; transform:rotate(-8deg); }
-.delivery-stamp text { margin-top:4rpx; font-size:18rpx; }
-.evidence-grid { margin-top:24rpx; padding-left:20rpx; border-left:4rpx solid #d9c7b4; }
-.evidence-grid evidence-section:first-child .section { margin-top:0; }
-.message-draft { margin-top:24rpx; padding:28rpx; border-left:8rpx solid #f4a340; background:#fff0c7; color:#3f332b; font-family:STSong,"Songti SC",serif; font-size:28rpx; line-height:1.72; }
-.message-draft .label { margin-bottom:12rpx; color:#9b6240; font:20rpx ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:2rpx; }
-.usage { margin-top:26rpx; padding:18rpx; border-top:2rpx solid #d9cabc; border-bottom:2rpx solid #d9cabc; color:#7d6e63; font:20rpx/1.6 ui-monospace,SFMono-Regular,Menlo,monospace; }
-.ai-label { margin:26rpx 0; padding:20rpx; border:2rpx dashed #b9a797; color:#695c53; font-size:22rpx; line-height:1.6; }
-.next { margin-top:16rpx; }
+.result-page {
+  padding-top: 48rpx;
+  overflow: visible;
+}
+
+.result-head {
+  padding-bottom: 18rpx;
+  text-align: center;
+}
+
+.result-logo {
+  width: 64rpx;
+  height: 64rpx;
+  margin-bottom: 22rpx;
+}
+
+.result-head .title {
+  margin-top: 0;
+}
+
+.evidence-grid {
+  margin-top: 18rpx;
+}
+
+.message-draft {
+  margin-top: 34rpx;
+  padding: 26rpx;
+  border-radius: 16rpx;
+  background: #f1faf5;
+  color: #444444;
+  font-size: var(--type-body);
+  line-height: 1.72;
+}
+
+.message-draft .label {
+  margin-bottom: 12rpx;
+  color: #18a956;
+  font-size: var(--type-caption);
+  font-weight: 700;
+}
+
+.ai-label {
+  margin: 30rpx 0;
+  color: #969696;
+  font-size: var(--type-caption);
+  line-height: 1.65;
+  text-align: center;
+}
+
+.result-page .danger-note {
+  border: 0;
+  border-radius: 16rpx;
+  background: #fff5f4;
+  color: #9b4742;
+  font-size: var(--type-secondary);
+}
+
+.result-action {
+  margin-top: 36rpx;
+}
+
+.next {
+  margin-top: 16rpx;
+}

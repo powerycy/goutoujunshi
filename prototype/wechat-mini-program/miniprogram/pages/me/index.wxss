@@ -1,0 +1,140 @@
+.me-page {
+  padding-top: 34rpx;
+  overflow: visible;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 112rpx;
+  margin: 0;
+  padding: 16rpx 0 28rpx;
+  background: transparent;
+  text-align: left;
+}
+
+.profile-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #f1f4f2;
+}
+
+.profile-copy {
+  flex: 1;
+  min-width: 0;
+  margin-left: 20rpx;
+}
+
+.profile-name {
+  color: #111;
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.profile-status {
+  margin-top: 8rpx;
+  color: #8a8a8a;
+  font-size: 23rpx;
+}
+
+.asset-list,
+.more-group {
+  overflow: hidden;
+  border-top: 2rpx solid #eeeeee;
+}
+
+.more-group {
+  margin-top: 34rpx;
+  border-bottom: 2rpx solid #eeeeee;
+}
+
+.menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 106rpx;
+  border-bottom: 2rpx solid #eeeeee;
+  color: #111;
+  font-size: 31rpx;
+  font-weight: 500;
+}
+
+.compact-row {
+  min-height: 92rpx;
+  font-size: 28rpx;
+}
+
+.row-side {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  color: #9a9a9a;
+  font-size: 26rpx;
+  font-weight: 400;
+}
+
+.balance-count {
+  color: #111;
+  font-size: 31rpx;
+  font-weight: 700;
+}
+
+.row-side.green {
+  color: #18b85f;
+}
+
+.chevron {
+  color: #b8b8b8;
+  font-size: 44rpx;
+  line-height: 1;
+}
+
+.chevron.open {
+  transform: rotate(90deg);
+}
+
+.more-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 94rpx;
+  color: #111;
+  font-size: 29rpx;
+}
+
+.more-list {
+  border-top: 2rpx solid #eeeeee;
+}
+
+.row-value {
+  color: #8f8f8f;
+  font-size: 25rpx;
+}
+
+.quiet-note {
+  padding: 20rpx 0 8rpx;
+  color: #9a9a9a;
+  font-size: 21rpx;
+  line-height: 1.65;
+}
+
+.delete-account {
+  margin: 18rpx 0 0;
+  padding: 0;
+  background: transparent;
+  color: #9b4742;
+  font-size: 23rpx;
+  text-align: left;
+}
+
+.me-page .danger-note {
+  padding: 20rpx;
+  border: 0;
+  border-radius: 16rpx;
+  background: #f6f7f6;
+  color: #727272;
+  font-size: 22rpx;
+}

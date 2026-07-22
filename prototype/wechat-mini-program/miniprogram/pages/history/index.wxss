@@ -1,0 +1,13 @@
+.history-page { padding-top:52rpx; }
+.history-page .title { margin-top:0; font-size:48rpx; }
+.empty { margin-top:40rpx; padding:60rpx 30rpx; border:2rpx dashed #e5e5e5; border-radius:24rpx; color:#777; text-align:center; }
+.empty view { font-size:30rpx; font-weight:800; }
+.empty text { display:block; margin-top:10rpx; font-size:23rpx; }
+.archive-list { margin:34rpx 0; border-top:2rpx solid #eeeeee; }
+.archive-row { display:flex; align-items:center; gap:18rpx; padding:26rpx 0; border-bottom:2rpx solid #eeeeee; }
+.archive-index { color:#18b85f; font:20rpx ui-monospace,SFMono-Regular,Menlo,monospace; }
+.archive-main { flex:1; min-width:0; }
+.archive-title { overflow:hidden; font-size:28rpx; font-weight:750; text-overflow:ellipsis; white-space:nowrap; }
+.archive-meta { margin-top:8rpx; color:#999; font-size:21rpx; }
+.archive-actions { display:flex; flex-direction:column; gap:12rpx; color:#18b85f; font-size:22rpx; }
+.archive-actions .delete { color:#999; }

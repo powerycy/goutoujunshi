@@ -1,0 +1,27 @@
+<view class="page-shell intake-page">
+  <view class="page-enter">
+    <view class="eyebrow">CASE INTAKE / 最小必要信息</view>
+    <view class="title">提交一个具体关系问题</view>
+    <view class="subtitle">不用证明谁是坏人。只写发生了什么、你想要什么，以及现在最卡住你的地方。</view>
+  </view>
+  <beta-badge wx:if="{{benefit}}" benefit="{{benefit}}" />
+  <view wx:if="{{benefit && benefit.trialAnalysisRemaining < 1}}" class="no-ticket">
+    <view>当前没有可用分析次数</view><text>前 10,000 名去重用户可获得 2 次免费完整分析，并预留正式版 10 个活动狗头，到账后 60 天有效。当前不会扣款。</text>
+    <button bindtap="goPricing">去价格页登记内测</button>
+  </view>
+  <view class="form-sheet">
+    <view class="field-label"><text>01</text>关系问题与关键经过</view>
+    <textarea class="case-input" maxlength="4000" placeholder="例如：认识两个月，最近两周都是我主动约。他每次都赴约，但从不提下一次。昨天又说最近忙，我该继续推进还是先降级投入？" value="{{question}}" data-field="question" bindinput="updateField" />
+    <view class="privacy-tip">{{privacyShort}}</view>
+    <view class="field-grid">
+      <view class="field half"><view class="field-label"><text>02</text>对象代号</view><input maxlength="12" value="{{targetAlias}}" data-field="targetAlias" bindinput="updateField" placeholder="A" /></view>
+      <view class="field half"><view class="field-label"><text>03</text>关系阶段</view><picker range="{{stages}}" bindchange="chooseStage"><view class="picker-value">{{relationshipStage}}⌄</view></picker></view>
+    </view>
+    <view class="field"><view class="field-label"><text>04</text>这次想解决什么</view><picker range="{{goals}}" bindchange="chooseGoal"><view class="picker-value">{{goal}}⌄</view></picker></view>
+    <view class="field"><view class="field-label"><text>05</text>此刻情绪强度 <text class="intensity">{{emotionIntensity}} / 10</text></view><slider min="0" max="10" step="1" value="{{emotionIntensity}}" activeColor="#c2602c" backgroundColor="#eadfd0" block-size="20" bindchange="changeEmotion" /></view>
+  </view>
+  <view class="consent-row" bindtap="toggleAdult"><view class="checkbox {{adultConfirmed ? 'checked' : ''}}">{{adultConfirmed ? '✓' : ''}}</view><view>我确认已满 18 周岁；当前内测不面向未成年人。</view></view>
+  <view class="consent-row" bindtap="toggleAgreement"><view class="checkbox {{agreed ? 'checked' : ''}}">{{agreed ? '✓' : ''}}</view><view>我同意本次敏感关系信息发送至服务端，并在真实模式下由阶跃处理；可在“我的”删除数据。</view></view>
+  <button class="primary-button submit" disabled="{{submitting}}" loading="{{submitting}}" bindtap="submitCase">{{submitting ? '正在建立分析任务…' : '使用免费次数，生成结构化分析'}}</button>
+  <view class="safe-note">成功交付完整结构化分析后才核销。模型超时、系统失败或安全拦截都不核销个人体验券，但已领取的内测名额保持。</view>
+</view>

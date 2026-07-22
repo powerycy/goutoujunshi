@@ -1,0 +1,4 @@
+{
+  "navigationBarTitleText": "结构化分析报告",
+  "usingComponents": { "evidence-section": "/components/evidence-section/index" }
+}

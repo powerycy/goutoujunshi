@@ -1,0 +1,5 @@
+.badge { display:flex; align-items:center; gap:22rpx; padding:24rpx; border:2rpx dashed #d89b47; border-radius:20rpx; background:#fff0c7; }
+.stamp { display:flex; align-items:center; justify-content:center; width:76rpx; height:76rpx; border:4rpx solid #c2602c; border-radius:50%; color:#c2602c; font-size:22rpx; font-weight:800; transform:rotate(-8deg); }
+.copy { flex:1; min-width:0; }
+.title { font-size:28rpx; font-weight:800; }
+.detail { margin-top:6rpx; color:#745f47; font-size:22rpx; line-height:1.5; }

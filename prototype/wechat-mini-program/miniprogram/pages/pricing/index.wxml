@@ -1,0 +1,43 @@
+<view class="page-shell pricing-page">
+  <view class="balance-summary page-enter">
+    <text>狗头余额</text>
+    <view><text class="balance-value">{{benefit.dogheadBalance || 0}}</text><text class="balance-unit"> 个</text></view>
+  </view>
+
+  <view class="section-label">充值金额</view>
+  <view class="package-grid">
+    <view
+      wx:for="{{packages}}"
+      wx:key="id"
+      class="package-option {{selectedPackage === item.id ? 'selected' : ''}}"
+      data-package-id="{{item.id}}"
+      bindtap="choosePackage"
+    >
+      <view class="price"><text>¥</text>{{item.price}}</view>
+      <view class="coin-copy">{{item.coins}} 个狗头</view>
+    </view>
+  </view>
+
+  <view class="buy-button {{submitting ? 'disabled' : ''}}" bindtap="submitRecharge">
+    <text wx:if="{{submitting}}">处理中...</text>
+    <text wx:else>充值 ¥{{selectedPrice}}</text>
+  </view>
+
+  <view class="info-list">
+    <view class="info-row">
+      <text>赠品</text>
+      <text class="info-value">{{giftSummary}}</text>
+    </view>
+    <view class="info-row" bindtap="toggleRecords">
+      <text>购买记录</text>
+      <text class="chevron {{recordsOpen ? 'open' : ''}}">›</text>
+    </view>
+    <view wx:if="{{recordsOpen}}" class="records-panel">
+      <view class="empty-record">暂无购买记录</view>
+      <view class="refund-note">整单未使用可申请退款；已使用任意狗头后，整单不可退。赠品不可退款，也不折算现金。</view>
+    </view>
+  </view>
+
+  <view class="pricing-footnote">分析未成功交付，不扣狗头。当前为界面测试，不会唤起微信支付。</view>
+  <view wx:if="{{error}}" class="danger-note">{{error}}</view>
+</view>

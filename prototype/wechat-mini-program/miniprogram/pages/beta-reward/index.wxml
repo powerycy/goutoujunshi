@@ -1,0 +1,29 @@
+<view class="page-shell reward-page">
+  <view class="reward-head page-enter">
+    <image class="reward-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
+    <view class="title">{{title}}</view>
+    <view class="lead">当前为界面测试，没有唤起微信支付，也没有扣款。</view>
+  </view>
+
+  <view wx:if="{{reward.eligible}}" class="reward-list">
+    <view class="reward-row">
+      <text>可用狗头</text>
+      <text>{{reward.trialAnalysisRemaining || 0}}</text>
+    </view>
+    <view wx:for="{{giftItems}}" wx:key="*this" class="reward-row">
+      <text>赠品</text>
+      <text>{{item}}</text>
+    </view>
+    <view class="reward-note">赠品不可退款，也不折算现金。</view>
+  </view>
+
+  <view wx:else class="reward-list">
+    <view class="reward-row">
+      <text>状态</text>
+      <text>本轮名额已满</text>
+    </view>
+    <view class="reward-note">本次只记录充值选择，没有发生付款。</view>
+  </view>
+
+  <button class="primary-button" bindtap="goMe">返回我的</button>
+</view>

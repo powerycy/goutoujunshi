@@ -1,0 +1,153 @@
+.pricing-page {
+  padding-top: 34rpx;
+  overflow: visible;
+}
+
+.balance-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 112rpx;
+  border-bottom: 2rpx solid #eeeeee;
+  color: #111;
+  font-size: 29rpx;
+}
+
+.balance-value {
+  color: #111;
+  font-size: 42rpx;
+  font-weight: 750;
+  line-height: 1;
+}
+
+.balance-unit {
+  color: #7d7d7d;
+  font-size: 23rpx;
+}
+
+.section-label {
+  margin: 40rpx 0 18rpx;
+  color: #777;
+  font-size: 24rpx;
+}
+
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16rpx;
+}
+
+.package-option {
+  min-width: 0;
+  padding: 28rpx 8rpx 24rpx;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 16rpx;
+  background: #fff;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.package-option.selected {
+  border-color: #18c463;
+  background: #f3fbf6;
+}
+
+.price {
+  color: #111;
+  font-size: 38rpx;
+  font-weight: 750;
+}
+
+.price text {
+  margin-right: 4rpx;
+  font-size: 22rpx;
+}
+
+.coin-copy {
+  margin-top: 10rpx;
+  color: #777;
+  font-size: 21rpx;
+}
+
+.buy-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 88rpx;
+  margin-top: 24rpx;
+  border-radius: 16rpx;
+  background: #18c463;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+
+.buy-button.disabled {
+  opacity: .55;
+}
+
+.info-list {
+  margin-top: 42rpx;
+  border-top: 2rpx solid #eeeeee;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 96rpx;
+  border-bottom: 2rpx solid #eeeeee;
+  color: #111;
+  font-size: 28rpx;
+}
+
+.info-value,
+.chevron {
+  color: #8f8f8f;
+  font-size: 24rpx;
+}
+
+.chevron {
+  font-size: 42rpx;
+  line-height: 1;
+}
+
+.chevron.open {
+  transform: rotate(90deg);
+}
+
+.records-panel {
+  padding: 24rpx 0 28rpx;
+  border-bottom: 2rpx solid #eeeeee;
+}
+
+.empty-record {
+  color: #777;
+  font-size: 25rpx;
+}
+
+.refund-note {
+  margin-top: 14rpx;
+  color: #a0a0a0;
+  font-size: 21rpx;
+  line-height: 1.65;
+}
+
+.pricing-footnote {
+  padding: 30rpx 12rpx 0;
+  color: #9a9a9a;
+  font-size: 21rpx;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.pricing-page .danger-note {
+  padding: 20rpx;
+  border: 0;
+  border-radius: 16rpx;
+  background: #f6f7f6;
+  color: #727272;
+  font-size: 22rpx;
+}

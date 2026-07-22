@@ -1,0 +1,66 @@
+.ticket-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 36rpx;
+  padding: 28rpx;
+  border: 2rpx dashed #d88c41;
+  border-radius: 20rpx;
+  background: #fff0c7;
+}
+
+.ticket-title {
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.ticket-copy {
+  max-width: 480rpx;
+  margin-top: 8rpx;
+  color: #7b654e;
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.ticket-count {
+  color: #a95228;
+  font-size: 36rpx;
+  font-weight: 850;
+}
+
+.case-input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 360rpx;
+  margin: 28rpx 0 24rpx;
+  padding: 26rpx;
+  border: 2rpx solid #eadfce;
+  border-radius: 20rpx;
+  background: #ffffff;
+  font-size: 27rpx;
+  line-height: 1.65;
+}
+
+.pending-card {
+  margin-top: 24rpx;
+  padding: 26rpx;
+  border-radius: 20rpx;
+  background: #edf6ec;
+}
+
+.pending-title {
+  color: #355238;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.pending-copy {
+  margin-top: 10rpx;
+  color: #5d735f;
+  font-size: 24rpx;
+  line-height: 1.65;
+}
+
+.back-button {
+  margin-top: 22rpx;
+}

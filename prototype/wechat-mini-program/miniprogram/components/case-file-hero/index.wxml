@@ -1,0 +1,24 @@
+<view class="hero page-enter">
+  <view class="hero-meta">
+    <view class="docket">CASE / 2026-BETA</view>
+    <view class="tool-tag">关系问题分析与决策软件</view>
+  </view>
+  <view class="title-wrap">
+    <view class="hero-title">把关系问题<text class="title-line">拆清楚</text><text class="title-line title-accent">再行动</text></view>
+    <view class="case-stack" aria-hidden="true">
+      <view class="sheet sheet-back"></view>
+      <view class="sheet sheet-front">
+        <view class="sheet-line"></view><view class="sheet-line short"></view>
+        <view class="note">事实 ≠ 猜测</view>
+        <view class="paw">●<text class="paw-dots">● ● ●</text></view>
+      </view>
+    </view>
+  </view>
+  <view class="hero-copy">提交一个具体问题，获得事实拆分、核心判断、行动方案、观察窗口与停止条件。</view>
+  <button class="primary" bindtap="submit">开始问题分析</button>
+  <button class="preview" bindtap="preview">查看结构化分析方法 →</button>
+  <view class="status-line">
+    <view class="status-dot"></view>
+    <text>免费封闭内测 · 可用完整分析 {{ticketCount}} 次</text>
+  </view>
+</view>

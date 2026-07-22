@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/case-intake/index",
+    "pages/analysis-loading/index",
+    "pages/analysis-result/index",
+    "pages/pricing/index",
+    "pages/beta-reward/index",
+    "pages/history/index",
+    "pages/me/index",
+    "pages/analysis/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "狗头军师",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

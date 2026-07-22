@@ -1,0 +1,9 @@
+{
+  "desc": "狗头军师封闭内测原型",
+  "rules": [
+    {
+      "action": "disallow",
+      "page": "*"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+<view class="page-shell home-page">
+  <view class="home-nav">
+    <view class="brand-lockup">
+      <image class="brand-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
+      <text>狗头军师</text>
+    </view>
+    <button class="me-icon-button" bindtap="goMe" aria-label="我的">
+      <image src="/assets/doghead-logo.png" mode="aspectFit" />
+    </button>
+  </view>
+
+  <scroll-view class="conversation" scroll-y scroll-with-animation scroll-top="{{scrollTop}}">
+    <view wx:if="{{!submittedQuestion && !result && status !== 'running'}}" class="empty-state page-enter">
+      <image class="hero-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
+      <view class="hero-title">狗头军师，解决你的情感问题</view>
+    </view>
+
+    <view wx:if="{{submittedQuestion}}" class="message-row user-row">
+      <view class="user-message">{{submittedQuestion}}</view>
+    </view>
+
+    <view wx:if="{{status === 'running'}}" class="assistant-block loading-block">
+      <view class="assistant-head">
+        <image class="assistant-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
+        <text>狗头军师正在判断</text>
+      </view>
+      <view class="loading-dots"><text></text><text></text><text></text></view>
+    </view>
+
+    <view wx:if="{{status === 'failed'}}" class="assistant-block">
+      <view class="assistant-head danger">
+        <image class="assistant-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
+        <text>这次没有分析成功</text>
+      </view>
+      <view class="answer-copy">{{error || '服务暂时不可用，请稍后再试。'}}</view>
+    </view>
+
+    <view wx:if="{{status === 'blocked' && result}}" class="assistant-block">
+      <view class="assistant-head danger">
+        <image class="assistant-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
+        <text>狗头军师判断</text>
+      </view>
+      <view class="answer-copy">{{result.emotionalGrounding}}</view>
+      <view class="answer-section">
+        <view class="answer-title">现在先做</view>
+        <view wx:for="{{result.facts}}" wx:key="*this" class="answer-item">{{item}}</view>
+      </view>
+      <view class="answer-section">
+        <view class="answer-title">停止条件</view>
+        <view wx:for="{{result.stopConditions}}" wx:key="*this" class="answer-item">{{item}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{status === 'delivered' && result}}" class="assistant-block">
+      <view class="assistant-head">
+        <image class="assistant-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
+        <text>狗头军师判断</text>
+      </view>
+      <view class="answer-lead">{{result.recommendation}}</view>
+      <view class="answer-section" wx:if="{{result.reasons && result.reasons.length}}">
+        <view class="answer-title">核心判断</view>
+        <view wx:for="{{result.reasons}}" wx:key="*this" class="answer-item">{{item}}</view>
+      </view>
+      <view class="answer-section">
+        <view class="answer-title">行动建议</view>
+        <view class="answer-copy">{{result.nextAction}}</view>
+      </view>
+      <view class="answer-section" wx:if="{{result.observationWindow}}">
+        <view class="answer-title">观察窗口</view>
+        <view class="answer-copy">{{result.observationWindow}}</view>
+      </view>
+      <view class="answer-section" wx:if="{{result.stopConditions && result.stopConditions.length}}">
+        <view class="answer-title">停止条件</view>
+        <view wx:for="{{result.stopConditions}}" wx:key="*this" class="answer-item">{{item}}</view>
+      </view>
+      <view class="answer-note">{{result.safetyNote || aiDisclosure}}</view>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{apiError && charCount > 0}}" class="api-warning">
+    <text>分析服务暂时不可用</text>
+    <button bindtap="retry">重试</button>
+  </view>
+
+  <view class="composer">
+    <textarea
+      class="composer-input"
+      maxlength="4000"
+      value="{{question}}"
+      disabled="{{status === 'running'}}"
+      placeholder="{{inputPlaceholder}}"
+      bindinput="updateQuestion"
+    />
+    <view class="composer-bottom">
+      <text>{{charCount}} / 4000 · 至少 30 字</text>
+      <view
+        class="send-button {{!canSubmit || status === 'running' ? 'disabled' : ''}}"
+        role="button"
+        aria-label="发送问题"
+        aria-disabled="{{!canSubmit || status === 'running'}}"
+        bindtap="submit"
+      >↑</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,26 @@
+.hero { padding-top: 8rpx; animation:case-open 280ms ease-out both; }
+.hero-meta { display: flex; align-items: center; justify-content: space-between; }
+.docket { color: #9b8270; font: 20rpx ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 2rpx; }
+.tool-tag { padding: 10rpx 16rpx; border: 2rpx solid #c2602c; border-radius: 12rpx; color: #9e4823; font-size: 21rpx; font-weight: 700; }
+.title-wrap { position: relative; min-height: 360rpx; margin-top: 36rpx; }
+.hero-title { position: relative; z-index: 2; font-family: STSong, "Songti SC", "Noto Serif CJK SC", serif; font-size: 60rpx; font-weight: 800; line-height: 1.1; letter-spacing: -2rpx; }
+.title-line { display: block; }
+.title-accent { color: #c2602c; }
+.case-stack { position: absolute; right: 4rpx; bottom: 0; width: 264rpx; height: 226rpx; transform: rotate(-3deg); }
+.sheet { position: absolute; box-sizing: border-box; width: 224rpx; height: 192rpx; border: 2rpx solid #d9c5ad; border-radius: 12rpx; }
+.sheet-back { right: 0; bottom: 0; background: #efd5aa; transform: rotate(8deg); }
+.sheet-front { left: 0; top: 0; padding: 28rpx 22rpx; background: #fffcf6; box-shadow: 0 14rpx 30rpx rgba(73,48,28,.1); }
+.sheet-line { width: 100%; height: 2rpx; margin-bottom: 18rpx; background: #d8cabc; }
+.sheet-line.short { width: 58%; }
+.note { position: absolute; right: -18rpx; top: 76rpx; padding: 10rpx 14rpx; background: #fff0c7; color: #8b4f2e; font-size: 20rpx; font-weight: 700; transform: rotate(4deg); }
+.paw { position: absolute; left: 32rpx; bottom: 22rpx; color: #c2602c; font-size: 32rpx; transform: rotate(-15deg); }
+.paw-dots { position: absolute; left: -8rpx; top: -16rpx; width: 60rpx; font-size: 12rpx; letter-spacing: 6rpx; }
+.hero-copy { max-width: 620rpx; color: #6f6259; font-size: 27rpx; line-height: 1.7; }
+.primary { display: flex; align-items: center; justify-content: center; height: 96rpx; margin-top: 34rpx; border-radius: 20rpx; background: #f4a340; color: #2a2019; font-size: 31rpx; font-weight: 800; }
+.primary:active { transform: scale(.98); }
+.preview { margin-top: 14rpx; background: transparent; color: #6a5142; font-size: 25rpx; }
+.status-line { display: flex; align-items: center; justify-content: center; gap: 12rpx; margin-top: 22rpx; color: #8a7b70; font-size: 22rpx; }
+.status-dot { width: 12rpx; height: 12rpx; border-radius: 50%; background: #6f946e; }
+@media (max-width: 340px) { .hero-title { font-size: 56rpx; } .case-stack { opacity: .72; transform: scale(.88) rotate(-3deg); transform-origin: right bottom; } }
+@keyframes case-open { from{opacity:0;transform:translateY(18rpx)} to{opacity:1;transform:translateY(0)} }
+@media (prefers-reduced-motion: reduce) { .hero{animation-duration:.01ms} }

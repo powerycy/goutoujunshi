@@ -1,0 +1,393 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "历史 Token 盈利报告（已停用）",
+    "description": "本报告使用已废弃套餐口径，仅作历史留档；现行模型见 analysis/current-pricing-unit-economics.md。",
+    "generatedAt": "2026-07-21T12:00:00+08:00",
+    "sources": [
+      {
+        "id": "profit_model",
+        "label": "狗头军师 Token 盈利测算",
+        "path": "analysis/token-profit-model.ipynb",
+        "query": {
+          "language": "python",
+          "description": "根据套餐价格、模型成本、支付费率、月活、付费率和每月回复次数计算收入与贡献利润。",
+          "filters": [
+            "标准回复为 6,000 个未缓存输入 Token 加 1,000 个输出 Token",
+            "设备支付结构假设为 70% Android/鸿蒙/Windows、30% iOS",
+            "成熟期按 6 元标准包的单位经济性测算",
+            "全部已售 Token 最终被使用"
+          ],
+          "metric_definitions": [
+            "Token 收入：按月回复消耗占标准包可用回复数的比例确认套餐收入",
+            "贡献利润：Token 收入减微信虚拟支付费用和阶跃模型成本",
+            "贡献利润不含服务器、内容安全、退款、税、获客和开发者人工"
+          ]
+        }
+      },
+      {
+        "id": "stepfun_pricing",
+        "label": "StepFun 定价与限速",
+        "href": "https://platform.stepfun.com/docs/zh/guides/pricing/details"
+      },
+      {
+        "id": "wechat_payment_fees",
+        "label": "微信小程序虚拟支付技术服务费",
+        "href": "https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/business-capabilities/virtual-payment/devplan.html"
+      },
+      {
+        "id": "scenario_sql",
+        "label": "月活盈利情景数据",
+        "query": {
+          "engine": "duckdb",
+          "language": "sql",
+          "description": "加载已复核的三档月活与三种付费情景，用于分组柱状图。",
+          "sql": "SELECT * FROM (VALUES ('1千', 1000, '保守', 0.02, 10, 20, 6.35, 4.82), ('1千', 1000, '正常', 0.05, 30, 50, 47.65, 36.15), ('1千', 1000, '乐观', 0.10, 60, 100, 190.59, 144.59), ('1万', 10000, '保守', 0.02, 10, 200, 63.53, 48.20), ('1万', 10000, '正常', 0.05, 30, 500, 476.47, 361.48), ('1万', 10000, '乐观', 0.10, 60, 1000, 1905.88, 1445.93), ('10万', 100000, '保守', 0.02, 10, 2000, 635.29, 481.98), ('10万', 100000, '正常', 0.05, 30, 5000, 4764.71, 3614.82), ('10万', 100000, '乐观', 0.10, 60, 10000, 19058.82, 14459.29)) AS t(mau_label, mau, scenario, paid_rate, replies_per_payer, paid_users, token_revenue, contribution_profit)"
+        }
+      },
+      {
+        "id": "pack_sql",
+        "label": "Token 包单位经济性数据",
+        "query": {
+          "engine": "duckdb",
+          "language": "sql",
+          "description": "加载已复核的两个 Token 包单位经济性。",
+          "sql": "SELECT * FROM (VALUES ('1元新客包', 1.0, 94.4, 0.595, 0.043, 0.362), ('6元标准包', 6.0, 188.9, 1.190, 0.258, 4.552)) AS t(pack, price, replies, model_cost, payment_fee, contribution_profit)"
+        }
+      },
+      {
+        "id": "ad_sql",
+        "label": "广告收入敏感性数据",
+        "query": {
+          "engine": "duckdb",
+          "language": "sql",
+          "description": "加载 1 万 MAU 下三档 eCPM 广告收入情景。",
+          "sql": "SELECT * FROM (VALUES (5.0, 13300, 66.5, 598.5, -532.0), (15.0, 13300, 199.5, 598.5, -399.0), (30.0, 13300, 399.0, 598.5, -199.5)) AS t(ecpm, effective_impressions, ad_revenue, free_model_cost, ad_net_contribution)"
+        }
+      },
+      {
+        "id": "target_sql",
+        "label": "月贡献利润目标数据",
+        "query": {
+          "engine": "duckdb",
+          "language": "sql",
+          "description": "加载达到每月 1 万元 Token 贡献利润所需的月活规模。",
+          "sql": "SELECT * FROM (VALUES ('乐观', 0.10, 60, 69160), ('正常', 0.05, 30, 276639), ('保守', 0.02, 10, 2074790)) AS t(scenario, paid_rate, replies_per_payer, required_mau)"
+        }
+      }
+    ],
+    "charts": [
+      {
+        "id": "scenario_profit_chart",
+        "title": "不同月活与付费情景下的 Token 贡献利润",
+        "subtitle": "1,000、10,000 与 100,000 MAU；未扣服务器、税、退款、获客和人工",
+        "type": "bar",
+        "dataset": "scenario_results",
+        "sourceId": "scenario_sql",
+        "intent": "comparison",
+        "question": "在保守、正常和乐观情景下，Token 贡献利润如何随月活规模变化？",
+        "rationale": "三档月活是离散规模情景，分组柱状图比折线图更诚实，也能直接比较三种付费情景。",
+        "encodings": {
+          "x": { "field": "mau_label", "type": "nominal", "label": "月活 MAU" },
+          "y": { "field": "contribution_profit", "type": "quantitative", "label": "Token 贡献利润", "unit": "¥/月" },
+          "color": { "field": "scenario", "type": "nominal", "label": "情景" },
+          "tooltip": [
+            { "field": "paid_rate", "type": "quantitative", "label": "付费率", "format": "percent" },
+            { "field": "paid_users", "type": "quantitative", "label": "付费活跃用户" },
+            { "field": "replies_per_payer", "type": "quantitative", "label": "付费用户回复/月" }
+          ]
+        },
+        "valueFormat": "number",
+        "unit": "¥/月",
+        "layout": "full",
+        "palette": { "kind": "categorical", "name": "blue-orange-pink" },
+        "labels": { "values": "auto" },
+        "legend": { "position": "bottom", "title": "情景", "sort": "spec" },
+        "settings": { "groupMode": "grouped", "orientation": "vertical", "sort": "none", "showValues": true },
+        "surface": { "surface": "card", "compact": false, "interactiveLegend": true, "showControls": false, "viewMode": "both" }
+      }
+    ],
+    "tables": [
+      {
+        "id": "pack_economics_table",
+        "title": "单个 Token 包的经济性",
+        "subtitle": "假设所有 Token 最终全部使用；金额单位为人民币元",
+        "dataset": "pack_economics",
+        "sourceId": "pack_sql",
+        "defaultSort": {
+          "field": "price",
+          "direction": "asc"
+        },
+        "density": "spacious",
+        "columns": [
+          { "field": "pack", "label": "Token 包", "type": "text" },
+          { "field": "price", "label": "售价 ¥", "format": "number" },
+          { "field": "replies", "label": "理论标准回复数", "format": "number" },
+          { "field": "model_cost", "label": "模型成本 ¥", "format": "number" },
+          { "field": "payment_fee", "label": "加权支付费用 ¥", "format": "number" },
+          { "field": "contribution_profit", "label": "贡献利润 ¥", "format": "number" }
+        ]
+      },
+      {
+        "id": "scenario_table",
+        "title": "月活规模与 Token 贡献利润",
+        "subtitle": "成熟期稳态测算；金额单位为人民币元/月",
+        "dataset": "scenario_results",
+        "sourceId": "scenario_sql",
+        "defaultSort": {
+          "field": "mau",
+          "direction": "asc"
+        },
+        "density": "spacious",
+        "columns": [
+          { "field": "mau", "label": "月活 MAU", "format": "number" },
+          { "field": "scenario", "label": "情景", "type": "text" },
+          { "field": "paid_rate", "label": "付费率", "format": "percent" },
+          { "field": "replies_per_payer", "label": "付费用户回复/月", "format": "number" },
+          { "field": "paid_users", "label": "当月付费活跃用户", "format": "number" },
+          { "field": "token_revenue", "label": "Token 收入 ¥", "format": "number" },
+          { "field": "contribution_profit", "label": "贡献利润 ¥", "format": "number" }
+        ]
+      },
+      {
+        "id": "ad_table",
+        "title": "1 万 MAU 的广告收入敏感性",
+        "subtitle": "95% 免费用户、每人每月 10 次回复、每 5 次一次广告机会、70% 有效填充",
+        "dataset": "ad_sensitivity",
+        "sourceId": "ad_sql",
+        "defaultSort": {
+          "field": "ecpm",
+          "direction": "asc"
+        },
+        "density": "spacious",
+        "columns": [
+          { "field": "ecpm", "label": "实际 eCPM ¥", "format": "number" },
+          { "field": "effective_impressions", "label": "有效展示/月", "format": "number" },
+          { "field": "ad_revenue", "label": "广告收入 ¥/月", "format": "number" },
+          { "field": "free_model_cost", "label": "免费用户模型成本 ¥/月", "format": "number" },
+          { "field": "ad_net_contribution", "label": "广告净贡献 ¥/月", "format": "number", "movement": true }
+        ]
+      },
+      {
+        "id": "target_table",
+        "title": "仅靠 Token 达到月贡献利润 1 万元所需规模",
+        "subtitle": "未扣服务器、税、退款、获客与人工",
+        "dataset": "profit_targets",
+        "sourceId": "target_sql",
+        "defaultSort": {
+          "field": "required_mau",
+          "direction": "asc"
+        },
+        "density": "spacious",
+        "columns": [
+          { "field": "scenario", "label": "情景", "type": "text" },
+          { "field": "paid_rate", "label": "付费率", "format": "percent" },
+          { "field": "replies_per_payer", "label": "付费用户回复/月", "format": "number" },
+          { "field": "required_mau", "label": "所需月活 MAU", "format": "number" }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "body": "# 狗头军师能赚多少钱"
+      },
+      {
+        "id": "executive_summary",
+        "type": "markdown",
+        "sourceId": "profit_model",
+        "body": "## Executive Summary\n\n- **正常档假设下，1 万 MAU 只有约 362 元/月的 Token 贡献利润。**这里假设付费率 5%，每名付费用户每月使用 30 次；尚未扣服务器、税、退款、投放和你的人工。\n- **10 万 MAU 的正常档约为 3,615 元/月。**乐观档（10%付费、每名付费用户60次/月）约为 14,459 元/月。\n- **瓶颈不是毛利率，而是客单价和复购速度。**6元包贡献利润约4.55元，却可支持约189次标准回复；30次/月的用户约6.3个月才需要补一次。\n- **普通展示广告很可能覆盖不了免费调用。**1万MAU的示例中，免费用户模型成本约599元/月；eCPM需达到约45元才打平，eCPM为5–30元时仍亏约200–532元/月。"
+      },
+      {
+        "id": "definitions",
+        "type": "markdown",
+        "body": "## 先看口径\n\n这里计算的是**贡献利润**：用户充值收入，减去微信虚拟支付费用和阶跃模型成本。它不是最终净利润，因为服务器、内容安全、退款、税、获客和开发者人工都还没有扣。\n\n测算采用当前 `step-3.5-flash` 官方价格；一次标准回复按6,000输入Token和1,000输出Token计算，模型成本约0.0063元。支付端假设70%来自Android/鸿蒙/Windows、30%来自iOS，对应活动费率的加权支付费率为4.3%。"
+      },
+      {
+        "id": "pack_finding",
+        "type": "markdown",
+        "sourceId": "profit_model",
+        "body": "## 80%毛利仍然可能赚得不多\n\n6元标准包看起来有约80%的模型成本毛利，但扣除加权支付费用后，完整履约的贡献利润约4.55元。问题在于这个包能支持约189次标准回复：如果一个用户每月问30次，平均6.3个月才产生下一笔6元充值。\n\n1元新客包更明显：贡献利润约0.36元，却能支持约94次回复。它有利于首次付费，却可能把第一次6元复购推迟数月。"
+      },
+      {
+        "id": "pack_table_block",
+        "type": "table",
+        "tableId": "pack_economics_table"
+      },
+      {
+        "id": "scenario_finding",
+        "type": "markdown",
+        "sourceId": "profit_model",
+        "body": "## 真正赚钱需要数万到数十万月活\n\n正常档下，每个MAU平均只贡献约0.036元/月。因此1万MAU约362元，10万MAU约3,615元。即便达到乐观档，1万MAU也只有约1,446元贡献利润。\n\n这不是说产品不能赚钱，而是说明当前定价更像低价流量产品：必须依靠较大规模、较高使用频率、广告或更高客单价，才能形成明显收入。"
+      },
+      {
+        "id": "scenario_chart_block",
+        "type": "chart",
+        "chartId": "scenario_profit_chart"
+      },
+      {
+        "id": "scenario_table_block",
+        "type": "table",
+        "tableId": "scenario_table"
+      },
+      {
+        "id": "ad_finding",
+        "type": "markdown",
+        "sourceId": "profit_model",
+        "body": "## 普通展示广告可能越做越亏\n\n按1万MAU、95%免费用户、每人每月10次回复测算，免费调用的阶跃模型成本约598.5元/月。13,300次有效广告展示在eCPM为5元时只收入约66.5元，eCPM为30元时收入约399元，仍不能覆盖模型费；打平需要约45元eCPM。把这部分与正常档Token贡献利润361.5元合并，整个模型在三档eCPM下约为-170.5元、-37.5元和+162元/月，且仍未扣其他运营成本。\n\n因此广告不能直接换取不限量免费对话。若使用广告，必须限制赠送Token，并用真实的“每次广告收入 ÷ 获得Token对应模型成本”决定赠送量。"
+      },
+      {
+        "id": "ad_table_block",
+        "type": "table",
+        "tableId": "ad_table"
+      },
+      {
+        "id": "target_finding",
+        "type": "markdown",
+        "sourceId": "profit_model",
+        "body": "## 月赚1万元的规模要求\n\n如果只靠Token、保持当前价格，正常档需要约27.7万MAU，乐观档也需要约6.9万MAU，才达到每月1万元贡献利润；这还不是到手净利润。保守档几乎不可行，说明低付费率和低使用频率下不能靠Token差价支撑业务。"
+      },
+      {
+        "id": "target_table_block",
+        "type": "table",
+        "tableId": "target_table"
+      },
+      {
+        "id": "recommendations",
+        "type": "markdown",
+        "body": "## 现在最值得做的事\n\n1. 保留1元包限购，但把它当付费验证，不把新客包销量误认为稳定月收入。\n2. 首发记录每名用户的月回复数、首次付费率、1元到6元转化率、补充购买间隔和广告eCPM。\n3. 用100名真实测试用户跑30天，再用真实中位回复数替换30次/月的假设。\n4. 如果6元包平均超过6个月才复购，说明包量过大或定价过低；再决定提高价格、减少Token，还是接受薄利规模路线。"
+      },
+      {
+        "id": "further_questions",
+        "type": "markdown",
+        "body": "## 还需要真实数据回答的问题\n\n- 新用户有多少人愿意支付1元？\n- 买过1元包的人，有多少在30、90、180天内购买6元包？\n- 每名活跃用户每月到底发起多少次模型请求？\n- Android、iOS设备占比和后台实际签约费率是多少？\n- 广告的实际填充率、eCPM和对7日留存的影响是多少？"
+      },
+      {
+        "id": "caveats",
+        "type": "markdown",
+        "body": "## Caveats and Assumptions\n\n这是上线前的敏感性模型，不是经营预测。当前没有真实用户、留存、充值、设备结构、广告或服务器数据。所有已售Token均假设最终使用完，因此完整计提了未来模型成本；如果用户充值后没有使用，短期现金利润会更高，但未消费余额仍是你的履约义务。模型价格和微信活动费率变化时必须重新计算。"
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-07-21T12:00:00+08:00",
+    "status": "ready",
+    "datasets": {
+      "pack_economics": [
+        {
+          "pack": "1元新客包",
+          "price": 1,
+          "replies": 94.4,
+          "model_cost": 0.595,
+          "payment_fee": 0.043,
+          "contribution_profit": 0.362
+        },
+        {
+          "pack": "6元标准包",
+          "price": 6,
+          "replies": 188.9,
+          "model_cost": 1.19,
+          "payment_fee": 0.258,
+          "contribution_profit": 4.552
+        }
+      ],
+      "scenario_results": [
+        { "mau": 1000, "mau_label": "1千", "scenario": "保守", "paid_rate": 0.02, "replies_per_payer": 10, "paid_users": 20, "token_revenue": 6.35, "contribution_profit": 4.82 },
+        { "mau": 1000, "mau_label": "1千", "scenario": "正常", "paid_rate": 0.05, "replies_per_payer": 30, "paid_users": 50, "token_revenue": 47.65, "contribution_profit": 36.15 },
+        { "mau": 1000, "mau_label": "1千", "scenario": "乐观", "paid_rate": 0.10, "replies_per_payer": 60, "paid_users": 100, "token_revenue": 190.59, "contribution_profit": 144.59 },
+        { "mau": 10000, "mau_label": "1万", "scenario": "保守", "paid_rate": 0.02, "replies_per_payer": 10, "paid_users": 200, "token_revenue": 63.53, "contribution_profit": 48.20 },
+        { "mau": 10000, "mau_label": "1万", "scenario": "正常", "paid_rate": 0.05, "replies_per_payer": 30, "paid_users": 500, "token_revenue": 476.47, "contribution_profit": 361.48 },
+        { "mau": 10000, "mau_label": "1万", "scenario": "乐观", "paid_rate": 0.10, "replies_per_payer": 60, "paid_users": 1000, "token_revenue": 1905.88, "contribution_profit": 1445.93 },
+        { "mau": 100000, "mau_label": "10万", "scenario": "保守", "paid_rate": 0.02, "replies_per_payer": 10, "paid_users": 2000, "token_revenue": 635.29, "contribution_profit": 481.98 },
+        { "mau": 100000, "mau_label": "10万", "scenario": "正常", "paid_rate": 0.05, "replies_per_payer": 30, "paid_users": 5000, "token_revenue": 4764.71, "contribution_profit": 3614.82 },
+        { "mau": 100000, "mau_label": "10万", "scenario": "乐观", "paid_rate": 0.10, "replies_per_payer": 60, "paid_users": 10000, "token_revenue": 19058.82, "contribution_profit": 14459.29 }
+      ],
+      "ad_sensitivity": [
+        { "ecpm": 5, "effective_impressions": 13300, "ad_revenue": 66.5, "free_model_cost": 598.5, "ad_net_contribution": -532.0 },
+        { "ecpm": 15, "effective_impressions": 13300, "ad_revenue": 199.5, "free_model_cost": 598.5, "ad_net_contribution": -399.0 },
+        { "ecpm": 30, "effective_impressions": 13300, "ad_revenue": 399, "free_model_cost": 598.5, "ad_net_contribution": -199.5 }
+      ],
+      "profit_targets": [
+        { "scenario": "乐观", "paid_rate": 0.10, "replies_per_payer": 60, "required_mau": 69160 },
+        { "scenario": "正常", "paid_rate": 0.05, "replies_per_payer": 30, "required_mau": 276639 },
+        { "scenario": "保守", "paid_rate": 0.02, "replies_per_payer": 10, "required_mau": 2074790 }
+      ]
+    },
+    "accessIssues": []
+  },
+  "sources": [
+    {
+      "id": "profit_model",
+      "label": "狗头军师 Token 盈利测算",
+      "path": "analysis/token-profit-model.ipynb",
+      "query": {
+        "language": "python",
+        "description": "根据套餐价格、模型成本、支付费率、月活、付费率和每月回复次数计算收入与贡献利润。",
+        "filters": [
+          "标准回复为 6,000 个未缓存输入 Token 加 1,000 个输出 Token",
+          "设备支付结构假设为 70% Android/鸿蒙/Windows、30% iOS",
+          "成熟期按 6 元标准包的单位经济性测算",
+          "全部已售 Token 最终被使用"
+        ],
+        "metric_definitions": [
+          "Token 收入：按月回复消耗占标准包可用回复数的比例确认套餐收入",
+          "贡献利润：Token 收入减微信虚拟支付费用和阶跃模型成本"
+        ]
+      }
+    },
+    {
+      "id": "stepfun_pricing",
+      "label": "StepFun 定价与限速",
+      "href": "https://platform.stepfun.com/docs/zh/guides/pricing/details"
+    },
+    {
+      "id": "wechat_payment_fees",
+      "label": "微信小程序虚拟支付技术服务费",
+      "href": "https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/business-capabilities/virtual-payment/devplan.html"
+    },
+    {
+      "id": "scenario_sql",
+      "label": "月活盈利情景数据",
+      "query": {
+        "engine": "duckdb",
+        "language": "sql",
+        "description": "加载已复核的三档月活与三种付费情景，用于分组柱状图。",
+        "sql": "SELECT * FROM (VALUES ('1千', 1000, '保守', 0.02, 10, 20, 6.35, 4.82), ('1千', 1000, '正常', 0.05, 30, 50, 47.65, 36.15), ('1千', 1000, '乐观', 0.10, 60, 100, 190.59, 144.59), ('1万', 10000, '保守', 0.02, 10, 200, 63.53, 48.20), ('1万', 10000, '正常', 0.05, 30, 500, 476.47, 361.48), ('1万', 10000, '乐观', 0.10, 60, 1000, 1905.88, 1445.93), ('10万', 100000, '保守', 0.02, 10, 2000, 635.29, 481.98), ('10万', 100000, '正常', 0.05, 30, 5000, 4764.71, 3614.82), ('10万', 100000, '乐观', 0.10, 60, 10000, 19058.82, 14459.29)) AS t(mau_label, mau, scenario, paid_rate, replies_per_payer, paid_users, token_revenue, contribution_profit)"
+      }
+    },
+    {
+      "id": "pack_sql",
+      "label": "Token 包单位经济性数据",
+      "query": {
+        "engine": "duckdb",
+        "language": "sql",
+        "description": "加载已复核的两个 Token 包单位经济性。",
+        "sql": "SELECT * FROM (VALUES ('1元新客包', 1.0, 94.4, 0.595, 0.043, 0.362), ('6元标准包', 6.0, 188.9, 1.190, 0.258, 4.552)) AS t(pack, price, replies, model_cost, payment_fee, contribution_profit)"
+      }
+    },
+    {
+      "id": "ad_sql",
+      "label": "广告收入敏感性数据",
+      "query": {
+        "engine": "duckdb",
+        "language": "sql",
+        "description": "加载 1 万 MAU 下三档 eCPM 广告收入情景。",
+        "sql": "SELECT * FROM (VALUES (5.0, 13300, 66.5, 598.5, -532.0), (15.0, 13300, 199.5, 598.5, -399.0), (30.0, 13300, 399.0, 598.5, -199.5)) AS t(ecpm, effective_impressions, ad_revenue, free_model_cost, ad_net_contribution)"
+      }
+    },
+    {
+      "id": "target_sql",
+      "label": "月贡献利润目标数据",
+      "query": {
+        "engine": "duckdb",
+        "language": "sql",
+        "description": "加载达到每月 1 万元 Token 贡献利润所需的月活规模。",
+        "sql": "SELECT * FROM (VALUES ('乐观', 0.10, 60, 69160), ('正常', 0.05, 30, 276639), ('保守', 0.02, 10, 2074790)) AS t(scenario, paid_rate, replies_per_payer, required_mau)"
+      }
+    }
+  ]
+}

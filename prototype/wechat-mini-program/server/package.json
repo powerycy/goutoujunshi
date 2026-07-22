@@ -1,0 +1,12 @@
+{
+  "name": "goutoujunshi-beta-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js"
+  },
+  "engines": { "node": ">=22.5" }
+}

@@ -1,0 +1,38 @@
+<view class="page-shell result-page">
+  <view wx:if="{{loading}}" class="title">正在读取分析报告…</view>
+  <view wx:elif="{{error}}" class="danger-note">{{error}}</view>
+  <block wx:elif="{{task.status === 'failed'}}">
+    <view class="eyebrow">CASE / FAILED</view><view class="title">这次没交成卷</view>
+    <view class="danger-note">{{task.errorMessage || '模型或系统未能生成可用的结构化分析。'}}体验券没有核销，可稍后重试。</view>
+  </block>
+  <block wx:elif="{{task.status === 'blocked'}}">
+    <view class="eyebrow">SAFETY / 先处理现实安全</view><view class="title">这不是普通恋爱策略题</view>
+    <view class="danger-note">{{result.emotionalGrounding}}</view>
+    <evidence-section index="01" title="现在先做" tone="danger" items="{{result.facts}}" />
+    <evidence-section index="02" title="安全行动" tone="sage" text="{{result.nextAction}}" />
+    <evidence-section index="03" title="停止条件与求助" tone="danger" items="{{result.stopConditions}}" />
+    <view class="ai-label">{{result.safetyNote || aiDisclosure}}</view>
+  </block>
+  <block wx:elif="{{result}}">
+    <view class="result-head page-enter">
+      <view class="eyebrow">CASE / DELIVERED · {{task.model}}</view>
+      <view class="title">分析完成，先看核心结论</view>
+      <view class="delivery-stamp">已交付<text>{{task.modelMode === 'mock' ? '本地演示' : 'AI 分析'}}</text></view>
+    </view>
+    <evidence-section index="01" title="先稳一下" tone="gold" text="{{result.emotionalGrounding}}" />
+    <view class="evidence-grid">
+      <evidence-section index="02A" title="已知事实" items="{{result.facts}}" />
+      <evidence-section index="02B" title="合理推测" items="{{result.inferences}}" />
+      <evidence-section index="02C" title="关键未知" items="{{result.unknowns}}" />
+    </view>
+    <evidence-section index="03" title="核心判断" tone="gold" text="{{result.recommendation}}" items="{{result.reasons}}" />
+    <evidence-section index="04" title="下一步" tone="sage" text="{{result.nextAction}}" />
+    <view wx:if="{{result.messageDraft}}" class="message-draft"><view class="label">可选话术 / COPY</view><view>“{{result.messageDraft}}”</view></view>
+    <evidence-section index="05" title="观察窗口" text="{{result.observationWindow}}" />
+    <evidence-section index="06" title="停止条件" tone="danger" items="{{result.stopConditions}}" />
+    <view class="usage" wx:if="{{task.usage}}">本次使用 1 次免费完整分析，扣款 0 元。详细模型用量已记录，用于成本与计费校准。</view>
+    <view class="ai-label">{{result.safetyNote || aiDisclosure}}</view>
+  </block>
+  <button class="primary-button" bindtap="goHome">分析另一个问题</button>
+  <button class="secondary-button next" bindtap="goHistory">查看历史分析</button>
+</view>

@@ -1,0 +1,5 @@
+<view class="section {{tone}}">
+  <view class="heading"><text class="heading-index">{{index}}</text><view>{{title}}</view></view>
+  <view wx:if="{{text}}" class="body">{{text}}</view>
+  <view wx:for="{{items}}" wx:key="*this" class="item"><text class="item-mark">—</text><view class="item-copy">{{item}}</view></view>
+</view>

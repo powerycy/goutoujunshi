@@ -1,0 +1,138 @@
+page {
+  min-height: 100%;
+  background: #ffffff;
+  color: #111111;
+  font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+}
+
+button::after {
+  border: 0;
+}
+
+.page-shell {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 40rpx 32rpx 120rpx;
+  background: #ffffff;
+}
+
+.page-shell > view,
+.page-shell > button,
+.page-shell > textarea,
+.page-shell > input,
+.page-shell > picker,
+.page-shell > form,
+.page-shell > scroll-view {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  color: #18c463;
+  font-size: 24rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.title {
+  margin-top: 18rpx;
+  font-size: 52rpx;
+  font-weight: 800;
+  line-height: 1.18;
+  font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+}
+
+.subtitle {
+  margin-top: 20rpx;
+  color: #6f6f6f;
+  font-size: 28rpx;
+  line-height: 1.7;
+}
+
+.paper-card {
+  box-sizing: border-box;
+  border: 2rpx solid #ececec;
+  border-radius: 24rpx;
+  background: #ffffff;
+}
+
+.meta-label {
+  color: #8b7769;
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.primary-button,
+.secondary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 92rpx;
+  border-radius: 20rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.primary-button {
+  background: #18c463;
+  color: #ffffff;
+}
+
+.secondary-button {
+  background: #f4f5f4;
+  color: #333333;
+}
+
+.primary-button:active,
+.secondary-button:active {
+  transform: scale(0.98);
+}
+
+.safe-note {
+  margin-top: 24rpx;
+  padding: 22rpx 24rpx;
+  border-left: 6rpx solid #18c463;
+  background: #f2fbf6;
+  color: #3e6d50;
+  font-size: 23rpx;
+  line-height: 1.65;
+}
+
+.danger-note {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  border: 2rpx solid #f0b8b3;
+  border-radius: 20rpx;
+  background: #fff6f5;
+  color: #8a2d26;
+  font-size: 25rpx;
+  line-height: 1.65;
+}
+
+.bottom-links {
+  display: flex;
+  justify-content: center;
+  gap: 36rpx;
+  margin-top: 34rpx;
+  color: #7b6b60;
+  font-size: 24rpx;
+}
+
+.page-enter {
+  animation: case-open 280ms ease-out both;
+}
+
+@keyframes case-open {
+  from { opacity: 0; transform: translateY(18rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter { animation-duration: 0.01ms; animation-iteration-count: 1; }
+  .primary-button,
+  .secondary-button { transition-duration: 0.01ms; }
+}

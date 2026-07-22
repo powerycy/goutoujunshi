@@ -1,0 +1,7 @@
+<view wx:if="{{benefit && benefit.cohort}}" class="badge">
+  <view class="stamp">内测</view>
+  <view class="copy">
+    <view class="title">创始内测官</view>
+    <view class="detail">免费分析 {{benefit.trialAnalysisRemaining}} 次 · 正式版 10 狗头（到账后60天有效）已预留</view>
+  </view>
+</view>

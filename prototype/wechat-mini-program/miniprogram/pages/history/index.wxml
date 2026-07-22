@@ -1,0 +1,14 @@
+<view class="page-shell history-page">
+  <view class="page-enter"><view class="title">历史判断</view><view class="subtitle">登录后，同一账号下的判断会保存在这里。</view></view>
+  <view wx:if="{{loading}}" class="empty">正在读取分析记录…</view>
+  <view wx:elif="{{error}}" class="danger-note">{{error}}</view>
+  <view wx:elif="{{!items.length}}" class="empty"><view>还没有历史判断</view><text>回到首页，先提交一个具体关系问题。</text></view>
+  <view wx:else class="archive-list">
+    <view wx:for="{{items}}" wx:key="id" class="archive-row" data-id="{{item.id}}" bindtap="open">
+      <view class="archive-index">{{item.indexLabel}}</view>
+      <view class="archive-main"><view class="archive-title">{{item.profile.targetAlias || 'A'}} · {{item.profile.goal || '关系分析'}}</view><view class="archive-meta">{{item.dateLabel}} · {{item.statusLabel}}</view></view>
+      <view class="archive-actions"><text>查看</text><text class="delete" data-id="{{item.id}}" catchtap="remove">删除</text></view>
+    </view>
+  </view>
+  <button class="primary-button" bindtap="goHome">回到军师</button>
+</view>

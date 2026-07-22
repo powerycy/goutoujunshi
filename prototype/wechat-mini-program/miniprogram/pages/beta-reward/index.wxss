@@ -1,0 +1,61 @@
+.reward-page {
+  padding-top: 58rpx;
+}
+
+.reward-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.reward-logo {
+  width: 82rpx;
+  height: 82rpx;
+  margin-bottom: 28rpx;
+}
+
+.reward-head .title {
+  margin-top: 0;
+  font-size: 38rpx;
+}
+
+.lead {
+  max-width: 560rpx;
+  margin-top: 20rpx;
+  color: #888;
+  font-size: 25rpx;
+  line-height: 1.65;
+}
+
+.reward-list {
+  margin-top: 48rpx;
+  border-top: 2rpx solid #eeeeee;
+}
+
+.reward-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 104rpx;
+  border-bottom: 2rpx solid #eeeeee;
+  color: #111;
+  font-size: 29rpx;
+}
+
+.reward-row text:last-child {
+  color: #18b85f;
+  font-weight: 750;
+}
+
+.reward-note {
+  padding-top: 18rpx;
+  color: #9a9a9a;
+  font-size: 23rpx;
+  line-height: 1.6;
+}
+
+.primary-button {
+  margin-top: 42rpx;
+  border-radius: 16rpx;
+}

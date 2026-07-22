@@ -1,0 +1,10 @@
+.section { margin-top:24rpx; padding:28rpx; border:2rpx solid #eadfd0; border-radius:20rpx; background:#fffcf6; }
+.section.sage { background:#edf6ec; border-color:#d4e7d1; }
+.section.gold { background:#fff0c7; border-color:#ecd49b; }
+.section.danger { background:#fff4ef; border-color:#c98377; }
+.heading { display:flex; align-items:baseline; gap:18rpx; font-family:STSong,"Songti SC","Noto Serif CJK SC",serif; font-size:32rpx; font-weight:800; }
+.heading-index { color:#c2602c; font:20rpx ui-monospace,SFMono-Regular,Menlo,monospace; }
+.body { margin-top:18rpx; color:#473b32; font-size:27rpx; line-height:1.75; white-space:pre-wrap; }
+.item { display:flex; gap:14rpx; margin-top:16rpx; color:#473b32; font-size:26rpx; line-height:1.68; }
+.item-mark { color:#c2602c; }
+.item-copy { flex:1; }

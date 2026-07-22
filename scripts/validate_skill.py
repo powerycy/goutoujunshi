@@ -58,10 +58,12 @@ def validate_inventory() -> None:
     require("references/practical/关系投入失衡：互惠判断、降级投入与退出决策.md")
     require("references/practical/场景感、松弛感与社交校准：从接话到关系推进.md")
     require("references/practical/实战话术编排器：从一句回复到后续分支.md")
+    require("references/practical/主动表达、第一次见面与自然接触.md")
     require("tests/chat-record-analysis-scenarios.md")
     require("tests/relationship-investment-scenarios.md")
     require("tests/social-calibration-scenarios.md")
     require("tests/tactical-reply-scenarios.md")
+    require("tests/active-dating-scenarios.md")
 
     agent = ROOT / "agents/openai.yaml"
     if agent.is_file() and "$goutoujunshi" not in agent.read_text(encoding="utf-8"):

@@ -4,9 +4,9 @@ const Events = require('../../services/events')
 Page({
   data: {
     packages: [
-      { id: 'cny_1', coins: 10, price: 1 },
-      { id: 'cny_6', coins: 60, price: 6 },
-      { id: 'cny_12', coins: 120, price: 12 }
+      { id: 'cny_1', coins: 10, price: 1, label: '首充限定' },
+      { id: 'cny_6', coins: 30, price: 6, label: '单题补给' },
+      { id: 'cny_12', coins: 75, price: 12, label: '持续跟进' }
     ],
     benefit: null,
     selectedPackage: 'cny_6',

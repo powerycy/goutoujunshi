@@ -4,7 +4,11 @@ const CAMPAIGN = 'founding_beta_2026'
 const BENEFIT_VERSION = 'launch_credit_10_60d_v1'
 const LAUNCH_BONUS_COINS = 10
 const LAUNCH_BONUS_VALIDITY_DAYS = 60
-const PACKAGES = { cny_1: 100, cny_6: 600, cny_12: 1200 }
+const PACKAGES = {
+  cny_1: { priceFen: 100, coins: 10 },
+  cny_6: { priceFen: 600, coins: 30 },
+  cny_12: { priceFen: 1200, coins: 75 }
+}
 function id(prefix) { return `${prefix}_${crypto.randomUUID().replaceAll('-', '')}` }
 
 function createBetaService(db) {
@@ -36,7 +40,7 @@ function createBetaService(db) {
   function claim(user, input, sourceEventId) {
     if (!PACKAGES[input.packageId]) { const e=new Error('套餐不存在'); e.code='INVALID_PACKAGE'; e.statusCode=400; throw e }
     db.prepare('INSERT INTO purchase_intents(id,user_id,package_id,displayed_price_fen,copy_version,source,created_at) VALUES(?,?,?,?,?,?,?)')
-      .run(id('pi'), user.id, input.packageId, PACKAGES[input.packageId], input.copyVersion || 'professional_v3', input.source || 'pricing_page', new Date().toISOString())
+      .run(id('pi'), user.id, input.packageId, PACKAGES[input.packageId].priceFen, input.copyVersion || 'professional_v3', input.source || 'pricing_page', new Date().toISOString())
     const existing = member(user.id)
     if (existing) return Object.assign({ isNewBeta:false, paymentInvoked:false }, getMine(user))
     let freeClaimed = false

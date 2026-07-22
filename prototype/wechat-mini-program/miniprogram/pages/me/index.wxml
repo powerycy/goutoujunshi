@@ -1,6 +1,6 @@
 <view class="page-shell me-page">
   <view class="profile-button page-enter" bindtap="syncProfile">
-    <image class="profile-avatar" src="{{avatarUrl || '/assets/doghead-logo.png'}}" mode="aspectFill" />
+    <image class="profile-avatar" src="{{avatarUrl || '/assets/person-icon.png'}}" mode="aspectFill" />
     <view class="profile-copy">
       <view class="profile-name">{{displayName}}</view>
       <view class="profile-status">{{profileHint}}</view>
@@ -22,27 +22,15 @@
   <view class="more-group">
     <view class="more-trigger" bindtap="toggleMore">
       <text>更多</text>
-      <view class="row-side"><text>赠品 · 历史 · 服务</text><text class="chevron {{moreOpen ? 'open' : ''}}">›</text></view>
+      <view class="row-side"><text>历史 · 建议 · 账户</text><text class="chevron {{moreOpen ? 'open' : ''}}">›</text></view>
     </view>
     <view wx:if="{{moreOpen}}" class="more-list">
-      <view class="menu-row compact-row">
-        <text>赠品</text>
-        <text class="row-value">{{giftSummary}}</text>
-      </view>
       <view class="menu-row compact-row" bindtap="goHistory">
         <text>历史判断</text>
         <text class="chevron">›</text>
       </view>
-      <view class="menu-row compact-row" bindtap="goRecords">
-        <text>购买记录</text>
-        <text class="chevron">›</text>
-      </view>
       <view class="menu-row compact-row" bindtap="suggestProduct">
         <text>产品建议</text>
-        <text class="chevron">›</text>
-      </view>
-      <view class="menu-row compact-row" bindtap="contactSupport">
-        <text>反馈与客服</text>
         <text class="chevron">›</text>
       </view>
       <button class="delete-account" bindtap="deleteAccount">删除账号与历史</button>

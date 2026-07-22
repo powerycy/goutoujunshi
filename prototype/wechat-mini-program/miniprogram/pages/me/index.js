@@ -36,6 +36,7 @@ Page({
         giftSummary: gifts.length ? gifts.join(' · ') : '无',
         error: ''
       })
+      wx.setNavigationBarTitle({ title: profile.nickName || '微信用户' })
     } catch (error) {
       if (!retried && error && error.statusCode === 401) {
         await getApp().ready(true).catch(() => null)
@@ -63,6 +64,7 @@ Page({
             avatarUrl: profile.avatarUrl,
             profileHint: '微信账号已登录'
           })
+          wx.setNavigationBarTitle({ title: profile.nickName })
         },
         fail: () => this.load()
       })
@@ -89,17 +91,7 @@ Page({
       }
     })
   },
-  contactSupport() {
-    wx.showModal({
-      title: '反馈与客服',
-      content: '正式上线后接入微信客服。当前可以先通过“产品建议”提交反馈。',
-      showCancel: false,
-      confirmText: '知道了',
-      confirmColor: '#18c463'
-    })
-  },
   goPricing() { wx.navigateTo({ url: '/pages/pricing/index' }) },
-  goRecords() { wx.navigateTo({ url: '/pages/pricing/index?section=records' }) },
   goHistory() { wx.navigateTo({ url: '/pages/history/index' }) },
   goCase() { wx.navigateTo({ url: '/pages/home/index' }) },
 

@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding: 28rpx 32rpx 34rpx;
+  min-height: 0;
+  padding: 28rpx 32rpx calc(24rpx + env(safe-area-inset-bottom));
 }
 
 .home-nav {
@@ -17,7 +18,7 @@
   display: flex;
   align-items: center;
   gap: 12rpx;
-  color: #111;
+  color: #3f3f3f;
   font-size: 31rpx;
   font-weight: 750;
 }
@@ -28,9 +29,6 @@
 }
 
 .me-icon-button {
-  position: absolute;
-  top: 7rpx;
-  right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,15 +44,15 @@
 }
 
 .me-icon-button image {
-  width: 40rpx;
-  height: 40rpx;
+  width: 46rpx;
+  height: 46rpx;
 }
 
 .conversation {
   flex: 1 1 0;
   height: 0;
   min-height: 0;
-  padding: 24rpx 0 250rpx;
+  padding: 24rpx 0 28rpx;
   box-sizing: border-box;
 }
 
@@ -63,7 +61,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 760rpx;
+  min-height: 100%;
   text-align: center;
 }
 
@@ -75,7 +73,7 @@
 
 .hero-title {
   max-width: 620rpx;
-  color: #111;
+  color: #3f3f3f;
   font-size: 44rpx;
   font-weight: 760;
   line-height: 1.38;
@@ -95,7 +93,7 @@
   padding: 22rpx 26rpx;
   border-radius: 26rpx;
   background: #f4f6f4;
-  color: #1c1c1c;
+  color: #414141;
   font-size: 29rpx;
   line-height: 1.6;
 }
@@ -109,7 +107,7 @@
   align-items: center;
   gap: 14rpx;
   margin-bottom: 24rpx;
-  color: #111;
+  color: #3f3f3f;
   font-size: 33rpx;
   font-weight: 760;
 }
@@ -125,7 +123,7 @@
 
 .answer-lead {
   margin-bottom: 30rpx;
-  color: #111;
+  color: #3f3f3f;
   font-size: 31rpx;
   font-weight: 680;
   line-height: 1.7;
@@ -145,7 +143,7 @@
 
 .answer-copy,
 .answer-item {
-  color: #222;
+  color: #4a4a4a;
   font-size: 28rpx;
   line-height: 1.72;
 }
@@ -215,13 +213,10 @@
 }
 
 .composer {
-  position: absolute;
-  right: 32rpx;
-  bottom: 34rpx;
-  left: 32rpx;
   flex: 0 0 auto;
-  height: 240rpx;
-  padding: 20rpx 20rpx 16rpx;
+  width: 100%;
+  min-height: 274rpx;
+  padding: 24rpx 22rpx 18rpx;
   border: 2rpx solid #dcdcdc;
   border-radius: 28rpx;
   background: #fff;
@@ -229,17 +224,11 @@
   box-sizing: border-box;
 }
 
-.home-page > .composer {
-  position: fixed;
-  z-index: 3;
-}
-
 .composer-input {
   width: 100%;
-  height: 124rpx;
-  min-height: 124rpx;
-  padding-right: 82rpx;
-  color: #111;
+  height: 170rpx;
+  min-height: 170rpx;
+  color: #444;
   font-size: 29rpx;
   line-height: 1.55;
   box-sizing: border-box;
@@ -254,7 +243,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 18rpx;
-  margin-top: 10rpx;
+  min-height: 66rpx;
+  margin-top: 8rpx;
 }
 
 .composer-bottom text {
@@ -263,9 +253,6 @@
 }
 
 .send-button {
-  position: absolute;
-  top: 18rpx;
-  right: 18rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -278,11 +265,12 @@
   padding: 0;
   border-radius: 50%;
   background: #18c463;
-  color: #fff;
-  font-size: 36rpx;
-  font-weight: 650;
-  line-height: 66rpx;
   box-sizing: border-box;
+}
+
+.send-button image {
+  width: 38rpx;
+  height: 38rpx;
 }
 
 .send-button.disabled {

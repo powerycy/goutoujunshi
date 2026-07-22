@@ -24,6 +24,10 @@ test('充值假门使用当前专业版文案与三档价格',()=>{
   assert.match(source,/cny_1/)
   assert.match(source,/cny_6/)
   assert.match(source,/cny_12/)
+  assert.match(source,/coins:\s*30/)
+  assert.match(source,/coins:\s*75/)
+  assert.match(source,/首充限定/)
+  assert.ok(!/coins:\s*60|coins:\s*120/.test(source))
   assert.ok(!/humor_v\d|double_coin_v1/.test(source))
 })
 

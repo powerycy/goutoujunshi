@@ -13,6 +13,7 @@
       data-package-id="{{item.id}}"
       bindtap="choosePackage"
     >
+      <view class="package-label {{item.id === 'cny_1' ? 'accent' : ''}}">{{item.label}}</view>
       <view class="price"><text>¥</text>{{item.price}}</view>
       <view class="coin-copy">{{item.coins}} 个狗头</view>
     </view>
@@ -34,7 +35,7 @@
     </view>
     <view wx:if="{{recordsOpen}}" class="records-panel">
       <view class="empty-record">暂无购买记录</view>
-      <view class="refund-note">整单未使用可申请退款；已使用任意狗头后，整单不可退。赠品不可退款，也不折算现金。</view>
+      <view class="refund-note">未使用的订单可整单申请退款。赠品不计入退款金额。</view>
     </view>
   </view>
 

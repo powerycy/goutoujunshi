@@ -9,12 +9,12 @@
   justify-content: space-between;
   min-height: 112rpx;
   border-bottom: 2rpx solid #eeeeee;
-  color: #111;
+  color: #444;
   font-size: 29rpx;
 }
 
 .balance-value {
-  color: #111;
+  color: #3f3f3f;
   font-size: 42rpx;
   font-weight: 750;
   line-height: 1;
@@ -39,12 +39,25 @@
 
 .package-option {
   min-width: 0;
-  padding: 28rpx 8rpx 24rpx;
+  min-height: 176rpx;
+  padding: 20rpx 8rpx 22rpx;
   border: 2rpx solid #e8e8e8;
   border-radius: 16rpx;
   background: #fff;
   text-align: center;
   box-sizing: border-box;
+}
+
+.package-label {
+  height: 32rpx;
+  color: #8a8a8a;
+  font-size: 19rpx;
+  line-height: 32rpx;
+}
+
+.package-label.accent {
+  color: #18b85f;
+  font-weight: 700;
 }
 
 .package-option.selected {
@@ -53,7 +66,7 @@
 }
 
 .price {
-  color: #111;
+  color: #3f3f3f;
   font-size: 38rpx;
   font-weight: 750;
 }
@@ -99,7 +112,7 @@
   justify-content: space-between;
   min-height: 96rpx;
   border-bottom: 2rpx solid #eeeeee;
-  color: #111;
+  color: #444;
   font-size: 28rpx;
 }
 

@@ -5,7 +5,7 @@
       <text>狗头军师</text>
     </view>
     <button class="me-icon-button" bindtap="goMe" aria-label="我的">
-      <image src="/assets/doghead-logo.png" mode="aspectFit" />
+      <image src="/assets/person-icon.png" mode="aspectFit" />
     </button>
   </view>
 
@@ -99,7 +99,9 @@
         aria-label="发送问题"
         aria-disabled="{{!canSubmit || status === 'running'}}"
         bindtap="submit"
-      >↑</view>
+      >
+        <image src="/assets/arrow-up-icon.png" mode="aspectFit" />
+      </view>
     </view>
   </view>
 </view>

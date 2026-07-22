@@ -1,7 +1,7 @@
 page {
   min-height: 100%;
   background: #ffffff;
-  color: #111111;
+  color: #444444;
   font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
 }
 

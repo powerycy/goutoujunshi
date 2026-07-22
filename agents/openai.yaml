@@ -1,4 +1,4 @@
 interface:
   display_name: "狗头军师"
   short_description: "安抚恋爱情绪，分析聊天记录与多人关系，给出可执行策略"
-  default_prompt: "使用 $goutoujunshi 帮我分析聊天记录和当前关系，并给出下一步建议。"
+  default_prompt: "使用 $goutoujunshi 帮我梳理情绪、分析当前关系，并给出下一步建议。"

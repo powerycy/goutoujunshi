@@ -56,6 +56,7 @@ def validate_inventory() -> None:
     if len(practical) < 16:
         ERRORS.append(f"expected at least 16 practical documents, found {len(practical)}")
     require("references/practical/关系投入失衡：互惠判断、降级投入与退出决策.md")
+    require("tests/chat-record-analysis-scenarios.md")
     require("tests/relationship-investment-scenarios.md")
 
     agent = ROOT / "agents/openai.yaml"

@@ -45,6 +45,33 @@ function createDatabase(filename, config) {
       access_grant_type TEXT NOT NULL, error_code TEXT, error_message TEXT,
       created_at TEXT NOT NULL, delivered_at TEXT, deleted_at TEXT
     );
+    CREATE TABLE IF NOT EXISTS model_usage_ledger (
+      id TEXT PRIMARY KEY,
+      analysis_id TEXT NOT NULL REFERENCES analyses(id),
+      user_id TEXT NOT NULL REFERENCES users(id),
+      provider TEXT NOT NULL,
+      model TEXT NOT NULL,
+      phase TEXT NOT NULL,
+      attempt INTEGER NOT NULL,
+      outcome TEXT NOT NULL,
+      provider_request_id TEXT,
+      http_status INTEGER,
+      prompt_tokens INTEGER,
+      cached_tokens INTEGER,
+      completion_tokens INTEGER,
+      weighted_tokens INTEGER,
+      pricing_version TEXT NOT NULL,
+      uncached_input_price_nano_yuan INTEGER NOT NULL,
+      cached_input_price_nano_yuan INTEGER NOT NULL,
+      output_price_nano_yuan INTEGER NOT NULL,
+      estimated_cost_nano_yuan INTEGER NOT NULL DEFAULT 0,
+      duration_ms INTEGER,
+      error_code TEXT,
+      created_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_model_usage_ledger_created_at ON model_usage_ledger(created_at);
+    CREATE INDEX IF NOT EXISTS idx_model_usage_ledger_user_created ON model_usage_ledger(user_id, created_at);
+    CREATE INDEX IF NOT EXISTS idx_model_usage_ledger_analysis ON model_usage_ledger(analysis_id);
     CREATE TABLE IF NOT EXISTS product_events (
       event_id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), event_name TEXT NOT NULL,
       safe_properties_json TEXT NOT NULL, occurred_at TEXT NOT NULL

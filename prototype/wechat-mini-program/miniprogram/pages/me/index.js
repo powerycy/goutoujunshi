@@ -76,7 +76,7 @@ Page({
       placeholderText: '告诉我们哪里可以做得更好',
       confirmText: '提交',
       confirmColor: '#18c463',
-      success: (result) => {
+      success: async (result) => {
         const content = String(result.content || '').trim()
         if (!result.confirm || !content) return
         try {

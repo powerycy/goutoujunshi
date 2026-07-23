@@ -7,6 +7,7 @@
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
     "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "costs": "node scripts/report-costs.js",
     "invites": "node scripts/manage-invites.js"
   },
   "engines": { "node": ">=22.5" }

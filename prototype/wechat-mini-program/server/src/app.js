@@ -8,6 +8,7 @@ const { createBetaService } = require('./services/beta-service')
 const { createSkillRouter } = require('./services/skill-router')
 const { createStepfunGateway } = require('./services/stepfun-gateway')
 const { createAnalysisService } = require('./services/analysis-service')
+const { createModelUsageLedger } = require('./services/model-usage-ledger')
 
 function json(response,status,body){response.writeHead(status,{'content-type':'application/json; charset=utf-8','access-control-allow-origin':'*'});response.end(JSON.stringify(body))}
 function readBody(request){return new Promise((resolve,reject)=>{let body='';request.on('data',(chunk)=>{body+=chunk;if(body.length>1_000_000){reject(Object.assign(new Error('请求过大'),{statusCode:413,code:'PAYLOAD_TOO_LARGE'}));request.destroy()}});request.on('end',()=>{try{resolve(body?JSON.parse(body):{})}catch(_){reject(Object.assign(new Error('JSON 格式错误'),{statusCode:400,code:'INVALID_JSON'}))}});request.on('error',reject)})}
@@ -16,9 +17,9 @@ function safeProperties(properties){const result={};for(const [key,value] of Obj
 function createContext(overrides={}){
   const config=loadConfig(overrides.config||{});const db=createDatabase(overrides.databaseUrl||config.databaseUrl,config)
   const cryptoService=createCryptoService(config.dataEncryptionKey);const auth=createAuthService(db,config);const beta=createBetaService(db,config)
-  const skillRouter=createSkillRouter(config);const gateway=overrides.gateway||createStepfunGateway(config)
+  const costs=createModelUsageLedger(db);const skillRouter=createSkillRouter(config);const gateway=overrides.gateway||createStepfunGateway(config,costs)
   const analysis=createAnalysisService(db,config,cryptoService,skillRouter,gateway)
-  return{config,db,auth,beta,analysis,cryptoService}
+  return{config,db,auth,beta,analysis,costs,cryptoService}
 }
 
 function createServer(context){
@@ -37,6 +38,10 @@ function createServer(context){
       if(isWrite){const cached=context.db.prepare('SELECT status_code,response_json FROM idempotency_records WHERE user_id=? AND route_key=? AND idempotency_key=?').get(user.id,routeKey,idem);if(cached){json(response,cached.status_code,JSON.parse(cached.response_json));return}}
       let status=200;let result
       if(request.method==='GET'&&path==='/v1/beta/me')result=context.beta.getMine(user)
+      else if(request.method==='GET'&&path==='/v1/admin/costs/summary'){
+        if(user.role!=='admin'){json(response,403,{code:'FORBIDDEN',message:'仅管理员可查看成本汇总'});return}
+        result=context.costs.summary()
+      }
       else if(request.method==='POST'&&path==='/v1/beta/purchase-intents'){result=context.beta.claim(user,body,idem);status=201}
       else if(request.method==='POST'&&path==='/v1/analyses'){result=context.analysis.create(user,body);status=202}
       else if(request.method==='GET'&&path==='/v1/analyses')result=context.analysis.list(user)

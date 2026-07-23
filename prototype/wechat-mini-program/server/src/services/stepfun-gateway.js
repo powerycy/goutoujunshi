@@ -24,25 +24,44 @@ function mockResult(profile) {
   }
 }
 
-function createStepfunGateway(config) {
+function createStepfunGateway(config, usageLedger, dependencies = {}) {
+  const fetchImpl = dependencies.fetchImpl || fetch
+  const sleepImpl = dependencies.sleepImpl || sleep
+  function recordCall(event) {
+    if (!usageLedger || typeof usageLedger.record !== 'function') return
+    try { usageLedger.record(event) }
+    catch (error) { console.error('[usage-ledger]', error.code || error.name) }
+  }
   async function requestCompletion(requestId, items, suffix='', deadline=Date.now()+config.modelTimeoutMs) {
     let lastError
     for (let attempt=0; attempt<3; attempt++) {
       const remaining=deadline-Date.now()
       if(remaining<=0) { const e=new Error('StepFun total timeout'); e.name='AbortError'; throw e }
       const controller = new AbortController(); const timeout=setTimeout(()=>controller.abort(),remaining)
+      const startedAt=Date.now();let httpStatus=null;let providerRequestId=null;let usage=null;let recorded=false
+      const phase=suffix==='-repair'?'repair':'initial'
+      const finish=(outcome,error)=>{
+        if(recorded)return
+        recorded=true
+        recordCall({analysisId:requestId,provider:'stepfun',model:config.stepfunModel,phase,attempt:attempt+1,outcome,
+          providerRequestId,httpStatus,usage,durationMs:Date.now()-startedAt,errorCode:error&&(error.code||error.name)})
+      }
       try {
-        const response = await fetch(`${config.stepfunBaseUrl}/chat/completions`, { method:'POST', signal:controller.signal,
+        const response = await fetchImpl(`${config.stepfunBaseUrl}/chat/completions`, { method:'POST', signal:controller.signal,
           headers:{ Authorization:`Bearer ${config.stepfunApiKey}`,'Content-Type':'application/json','X-Request-ID':`${requestId}${suffix}` },
           body:JSON.stringify({ model:config.stepfunModel, messages:items, temperature:.35, max_tokens:2400, response_format:{type:'json_object'} }) })
+        httpStatus=response.status
         const payload = await response.json(); clearTimeout(timeout)
-        if (!response.ok) { const e=new Error(`StepFun ${response.status}`); e.retryable=response.status===429||response.status>=500; throw e }
+        providerRequestId=payload.id||null;usage=weightedUsage(payload.usage)
+        if (!response.ok) { const e=new Error(`StepFun ${response.status}`); e.code=`HTTP_${response.status}`;e.retryable=response.status===429||response.status>=500;finish('http_error',e);throw e }
         const content = payload.choices && payload.choices[0] && payload.choices[0].message && payload.choices[0].message.content
-        return { content, usage:weightedUsage(payload.usage), requestId:payload.id }
+        finish('succeeded')
+        return { content, usage, requestId:payload.id }
       } catch (error) {
-        clearTimeout(timeout); lastError=error
+        clearTimeout(timeout);lastError=error
+        finish(error.name==='AbortError'?'timeout':httpStatus?'response_error':'network_error',error)
         if (attempt===2 || (!error.retryable && error.name!=='AbortError')) break
-        await sleep(300 * (2 ** attempt))
+        await sleepImpl(300 * (2 ** attempt))
       }
     }
     throw lastError

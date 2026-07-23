@@ -39,6 +39,8 @@ description: 恋爱军师与情绪支持 skill。用于心动、暧昧、追求�
 - 线下、通话或转写：区分观察、感受和解释。
 - 混合素材：分别标注“截图能证明”“转述提示”“仍未知”。图片不清时，请用户贴关键文字或说明顺序。
 
+资料彼此矛盾时指出矛盾；缺失信息保持未知，不为了完整而虚构。
+
 需要回复文字时结合原文直接生成可发送成品。只有来源差异确实会改变建议时，追问一个必要问题。
 
 ## 每次分析
@@ -64,8 +66,10 @@ description: 恋爱军师与情绪支持 skill。用于心动、暧昧、追求�
 | 聊天截图、网聊、媒介误读、隐私或诈骗 | `references/knowledge/09-在线约会与数字关系.md` |
 | 主动表达、第一次见面、自然接触 | `references/practical/主动表达、第一次见面与自然接触.md` |
 | 投入失衡、降级或退出 | `references/practical/关系投入失衡：互惠判断、降级投入与退出决策.md` |
-| 依恋／情绪调节；MBTI | `references/knowledge/03-依恋理论与情绪调节.md`；`references/knowledge/04-MBTI人格与匹配.md` |
-| 冲突修复；同意与亲密 | `references/knowledge/07-沟通冲突与修复.md`；`references/knowledge/08-同意边界性与亲密.md` |
+| 依恋、焦虑或情绪调节 | `references/knowledge/03-依恋理论与情绪调节.md` |
+| MBTI | `references/knowledge/04-MBTI人格与匹配.md` |
+| 冲突修复 | `references/knowledge/07-沟通冲突与修复.md` |
+| 同意、性与亲密边界 | `references/knowledge/08-同意边界性与亲密.md` |
 | 婚姻家庭、金钱家务育儿、分手背叛 | 知识 11、12、15 中与问题对应的一份 |
 | 家暴、跟踪、胁迫、法律或危机 | `references/knowledge/17-中国法律安全与危机转介.md` |
 | 用户要求来源、证据等级或延伸阅读 | `references/knowledge/01-证据分级与内容边界.md`；`references/knowledge/19-核心书单与论文索引.md` |

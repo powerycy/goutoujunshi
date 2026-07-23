@@ -21,6 +21,8 @@ Codex 根据 Skill 描述决定是否加载 `SKILL.md`。被调用后，代理�
 
 `SKILL.md` 只保留核心流程、路由和安全边界，默认按问题读取 1–3 份参考。项目文档、测试和原始研究不属于运行时安装白名单；运行时只同步 `SKILL.md`、`agents/`、`references/`、`scripts/` 以及存在时的 `assets/`。
 
+仓库运行 `python3 scripts/validate_skill.py` 校验项目与运行内容；白名单安装副本运行 `python3 scripts/validate_skill.py --runtime`，不要求项目文档和测试存在。
+
 ## 信任边界
 
 1. **用户 → Codex**：用户可能提供高度敏感的关系、健康、性、财务和家庭信息。

@@ -9,6 +9,7 @@
 | 知识文档清单与最低数量 | 关键边界文档必须存在，知识和实用文档均至少20份 | 必需文件缺失或低于最低数量时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
 | SKILL上下文预算 | 行为内核不超过150行、5000字符和约4500 token | 超预算时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
 | 运行时边界 | research、项目文档、测试和产物不进入运行白名单 | 运行目录嵌入非运行内容时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
+| 白名单安装验证 | `--runtime` 不依赖 README、LICENSE、documentation 或 tests | 仅含运行白名单时仍能完成结构、预算、路由和断链校验 | `scripts/validate_skill.py --runtime` | 已有 |
 | 聊天材料场景规范 | 覆盖截图、导出文本、转述、媒介误判和情绪承接 | 缺少规范文件时失败 | `tests/chat-record-analysis-scenarios.md` | 已有，CI要求 |
 | 投入失衡场景规范 | 覆盖误判、明确拒绝、多元关系与安全升级 | 缺少规范文件时失败 | `tests/relationship-investment-scenarios.md` | 已有，CI要求 |
 | 社交校准场景规范 | 覆盖松弛聊天、线下场景、调情、反馈校准与多元关系 | 缺少规范文件时失败 | `tests/social-calibration-scenarios.md` | 已有，CI要求 |

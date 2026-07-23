@@ -109,10 +109,11 @@ def validate_skill_budget() -> None:
         )
 
 
-def validate_inventory() -> None:
+def validate_inventory(runtime_only: bool) -> None:
     require("agents/openai.yaml")
-    require("README.md")
-    require("LICENSE")
+    if not runtime_only:
+        require("README.md")
+        require("LICENSE")
     knowledge = list((ROOT / "references/knowledge").glob("*.md"))
     practical = list((ROOT / "references/practical").glob("*.md"))
     if len(knowledge) < MIN_KNOWLEDGE_DOCUMENTS:
@@ -129,15 +130,16 @@ def validate_inventory() -> None:
         require(f"references/knowledge/{filename}")
     for filename in REQUIRED_PRACTICAL:
         require(f"references/practical/{filename}")
-    for filename in REQUIRED_SCENARIOS:
-        require(f"tests/{filename}")
+    if not runtime_only:
+        for filename in REQUIRED_SCENARIOS:
+            require(f"tests/{filename}")
 
     agent = ROOT / "agents/openai.yaml"
     if agent.is_file() and "$goutoujunshi" not in agent.read_text(encoding="utf-8"):
         ERRORS.append("agents/openai.yaml default prompt must mention $goutoujunshi")
 
 
-def validate_routes_and_regressions() -> None:
+def validate_routes_and_regressions(runtime_only: bool) -> None:
     skill = ROOT / "SKILL.md"
     if skill.is_file():
         content = skill.read_text(encoding="utf-8")
@@ -151,6 +153,8 @@ def validate_routes_and_regressions() -> None:
                 ERRORS.append(f"SKILL.md missing required progressive-disclosure route: {route}")
 
     scenarios = ROOT / "tests/classic-social-framework-scenarios.md"
+    if runtime_only:
+        return
     if scenarios.is_file():
         content = scenarios.read_text(encoding="utf-8")
         coverage_markers = (
@@ -236,10 +240,16 @@ def validate_placeholders() -> None:
 
 
 def main() -> int:
+    unexpected_args = [arg for arg in sys.argv[1:] if arg != "--runtime"]
+    if unexpected_args:
+        print(f"ERROR: unsupported arguments: {' '.join(unexpected_args)}")
+        return 2
+    runtime_only = "--runtime" in sys.argv[1:]
+
     validate_frontmatter()
     validate_skill_budget()
-    validate_inventory()
-    validate_routes_and_regressions()
+    validate_inventory(runtime_only)
+    validate_routes_and_regressions(runtime_only)
     validate_runtime_boundaries()
     validate_markdown_links()
     validate_placeholders()

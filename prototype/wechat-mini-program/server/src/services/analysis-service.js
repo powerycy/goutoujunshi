@@ -27,6 +27,33 @@ function createAnalysisService(db, config, cryptoService, skillRouter, modelGate
     if(grant==='trial_credit') db.prepare('UPDATE beta_cohort_members SET trial_analysis_reserved=MAX(0,trial_analysis_reserved-1),trial_analysis_used=trial_analysis_used+1 WHERE user_id=? AND trial_analysis_reserved>0').run(userId)
     else db.prepare('UPDATE dev_allowances SET reserved=MAX(0,reserved-1), used=used+1 WHERE user_id=? AND reserved>0').run(userId)
   }
+  function enforceDailyAttemptLimit(userId) {
+    const since=new Date(Date.now()-24*60*60*1000).toISOString()
+    const row=db.prepare('SELECT COUNT(*) AS attempts FROM analyses WHERE user_id=? AND created_at>=?').get(userId,since)
+    if(Number(row.attempts||0)>=config.maxDailyAnalysisAttempts) {
+      const e=new Error('今日分析尝试次数已达上限，请明天再试。')
+      e.code='DAILY_ANALYSIS_LIMIT'
+      e.statusCode=429
+      throw e
+    }
+  }
+  function recoverInterrupted() {
+    const rows=db.prepare("SELECT id,user_id,access_grant_type FROM analyses WHERE status IN ('queued','running')").all()
+    if(!rows.length) return 0
+    db.exec('BEGIN IMMEDIATE')
+    try {
+      for(const row of rows) {
+        db.prepare("UPDATE analyses SET status='failed',error_code='PROCESS_RESTARTED',error_message='服务重启，分析额度已恢复，请重新提交。' WHERE id=?")
+          .run(row.id)
+        release(row.user_id,row.access_grant_type)
+      }
+      db.exec('COMMIT')
+      return rows.length
+    } catch(error) {
+      db.exec('ROLLBACK')
+      throw error
+    }
+  }
   function fail(analysisId, userId, grant, code, message, result, status='failed') {
     db.prepare('UPDATE analyses SET status=?, error_code=?, error_message=?, encrypted_result=? WHERE id=?')
       .run(status,code,message,result?cryptoService.encrypt(JSON.stringify(result)):null,analysisId)
@@ -40,6 +67,7 @@ function createAnalysisService(db, config, cryptoService, skillRouter, modelGate
     const deidentifiedQuestion=suppliedAlias&&!/^[A-Z]$/i.test(suppliedAlias)?question.split(suppliedAlias).join('A'):question
     if (question.length<20 || question.length>config.maxQuestionChars) { const e=new Error(`问题需为20–${config.maxQuestionChars}字`); e.code='INVALID_QUESTION'; e.statusCode=400; throw e }
     if (!payload.consent || payload.consent.adultConfirmed!==true || payload.consent.sensitiveDataProcessing!==true) { const e=new Error('需要成年确认与本次敏感信息处理同意'); e.code='CONSENT_REQUIRED'; e.statusCode=400; throw e }
+    enforceDailyAttemptLimit(user.id)
     const accessGrant=reserve(user)
     const analysisId=id('ana')
     try {
@@ -86,7 +114,7 @@ function createAnalysisService(db, config, cryptoService, skillRouter, modelGate
   function get(user,idValue) { const row=db.prepare('SELECT * FROM analyses WHERE id=? AND user_id=? AND deleted_at IS NULL').get(idValue,user.id); if(!row){const e=new Error('分析记录不存在');e.code='NOT_FOUND';e.statusCode=404;throw e} return serialize(row) }
   function list(user) { return { items:db.prepare('SELECT * FROM analyses WHERE user_id=? AND deleted_at IS NULL ORDER BY created_at DESC LIMIT 100').all(user.id).map(serialize) } }
   function remove(user,idValue) { const updated=db.prepare('UPDATE analyses SET deleted_at=?,encrypted_question=?,encrypted_result=NULL WHERE id=? AND user_id=? AND deleted_at IS NULL').run(new Date().toISOString(),cryptoService.encrypt('[用户已删除]'),idValue,user.id); if(updated.changes!==1){const e=new Error('分析记录不存在');e.code='NOT_FOUND';e.statusCode=404;throw e} return {deleted:true} }
-  return { create, get, list, process, remaining, remove }
+  return { create, get, list, process, recoverInterrupted, remaining, remove }
 }
 
 module.exports = { createAnalysisService }

@@ -31,6 +31,7 @@ function loadConfig(overrides = {}) {
     host: process.env.HOST || (nodeEnv === 'development' ? '127.0.0.1' : '0.0.0.0'),
     maxQuestionChars: 4000,
     maxWeightedTokens: 30000,
+    maxDailyAnalysisAttempts: int('MAX_DAILY_ANALYSIS_ATTEMPTS', 10),
     modelTimeoutMs: 60000,
     repositoryRoot: path.resolve(__dirname, '../../../..')
   }

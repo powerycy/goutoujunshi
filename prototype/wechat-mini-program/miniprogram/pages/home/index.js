@@ -82,7 +82,7 @@ Page({
     return new Promise((resolve) => {
       wx.showModal({
         title: '开始分析',
-        content: '请使用代号描述关系对象。提交后，本次关系信息会发送至服务端用于生成分析。',
+        content: '继续表示你已满 18 岁，并同意将本次关系信息发送至服务端和 AI 模型用于生成分析。请使用代号描述他人。',
         confirmText: '同意并发送',
         confirmColor: '#18c463',
         success: (result) => {

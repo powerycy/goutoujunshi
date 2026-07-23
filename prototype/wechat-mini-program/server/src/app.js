@@ -19,6 +19,7 @@ function createContext(overrides={}){
   const cryptoService=createCryptoService(config.dataEncryptionKey);const auth=createAuthService(db,config);const beta=createBetaService(db,config)
   const costs=createModelUsageLedger(db);const skillRouter=createSkillRouter(config);const gateway=overrides.gateway||createStepfunGateway(config,costs)
   const analysis=createAnalysisService(db,config,cryptoService,skillRouter,gateway)
+  analysis.recoverInterrupted()
   return{config,db,auth,beta,analysis,costs,cryptoService}
 }
 

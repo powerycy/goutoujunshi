@@ -31,6 +31,30 @@ test('模型失败不核销内测分析券',async()=>{
   const row=context.db.prepare('SELECT trial_analysis_used,trial_analysis_reserved FROM beta_cohort_members WHERE user_id=?').get(current.id);assert.deepEqual({...row},{trial_analysis_used:0,trial_analysis_reserved:0})
 })
 
+test('单用户每日尝试上限阻止失败任务无限消耗模型成本',async()=>{
+  const gateway={analyze:async()=>{throw new Error('synthetic model failure')}}
+  const context=createContext({databaseUrl:':memory:',gateway,config:{nodeEnv:'test',allowDevAuth:false,sessionSecret:'test-session-secret-long-enough',dataEncryptionKey:'test-data-key-long-enough',modelMode:'mock',betaCampaignQuota:1000,betaInviteRequired:false,maxDailyAnalysisAttempts:2}})
+  const current=user(context,'daily_limit_user')
+  const first=context.analysis.create(current,payload('这是第一份用于验证每日失败尝试上限的合成关系问题，内容长度足够。'))
+  await context.analysis.process(first.analysisId)
+  const second=context.analysis.create(current,payload('这是第二份用于验证每日失败尝试上限的合成关系问题，内容长度也足够。'))
+  await context.analysis.process(second.analysisId)
+  assert.throws(()=>context.analysis.create(current,payload('这是第三份合成关系问题，应当在调用模型以前触发每日尝试次数上限。')),/今日分析尝试次数已达上限/)
+  assert.equal(context.beta.getMine(current).trialAnalysisRemaining,3)
+})
+
+test('服务重启会释放排队任务预留的内测额度',()=>{
+  const context=createContext({databaseUrl:':memory:',config:{nodeEnv:'test',allowDevAuth:false,sessionSecret:'test-session-secret-long-enough',dataEncryptionKey:'test-data-key-long-enough',modelMode:'mock',betaCampaignQuota:1000,betaInviteRequired:false}})
+  const current=user(context,'restart_recovery_user')
+  const created=context.analysis.create(current,payload('这是一份模拟服务重启中断的合成关系问题，内容长度足够用于创建任务。'))
+  assert.equal(context.beta.getMine(current).trialAnalysisRemaining,2)
+  assert.equal(context.analysis.recoverInterrupted(),1)
+  const task=context.analysis.get(current,created.analysisId)
+  assert.equal(task.status,'failed')
+  assert.equal(task.errorCode,'PROCESS_RESTARTED')
+  assert.equal(context.beta.getMine(current).trialAnalysisRemaining,3)
+})
+
 test('超过单次3狗头硬上限不交付且不核销',async()=>{
   const baseResult={emotionalGrounding:'先稳一下',facts:[],inferences:[],unknowns:[],recommendation:'暂停加码',reasons:[],nextAction:'等待',messageDraft:'',observationWindow:'48小时',stopConditions:['停止投入'],safetyNote:'AI生成'}
   const gateway={analyze:async()=>({result:baseResult,usage:{promptTokens:20000,cachedTokens:0,completionTokens:4000,weightedTokens:32000},modelMode:'synthetic'})}

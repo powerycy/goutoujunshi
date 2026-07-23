@@ -29,7 +29,7 @@ Page({
         giftSummary: benefit.trialAnalysisRemaining > 0 ? `${benefit.trialAnalysisRemaining} 次券` : '无',
         displayName: profile.nickName || '微信用户',
         avatarUrl: profile.avatarUrl || '',
-        profileHint: profile.nickName ? '微信账号已登录' : (loggedIn ? '点击同步微信昵称' : '点击微信登录'),
+        profileHint: loggedIn ? '微信账号已登录' : '点击微信登录',
         error: ''
       })
       wx.setNavigationBarTitle({ title: profile.nickName || '微信用户' })
@@ -38,15 +38,24 @@ Page({
         await getApp().ready(true).catch(() => null)
         return this.load(true)
       }
-      this.setData({ loggedIn: false, profileHint: '点击微信登录', error: '' })
+      this.setData({
+        loggedIn: false,
+        profileHint: '点击微信登录',
+        error: (error && error.message) || '暂时无法连接登录服务'
+      })
     }
   },
 
   async syncProfile() {
     try {
       await getApp().ready(true)
+      this.setData({
+        loggedIn: true,
+        profileHint: '微信账号已登录',
+        error: ''
+      })
       if (!wx.getUserProfile) {
-        await this.load()
+        wx.showToast({ title: '登录成功', icon: 'success' })
         return
       }
       wx.getUserProfile({
@@ -62,10 +71,17 @@ Page({
           })
           wx.setNavigationBarTitle({ title: profile.nickName })
         },
-        fail: () => this.load()
+        fail: () => {
+          this.setData({ loggedIn: true, profileHint: '微信账号已登录', error: '' })
+          wx.showToast({ title: '登录成功', icon: 'success' })
+        }
       })
     } catch (error) {
-      this.setData({ error: '' })
+      this.setData({
+        loggedIn: false,
+        profileHint: '点击微信登录',
+        error: (error && error.message) || '登录失败，请稍后再试'
+      })
     }
   },
 

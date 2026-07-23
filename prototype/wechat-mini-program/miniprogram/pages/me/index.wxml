@@ -33,7 +33,6 @@
       <text class="chevron">›</text>
     </view>
     <button class="delete-account" bindtap="deleteAccount">删除账号与历史</button>
-    <view class="quiet-note">请使用代号描述他人。删除账号会清除可识别的历史内容。</view>
   </view>
 
   <view wx:if="{{error}}" class="danger-note">{{error}}</view>

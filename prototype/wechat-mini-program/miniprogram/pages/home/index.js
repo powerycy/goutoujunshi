@@ -3,12 +3,42 @@ const Analysis = require('../../services/analysis-api')
 const Events = require('../../services/events')
 const Copy = require('../../config/copy')
 
+function getNavigationMetrics() {
+  let statusBarHeight = 20
+  let navContentHeight = 44
+  try {
+    const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
+    statusBarHeight = windowInfo.statusBarHeight || statusBarHeight
+    if (wx.getMenuButtonBoundingClientRect) {
+      const menuButton = wx.getMenuButtonBoundingClientRect()
+      if (menuButton && menuButton.top && menuButton.height) {
+        navContentHeight = Math.max(
+          navContentHeight,
+          (menuButton.top - statusBarHeight) * 2 + menuButton.height
+        )
+      }
+    }
+  } catch (error) {
+    // Use stable WeChat defaults when device metrics are unavailable.
+  }
+  return {
+    statusBarHeight,
+    navContentHeight,
+    navTotalHeight: statusBarHeight + navContentHeight
+  }
+}
+
 function countMeaningfulChars(value) {
   return Array.from(String(value || '').replace(/\s/g, '')).length
 }
 
+const navigationMetrics = getNavigationMetrics()
+
 Page({
   data: {
+    statusBarHeight: navigationMetrics.statusBarHeight,
+    navContentHeight: navigationMetrics.navContentHeight,
+    navTotalHeight: navigationMetrics.navTotalHeight,
     benefit: null,
     apiError: false,
     question: '',

@@ -1,14 +1,15 @@
-<view class="page-shell home-page">
-  <view class="home-nav">
-    <view class="brand-lockup">
-      <image class="brand-logo" src="/assets/doghead-logo.png" mode="aspectFit" />
+<view class="custom-navbar" style="height: {{navTotalHeight}}px; padding-top: {{statusBarHeight}}px;">
+  <view class="custom-navbar-main" style="height: {{navContentHeight}}px;">
+    <button class="me-icon-button" bindtap="goMe" aria-label="我的">
+      <image src="/assets/person-icon.png" mode="aspectFit" />
+    </button>
+    <view class="custom-navbar-brand">
       <text>狗头军师</text>
     </view>
-    <button class="me-icon-button" bindtap="goMe" aria-label="我的">
-      <image src="/assets/person-solid-icon-v2.png" mode="aspectFit" />
-    </button>
   </view>
+</view>
 
+<view class="page-shell home-page" style="height: calc(100vh - {{navTotalHeight}}px);">
   <scroll-view class="conversation" scroll-y scroll-with-animation scroll-top="{{scrollTop}}">
     <view wx:if="{{!submittedQuestion && !result && status !== 'running'}}" class="empty-state page-enter">
       <image class="hero-logo" src="/assets/doghead-logo.png" mode="aspectFit" />

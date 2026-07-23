@@ -9,8 +9,8 @@ Page({
       { id: 'cny_12', coins: 75, price: 12, label: '持续跟进' }
     ],
     benefit: { dogheadBalance: 0 },
-    selectedPackage: 'cny_6',
-    selectedPrice: 6,
+    selectedPackage: 'cny_1',
+    selectedPrice: 1,
     giftSummary: '无',
     inviteCode: '',
     recordsOpen: false,

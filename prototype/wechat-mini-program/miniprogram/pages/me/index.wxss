@@ -48,7 +48,6 @@
 
 .utility-list {
   margin-top: 34rpx;
-  border-bottom: 2rpx solid #eeeeee;
 }
 
 .menu-row {
@@ -89,16 +88,6 @@
   color: #b8b8b8;
   font-size: 44rpx;
   line-height: 1;
-}
-
-.quiet-note {
-  width: 100%;
-  padding: 20rpx 28rpx 8rpx;
-  color: #9a9a9a;
-  font-size: var(--type-caption);
-  line-height: 1.65;
-  text-align: center;
-  box-sizing: border-box;
 }
 
 .delete-account {

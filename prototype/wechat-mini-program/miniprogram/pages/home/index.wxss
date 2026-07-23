@@ -1,57 +1,58 @@
-.home-page {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  min-height: 0;
-  padding: 28rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
-}
-
-.home-nav {
+.custom-navbar {
   position: relative;
-  display: flex;
-  align-items: center;
-  flex: 0 0 auto;
+  z-index: 20;
   width: 100%;
-  height: 72rpx;
+  background: #fff;
   box-sizing: border-box;
 }
 
-.brand-lockup {
+.custom-navbar-main {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12rpx;
-  color: #3f3f3f;
-  font-size: var(--type-body);
-  font-weight: 750;
+  justify-content: center;
 }
 
-.brand-logo {
-  width: 48rpx;
-  height: 48rpx;
+.custom-navbar-brand {
+  display: flex;
+  align-items: center;
+  color: #3f3f3f;
+  font-size: var(--type-body);
+  font-weight: 700;
+}
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 8rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
 }
 
 .me-icon-button {
-  position: fixed;
-  top: 32rpx;
-  right: 32rpx;
+  position: absolute;
+  top: 50%;
+  left: 32rpx;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64rpx;
-  min-width: 64rpx;
-  max-width: 64rpx;
-  height: 64rpx;
+  width: 72rpx;
+  min-width: 72rpx;
+  max-width: 72rpx;
+  height: 72rpx;
   margin: 0;
   padding: 0;
   border-radius: 50%;
   background: transparent;
   box-sizing: border-box;
+  line-height: 1;
+  transform: translateY(-50%);
 }
 
 .me-icon-button image {
-  width: 42rpx;
-  height: 42rpx;
+  display: block;
+  width: 52rpx;
+  height: 52rpx;
 }
 
 .conversation {
@@ -68,6 +69,8 @@
   align-items: center;
   justify-content: center;
   min-height: 100%;
+  padding-bottom: 96rpx;
+  box-sizing: border-box;
   text-align: center;
 }
 

@@ -72,7 +72,7 @@ function createAnalysisService(db, config, cryptoService, skillRouter, modelGate
     const analysisId=id('ana')
     try {
       db.prepare(`INSERT INTO analyses(id,user_id,status,encrypted_question,profile_json,risk_level,model,model_mode,prompt_version,access_grant_type,created_at)
-        VALUES(?,?,?,?,?,'pending',?,?,?,?,?)`).run(analysisId,user.id,'queued',cryptoService.encrypt(deidentifiedQuestion),JSON.stringify(profile),config.stepfunModel,config.modelMode,'skill_router_v1',accessGrant,new Date().toISOString())
+        VALUES(?,?,?,?,?,'pending',?,?,?,?,?)`).run(analysisId,user.id,'queued',cryptoService.encrypt(deidentifiedQuestion),JSON.stringify(profile),config.stepfunModel,config.modelMode,'skill_router_v2',accessGrant,new Date().toISOString())
     } catch (error) { release(user.id,accessGrant); throw error }
     setImmediate(()=>process(analysisId).catch((error)=>fail(analysisId,user.id,accessGrant,'UNEXPECTED_PROCESSING_ERROR',error.message)))
     return { analysisId, status:'queued', accessGrantType:accessGrant }

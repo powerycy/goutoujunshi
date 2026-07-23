@@ -6,12 +6,15 @@
 | --- | --- | --- | --- | --- |
 | 仓库结构验证 | 必须存在Skill、元数据、知识库和项目文件 | 缺失时验证失败 | `scripts/validate_skill.py` | 已有，CI要求 |
 | Frontmatter验证 | 名称合法且含触发描述 | 非法名称、空描述或多余键失败 | `scripts/validate_skill.py` | 已有，CI要求 |
-| 知识文档数量 | 19份核心文档和至少19份实用文档 | 数量不足时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
+| 知识文档清单与最低数量 | 关键边界文档必须存在，知识和实用文档均至少20份 | 必需文件缺失或低于最低数量时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
+| SKILL上下文预算 | 行为内核不超过150行、5000字符和约4500 token | 超预算时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
+| 运行时边界 | research、项目文档、测试和产物不进入运行白名单 | 运行目录嵌入非运行内容时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
 | 聊天材料场景规范 | 覆盖截图、导出文本、转述、媒介误判和情绪承接 | 缺少规范文件时失败 | `tests/chat-record-analysis-scenarios.md` | 已有，CI要求 |
 | 投入失衡场景规范 | 覆盖误判、明确拒绝、多元关系与安全升级 | 缺少规范文件时失败 | `tests/relationship-investment-scenarios.md` | 已有，CI要求 |
 | 社交校准场景规范 | 覆盖松弛聊天、线下场景、调情、反馈校准与多元关系 | 缺少规范文件时失败 | `tests/social-calibration-scenarios.md` | 已有，CI要求 |
 | 实战话术场景规范 | 覆盖首选成品、主策略、三档口吻、后续分支与演练 | 缺少规范文件时失败 | `tests/tactical-reply-scenarios.md` | 已有，CI要求 |
 | 主动约会场景规范 | 覆盖主动表达、第一次见面、约会体验、自然接触与二次邀约 | 缺少规范文件时失败 | `tests/active-dating-scenarios.md` | 已有，CI要求 |
+| 经典社交体系回归 | 覆盖冷读误用、自然流、内在状态、结构化互动、截图、按需加载与操控边界 | 缺少文件或关键覆盖标记时失败 | `tests/classic-social-framework-scenarios.md` | 已有，CI要求 |
 | Markdown相对链接 | 仓库内部链接必须存在 | 断链时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
 | 占位符扫描 | 发布物不能包含模板TODO | 命中时失败 | `scripts/validate_skill.py` | 已有，CI要求 |
 
@@ -31,7 +34,7 @@
 
 ## 当前缺口
 
-1. 没有固定模型和版本下的可复现回答评测。
+1. 场景文件定义了人工／代理评测标准，但没有固定模型和版本下的可复现回答评分器。
 2. 没有法律与求助渠道的自动时效检查。
 3. 没有对建议“是否真正有利于用户”的长期结果数据。
 4. 没有多语言、方言和不同文化背景的系统评测。

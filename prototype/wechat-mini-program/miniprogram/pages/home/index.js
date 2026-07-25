@@ -2,6 +2,7 @@ const Beta = require('../../services/beta-api')
 const Analysis = require('../../services/analysis-api')
 const Events = require('../../services/events')
 const Copy = require('../../config/copy')
+const Auth = require('../../services/auth')
 
 function getNavigationMetrics() {
   let statusBarHeight = 20
@@ -63,7 +64,18 @@ Page({
   async load() {
     try {
       await getApp().ready()
-      const benefit = await Beta.getMine()
+      let benefit
+      try {
+        benefit = await Beta.getMine()
+      } catch (error) {
+        if (error && error.statusCode === 401) {
+          Auth.clearSession()
+          await getApp().ready(true)
+          benefit = await Beta.getMine()
+        } else {
+          throw error
+        }
+      }
       this.setData({ benefit, apiError: false })
       Events.track('home_viewed')
     } catch (error) {

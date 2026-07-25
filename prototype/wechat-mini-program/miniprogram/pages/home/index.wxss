@@ -17,8 +17,9 @@
   display: flex;
   align-items: center;
   color: #3f3f3f;
-  font-size: var(--type-body);
-  font-weight: 700;
+  font-size: var(--type-navbar);
+  font-weight: 760;
+  letter-spacing: 1rpx;
 }
 
 .home-page {
@@ -36,10 +37,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72rpx;
-  min-width: 72rpx;
-  max-width: 72rpx;
-  height: 72rpx;
+  width: 80rpx;
+  min-width: 80rpx;
+  max-width: 80rpx;
+  height: 80rpx;
   margin: 0;
   padding: 0;
   border-radius: 50%;
@@ -49,10 +50,19 @@
   transform: translateY(-50%);
 }
 
-.me-icon-button image {
-  display: block;
-  width: 52rpx;
-  height: 52rpx;
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 42rpx;
+  height: 32rpx;
+}
+
+.hamburger-icon view {
+  width: 100%;
+  height: 5rpx;
+  border-radius: 999rpx;
+  background: #3f3f3f;
 }
 
 .conversation {

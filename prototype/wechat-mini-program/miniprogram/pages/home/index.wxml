@@ -1,7 +1,11 @@
 <view class="custom-navbar" style="height: {{navTotalHeight}}px; padding-top: {{statusBarHeight}}px;">
   <view class="custom-navbar-main" style="height: {{navContentHeight}}px;">
     <button class="me-icon-button" bindtap="goMe" aria-label="我的">
-      <image src="/assets/person-icon.png" mode="aspectFit" />
+      <view class="hamburger-icon" aria-hidden="true">
+        <view></view>
+        <view></view>
+        <view></view>
+      </view>
     </button>
     <view class="custom-navbar-brand">
       <text>狗头军师</text>

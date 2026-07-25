@@ -5,6 +5,7 @@ page {
   --type-secondary: 24rpx;
   --type-caption: 22rpx;
   --type-emphasis: 34rpx;
+  --type-navbar: 38rpx;
   min-height: 100%;
   background: #ffffff;
   color: #444444;

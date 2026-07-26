@@ -1,4 +1,6 @@
 function sleep(ms) { return new Promise((resolve) => setTimeout(resolve, ms)) }
+const STEPFUN_MAX_COMPLETION_TOKENS = 3600
+
 function weightedUsage(usage) {
   if (!usage || !Number.isFinite(usage.prompt_tokens) || !Number.isFinite(usage.completion_tokens)) return null
   const cached = Number(usage.prompt_tokens_details && usage.prompt_tokens_details.cached_tokens) || 0
@@ -49,7 +51,7 @@ function createStepfunGateway(config, usageLedger, dependencies = {}) {
       try {
         const response = await fetchImpl(`${config.stepfunBaseUrl}/chat/completions`, { method:'POST', signal:controller.signal,
           headers:{ Authorization:`Bearer ${config.stepfunApiKey}`,'Content-Type':'application/json','X-Request-ID':`${requestId}${suffix}` },
-          body:JSON.stringify({ model:config.stepfunModel, messages:items, temperature:.35, max_tokens:2400, response_format:{type:'json_object'} }) })
+          body:JSON.stringify({ model:config.stepfunModel, messages:items, temperature:.35, max_tokens:STEPFUN_MAX_COMPLETION_TOKENS, response_format:{type:'json_object'} }) })
         httpStatus=response.status
         const payload = await response.json(); clearTimeout(timeout)
         providerRequestId=payload.id||null;usage=weightedUsage(payload.usage)

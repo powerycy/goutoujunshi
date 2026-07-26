@@ -36,9 +36,14 @@ test('每次阶跃调用分别记录初次与 JSON 修复成本',async()=>{
     response('not-json',{prompt_tokens:100,prompt_tokens_details:{cached_tokens:20},completion_tokens:10},'req_initial'),
     response('{"ok":true}',{prompt_tokens:200,prompt_tokens_details:{cached_tokens:0},completion_tokens:20},'req_repair')
   ]
-  const gateway=createStepfunGateway(config,ledger,{fetchImpl:async()=>replies.shift(),sleepImpl:async()=>{}})
+  const requestBodies=[]
+  const gateway=createStepfunGateway(config,ledger,{fetchImpl:async(_url,options)=>{
+    requestBodies.push(JSON.parse(options.body))
+    return replies.shift()
+  },sleepImpl:async()=>{}})
   const result=await gateway.analyze({messages:{requestId:'ana_cost',items:[{role:'user',content:'test'}]}})
   assert.deepEqual(result.result,{ok:true})
+  assert.deepEqual(requestBodies.map((body)=>body.max_tokens),[3600,3600])
   const rows=db.prepare("SELECT phase,outcome,provider_request_id,estimated_cost_nano_yuan FROM model_usage_ledger ORDER BY CASE phase WHEN 'initial' THEN 0 ELSE 1 END").all()
   assert.equal(rows.length,2)
   assert.deepEqual(rows.map((row)=>row.phase),['initial','repair'])

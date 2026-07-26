@@ -60,6 +60,15 @@ async function decryptProxyPayload<T>(
   return JSON.parse(new TextDecoder().decode(plaintext)) as T;
 }
 
+async function getRuntimeEnv() {
+  try {
+    const cloudflare = await import("cloudflare:workers");
+    return cloudflare.env as unknown as Record<string, string | undefined>;
+  } catch {
+    return process.env;
+  }
+}
+
 async function proxy(
   request: Request,
   context: { params: Promise<{ path: string[] }> },
@@ -72,7 +81,10 @@ async function proxy(
       { status: 404 },
     );
   }
-  const backendBaseUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "");
+  const runtimeEnv = await getRuntimeEnv();
+  const backendBaseUrl = (
+    runtimeEnv.BACKEND_API_URL || process.env.BACKEND_API_URL
+  )?.replace(/\/$/, "");
   if (!backendBaseUrl) {
     return Response.json(
       { code: "DEMO_BACKEND_NOT_CONFIGURED", message: "演示服务尚未完成连接" },
@@ -92,7 +104,7 @@ async function proxy(
     const body = ["POST", "DELETE"].includes(request.method)
       ? await request.text()
       : "";
-    const proxyKey = process.env.BACKEND_PROXY_KEY;
+    const proxyKey = runtimeEnv.BACKEND_PROXY_KEY || process.env.BACKEND_PROXY_KEY;
     let response: Response;
     if (proxyKey) {
       const safeHeaders: Record<string, string> = {};
@@ -156,6 +168,10 @@ async function proxy(
     });
   } catch (error) {
     const timedOut = error instanceof Error && error.name === "AbortError";
+    console.error(
+      "[investor-demo-proxy]",
+      error instanceof Error ? `${error.name}: ${error.message}` : "unknown error",
+    );
     return Response.json(
       {
         code: timedOut ? "DEMO_BACKEND_TIMEOUT" : "DEMO_BACKEND_UNAVAILABLE",

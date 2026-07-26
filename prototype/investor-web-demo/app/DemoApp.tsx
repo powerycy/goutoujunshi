@@ -98,7 +98,7 @@ function ResultView({ analysis }: { analysis: Analysis }) {
       <div
         className={`assistant-head ${analysis.status === "blocked" ? "danger" : ""}`}
       >
-        <Image src="/doghead-logo.png" alt="" width={30} height={30} />
+        <Image src="/doghead-logo.png" alt="" width={30} height={30} unoptimized />
         <span>狗头军师判断</span>
         <span className="status-chip">
           {analysis.modelMode === "stepfun" ? "真实 AI 分析" : analysis.modelMode}
@@ -398,6 +398,7 @@ export default function DemoApp() {
                 alt="狗头军师"
                 width={68}
                 height={68}
+                unoptimized
                 priority
               />
               <h2>狗头军师，解决你的情感问题</h2>
@@ -420,7 +421,7 @@ export default function DemoApp() {
           {isRunning ? (
             <section className="assistant-block" aria-live="polite">
               <div className="assistant-head">
-                <Image src="/doghead-logo.png" alt="" width={30} height={30} />
+                <Image src="/doghead-logo.png" alt="" width={30} height={30} unoptimized />
                 <span>狗头军师正在判断</span>
               </div>
               <div className="loading-card">
@@ -435,7 +436,7 @@ export default function DemoApp() {
           {analysis?.status === "failed" ? (
             <section className="assistant-block" aria-live="assertive">
               <div className="assistant-head danger">
-                <Image src="/doghead-logo.png" alt="" width={30} height={30} />
+                <Image src="/doghead-logo.png" alt="" width={30} height={30} unoptimized />
                 <span>这次没有分析成功</span>
               </div>
               <p className="answer-lead">
@@ -553,7 +554,7 @@ export default function DemoApp() {
           <div className="gate">
             <form className="gate-card" onSubmit={login}>
               <div className="gate-brand">
-                <Image src="/doghead-logo.png" alt="" width={48} height={48} />
+                <Image src="/doghead-logo.png" alt="" width={48} height={48} unoptimized />
                 <div>
                   <strong>狗头军师</strong>
                   <span>INVESTOR PREVIEW</span>

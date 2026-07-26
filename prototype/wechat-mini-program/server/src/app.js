@@ -9,6 +9,7 @@ const { createSkillRouter } = require('./services/skill-router')
 const { createStepfunGateway } = require('./services/stepfun-gateway')
 const { createAnalysisService } = require('./services/analysis-service')
 const { createModelUsageLedger } = require('./services/model-usage-ledger')
+const { createEncryptedWebProxyServer } = require('./services/encrypted-web-proxy')
 
 function json(response,status,body){response.writeHead(status,{'content-type':'application/json; charset=utf-8','access-control-allow-origin':'*'});response.end(JSON.stringify(body))}
 function readBody(request){return new Promise((resolve,reject)=>{let body='';request.on('data',(chunk)=>{body+=chunk;if(body.length>1_000_000){reject(Object.assign(new Error('请求过大'),{statusCode:413,code:'PAYLOAD_TOO_LARGE'}));request.destroy()}});request.on('end',()=>{try{resolve(body?JSON.parse(body):{})}catch(_){reject(Object.assign(new Error('JSON 格式错误'),{statusCode:400,code:'INVALID_JSON'}))}});request.on('error',reject)})}
@@ -81,6 +82,13 @@ function createServer(context){
   })
 }
 
-if(require.main===module){const context=createContext();const server=createServer(context);server.listen(context.config.port,context.config.host,()=>console.log(`狗头军师 API：${context.config.host}:${context.config.port}（${context.config.modelMode}）`))}
+if(require.main===module){
+  const context=createContext();const server=createServer(context)
+  server.listen(context.config.port,context.config.host,()=>console.log(`狗头军师 API：${context.config.host}:${context.config.port}（${context.config.modelMode}）`))
+  if(context.config.webProxyEnabled){
+    const proxy=createEncryptedWebProxyServer(context)
+    proxy.listen(context.config.webProxyPort,context.config.host,()=>console.log(`加密 Web 代理：${context.config.host}:${context.config.webProxyPort}`))
+  }
+}
 
-module.exports={createContext,createServer}
+module.exports={createContext,createServer,createEncryptedWebProxyServer}

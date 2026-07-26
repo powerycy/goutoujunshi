@@ -21,7 +21,7 @@ pnpm dev
 pnpm test
 ```
 
-`BACKEND_API_URL` 必须指向稳定的狗头军师 API 根地址。它仅由 Sites 服务端代理读取，不打包进客户端。
+`BACKEND_API_URL` 必须指向稳定的狗头军师 API 根地址。它仅由 Sites 服务端代理读取，不打包进客户端。没有域名时，生产环境同时配置 `BACKEND_PROXY_KEY`，Sites 与腾讯云固定 IP 之间使用 AES-256-GCM 加密信封传输；明文 HTTP 后端在缺少该密钥时会被拒绝。
 
 ## 安全边界
 

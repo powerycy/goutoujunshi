@@ -34,6 +34,9 @@ function loadConfig(overrides = {}) {
     webDemoCodeHashes,
     webDemoAnalysisQuota: int('WEB_DEMO_ANALYSIS_QUOTA', 12),
     webDemoSessionSeconds: int('WEB_DEMO_SESSION_SECONDS', 14400),
+    webProxyEnabled: bool('WEB_PROXY_ENABLED', false),
+    webProxyKey: process.env.WEB_PROXY_KEY || '',
+    webProxyPort: int('WEB_PROXY_PORT', 3001),
     betaCampaignQuota: int('BETA_CAMPAIGN_QUOTA', 1000),
     betaInviteRequired: bool('BETA_INVITE_REQUIRED', true),
     host: process.env.HOST || (nodeEnv === 'development' ? '127.0.0.1' : '0.0.0.0'),
@@ -50,6 +53,7 @@ function loadConfig(overrides = {}) {
   if (config.webDemoEnabled && !config.webDemoCodeHashes.length) throw new Error('WEB_DEMO_CODE_HASHES is required when WEB_DEMO_ENABLED=true')
   if (config.webDemoCodeHashes.some((value) => !/^[a-f0-9]{64}$/.test(value))) throw new Error('WEB_DEMO_CODE_HASHES must contain SHA-256 hex digests')
   if (config.webDemoAnalysisQuota < 1) throw new Error('WEB_DEMO_ANALYSIS_QUOTA must be at least 1')
+  if (config.webProxyEnabled && Buffer.from(config.webProxyKey, 'base64').length !== 32) throw new Error('WEB_PROXY_KEY must be a base64-encoded 32-byte key')
   return config
 }
 

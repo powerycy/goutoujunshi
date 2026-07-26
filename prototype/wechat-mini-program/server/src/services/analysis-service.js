@@ -27,10 +27,11 @@ function createAnalysisService(db, config, cryptoService, skillRouter, modelGate
     if(grant==='trial_credit') db.prepare('UPDATE beta_cohort_members SET trial_analysis_reserved=MAX(0,trial_analysis_reserved-1),trial_analysis_used=trial_analysis_used+1 WHERE user_id=? AND trial_analysis_reserved>0').run(userId)
     else db.prepare('UPDATE dev_allowances SET reserved=MAX(0,reserved-1), used=used+1 WHERE user_id=? AND reserved>0').run(userId)
   }
-  function enforceDailyAttemptLimit(userId) {
+  function enforceDailyAttemptLimit(user) {
     const since=new Date(Date.now()-24*60*60*1000).toISOString()
-    const row=db.prepare('SELECT COUNT(*) AS attempts FROM analyses WHERE user_id=? AND created_at>=?').get(userId,since)
-    if(Number(row.attempts||0)>=config.maxDailyAnalysisAttempts) {
+    const row=db.prepare('SELECT COUNT(*) AS attempts FROM analyses WHERE user_id=? AND created_at>=?').get(user.id,since)
+    const limit=user.role==='demo'?config.webDemoDailyAnalysisAttempts:config.maxDailyAnalysisAttempts
+    if(Number(row.attempts||0)>=limit) {
       const e=new Error('今日分析尝试次数已达上限，请明天再试。')
       e.code='DAILY_ANALYSIS_LIMIT'
       e.statusCode=429
@@ -65,9 +66,9 @@ function createAnalysisService(db, config, cryptoService, skillRouter, modelGate
     const profile={...incomingProfile,selfAlias:'我',targetAlias:/^[A-Z]$/.test(alias)?alias:'A'}
     const suppliedAlias=String(incomingProfile.targetAlias||'').trim()
     const deidentifiedQuestion=suppliedAlias&&!/^[A-Z]$/i.test(suppliedAlias)?question.split(suppliedAlias).join('A'):question
-    if (question.length<20 || question.length>config.maxQuestionChars) { const e=new Error(`问题需为20–${config.maxQuestionChars}字`); e.code='INVALID_QUESTION'; e.statusCode=400; throw e }
-    if (!payload.consent || payload.consent.adultConfirmed!==true || payload.consent.sensitiveDataProcessing!==true) { const e=new Error('需要成年确认与本次敏感信息处理同意'); e.code='CONSENT_REQUIRED'; e.statusCode=400; throw e }
-    enforceDailyAttemptLimit(user.id)
+    if (!question.length || question.length>config.maxQuestionChars) { const e=new Error(`请输入不超过 ${config.maxQuestionChars} 字的问题`); e.code='INVALID_QUESTION'; e.statusCode=400; throw e }
+    if (user.role!=='demo'&&(!payload.consent || payload.consent.adultConfirmed!==true || payload.consent.sensitiveDataProcessing!==true)) { const e=new Error('需要成年确认与本次敏感信息处理同意'); e.code='CONSENT_REQUIRED'; e.statusCode=400; throw e }
+    enforceDailyAttemptLimit(user)
     const accessGrant=reserve(user)
     const analysisId=id('ana')
     try {

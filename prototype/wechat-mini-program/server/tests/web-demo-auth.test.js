@@ -77,3 +77,39 @@ test('未显式开启时 Web Demo 身份入口不可用',()=>{
     return true
   })
 })
+
+test('免登录手机 Demo 自动获得 30 天会话和 100 次分析额度',async(t)=>{
+  const context=createContext({
+    databaseUrl:':memory:',
+    config:{
+      nodeEnv:'test',
+      allowDevAuth:false,
+      sessionSecret:'test-session-secret-long-enough',
+      dataEncryptionKey:'test-data-key-long-enough',
+      modelMode:'mock',
+      betaCampaignQuota:1000,
+      betaInviteRequired:true,
+      webDemoEnabled:true,
+      webDemoAutoLogin:true,
+      webDemoCodeHashes:[],
+      webDemoAnalysisQuota:100,
+      webDemoSessionSeconds:30*24*60*60,
+      webDemoDailyAnalysisAttempts:100
+    }
+  })
+  const server=createServer(context)
+  await new Promise((resolve)=>server.listen(0,'127.0.0.1',resolve))
+  t.after(()=>new Promise((resolve)=>server.close(resolve)))
+  const baseUrl=`http://127.0.0.1:${server.address().port}`
+
+  const first=await api(baseUrl,'/v1/auth/web-demo',{})
+  assert.equal(first.status,200)
+  assert.equal(first.body.expiresIn,30*24*60*60)
+  assert.equal(first.body.user.demoOnly,true)
+
+  const second=await api(baseUrl,'/v1/auth/web-demo',{})
+  assert.equal(second.status,200)
+  assert.equal(second.body.user.id,first.body.user.id)
+  const allowance=context.db.prepare('SELECT total,used,reserved FROM dev_allowances WHERE user_id=?').get(first.body.user.id)
+  assert.deepEqual({...allowance},{total:100,used:0,reserved:0})
+})

@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = host ? `${protocol}://${host}` : "https://goutoujunshi.example";
   const imageUrl = new URL("/og.png", baseUrl).toString();
   const title = "狗头军师｜关系问题分析";
-  const description = "先接住情绪，再分清事实，最后给能执行的选择。";
+  const description = "狗头军师，解决你的情感问题。";
 
   return {
     title,
@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: "狗头军师真实 AI 关系分析",
+          alt: "狗头军师手机体验",
         },
       ],
     },

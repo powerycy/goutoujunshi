@@ -43,8 +43,9 @@ function createServer(context){
       if(request.method==='POST'&&path==='/v1/auth/wechat'){json(response,200,await context.auth.login(await readBody(request)));return}
       if(request.method==='POST'&&path==='/v1/auth/web-demo'){
         const source=request.socket.remoteAddress||'unknown'
-        if(!allowWebLogin(source)){json(response,429,{code:'WEB_DEMO_LOGIN_RATE_LIMIT',message:'尝试次数过多，请十分钟后再试'});return}
-        json(response,200,context.auth.loginWebDemo(await readBody(request)));return
+        const body=await readBody(request)
+        if(!context.config.webDemoAutoLogin&&!allowWebLogin(source)){json(response,429,{code:'WEB_DEMO_LOGIN_RATE_LIMIT',message:'尝试次数过多，请十分钟后再试'});return}
+        json(response,200,context.auth.loginWebDemo(body));return
       }
       const token=(request.headers.authorization||'').replace(/^Bearer\s+/i,'');const user=context.auth.verify(token)
       if(!user){json(response,401,{code:'UNAUTHORIZED',message:'会话无效，请重新登录'});return}

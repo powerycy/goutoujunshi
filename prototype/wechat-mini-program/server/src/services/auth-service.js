@@ -49,12 +49,15 @@ function createAuthService(db, config) {
       error.code = 'WEB_DEMO_UNAVAILABLE'; error.statusCode = 503; throw error
     }
     const accessCode = String(body.accessCode || '').trim()
-    const candidateHash = hash(accessCode)
-    if (accessCode.length < 12 || accessCode.length > 128 || !secureHashMatch(candidateHash, config.webDemoCodeHashes)) {
-      const error = new Error('访问码无效')
-      error.code = 'WEB_DEMO_CODE_INVALID'; error.statusCode = 401; throw error
+    let identity = 'web-demo:auto-v1'
+    if (!config.webDemoAutoLogin) {
+      const candidateHash = hash(accessCode)
+      if (accessCode.length < 12 || accessCode.length > 128 || !secureHashMatch(candidateHash, config.webDemoCodeHashes)) {
+        const error = new Error('访问码无效')
+        error.code = 'WEB_DEMO_CODE_INVALID'; error.statusCode = 401; throw error
+      }
+      identity = `web-demo:${candidateHash}`
     }
-    const identity = `web-demo:${candidateHash}`
     const openidHash = hash(identity)
     let user = db.prepare('SELECT * FROM users WHERE openid_hash=?').get(openidHash)
     if (!user) {

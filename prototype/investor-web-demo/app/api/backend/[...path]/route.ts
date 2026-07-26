@@ -127,7 +127,7 @@ async function proxy(
         headers: { "content-type": "application/json" },
         body: JSON.stringify(envelope),
         signal: controller.signal,
-        redirect: "error",
+        redirect: "manual",
       });
       if (!encryptedResponse.ok) throw new Error("ENCRYPTED_PROXY_REJECTED");
       const decrypted = await decryptProxyPayload<{
@@ -154,7 +154,7 @@ async function proxy(
         headers,
         body: body || undefined,
         signal: controller.signal,
-        redirect: "error",
+        redirect: "manual",
       });
     }
     return new Response(response.body, {

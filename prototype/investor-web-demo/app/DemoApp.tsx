@@ -15,15 +15,15 @@ type Benefit = {
 
 type AnalysisResult = {
   emotionalGrounding?: string;
-  facts?: string[];
-  inferences?: string[];
-  unknowns?: string[];
+  facts?: string | string[];
+  inferences?: string | string[];
+  unknowns?: string | string[];
   recommendation?: string;
-  reasons?: string[];
+  reasons?: string | string[];
   nextAction?: string;
-  messageDraft?: string;
+  messageDraft?: string | string[];
   observationWindow?: string;
-  stopConditions?: string[];
+  stopConditions?: string | string[];
   safetyNote?: string;
 };
 
@@ -79,11 +79,16 @@ async function request<T>(
   return payload as T;
 }
 
-function list(values?: string[]) {
-  if (!values?.length) return null;
+function list(values?: string | string[]) {
+  const items = Array.isArray(values)
+    ? values.filter((value) => typeof value === "string" && value.trim())
+    : typeof values === "string" && values.trim()
+      ? [values]
+      : [];
+  if (!items.length) return null;
   return (
     <ul>
-      {values.map((value, index) => (
+      {items.map((value, index) => (
         <li key={`${index}-${value}`}>{value}</li>
       ))}
     </ul>
@@ -146,7 +151,11 @@ function ResultView({ analysis }: { analysis: Analysis }) {
       {result.messageDraft ? (
         <div className="answer-section">
           <h3>可以直接发</h3>
-          <p className="message-draft">{result.messageDraft}</p>
+          <p className="message-draft">
+            {Array.isArray(result.messageDraft)
+              ? result.messageDraft.join("\n")
+              : result.messageDraft}
+          </p>
         </div>
       ) : null}
       {result.observationWindow ? (

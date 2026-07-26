@@ -13,6 +13,15 @@ const { createModelUsageLedger } = require('./services/model-usage-ledger')
 function json(response,status,body){response.writeHead(status,{'content-type':'application/json; charset=utf-8','access-control-allow-origin':'*'});response.end(JSON.stringify(body))}
 function readBody(request){return new Promise((resolve,reject)=>{let body='';request.on('data',(chunk)=>{body+=chunk;if(body.length>1_000_000){reject(Object.assign(new Error('请求过大'),{statusCode:413,code:'PAYLOAD_TOO_LARGE'}));request.destroy()}});request.on('end',()=>{try{resolve(body?JSON.parse(body):{})}catch(_){reject(Object.assign(new Error('JSON 格式错误'),{statusCode:400,code:'INVALID_JSON'}))}});request.on('error',reject)})}
 function safeProperties(properties){const result={};for(const [key,value] of Object.entries(properties||{})){if(/question|message|name|phone|address|content|text/i.test(key))continue;if(['string','number','boolean'].includes(typeof value))result[key]=String(value).slice(0,120)}return result}
+function createRateLimiter({limit,windowMs}){
+  const buckets=new Map()
+  return function allow(key){
+    const now=Date.now();const current=buckets.get(key)
+    if(!current||current.resetAt<=now){buckets.set(key,{count:1,resetAt:now+windowMs});return true}
+    current.count+=1
+    return current.count<=limit
+  }
+}
 
 function createContext(overrides={}){
   const config=loadConfig(overrides.config||{});const db=createDatabase(overrides.databaseUrl||config.databaseUrl,config)
@@ -24,12 +33,18 @@ function createContext(overrides={}){
 }
 
 function createServer(context){
+  const allowWebLogin=createRateLimiter({limit:20,windowMs:10*60*1000})
   return http.createServer(async(request,response)=>{
     try{
       if(request.method==='OPTIONS'){response.writeHead(204,{'access-control-allow-origin':'*','access-control-allow-headers':'authorization,content-type,idempotency-key','access-control-allow-methods':'GET,POST,DELETE,OPTIONS'});response.end();return}
       const url=new URL(request.url,'http://localhost');const path=url.pathname
-      if(request.method==='GET'&&path==='/health'){json(response,200,{ok:true,modelMode:context.config.modelMode,devAuth:context.config.allowDevAuth});return}
+      if(request.method==='GET'&&path==='/health'){json(response,200,{ok:true,modelMode:context.config.modelMode,devAuth:context.config.allowDevAuth,webDemo:context.config.webDemoEnabled});return}
       if(request.method==='POST'&&path==='/v1/auth/wechat'){json(response,200,await context.auth.login(await readBody(request)));return}
+      if(request.method==='POST'&&path==='/v1/auth/web-demo'){
+        const source=request.socket.remoteAddress||'unknown'
+        if(!allowWebLogin(source)){json(response,429,{code:'WEB_DEMO_LOGIN_RATE_LIMIT',message:'尝试次数过多，请十分钟后再试'});return}
+        json(response,200,context.auth.loginWebDemo(await readBody(request)));return
+      }
       const token=(request.headers.authorization||'').replace(/^Bearer\s+/i,'');const user=context.auth.verify(token)
       if(!user){json(response,401,{code:'UNAUTHORIZED',message:'会话无效，请重新登录'});return}
       const body=['POST','DELETE'].includes(request.method)?await readBody(request):{}

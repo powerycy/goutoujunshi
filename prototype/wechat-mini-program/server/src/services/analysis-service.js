@@ -11,7 +11,7 @@ function createAnalysisService(db, config, cryptoService, skillRouter, modelGate
     try {
       const trial=db.prepare('UPDATE beta_cohort_members SET trial_analysis_reserved=trial_analysis_reserved+1 WHERE user_id=? AND trial_analysis_used+trial_analysis_reserved < trial_analysis_total').run(user.id)
       if (trial.changes===1) { db.exec('COMMIT'); return 'trial_credit' }
-      if (user.role==='dev'||user.role==='admin') {
+      if (user.role==='dev'||user.role==='admin'||user.role==='demo') {
         const dev=db.prepare('UPDATE dev_allowances SET reserved=reserved+1 WHERE user_id=? AND used+reserved < total').run(user.id)
         if (dev.changes===1) { db.exec('COMMIT'); return 'dev_allowance' }
       }

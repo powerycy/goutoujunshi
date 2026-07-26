@@ -5,9 +5,13 @@ function hash(value) { return crypto.createHash('sha256').update(value).digest('
 function sign(body, secret) { return crypto.createHmac('sha256', secret).update(body).digest('base64url') }
 
 function createAuthService(db, config) {
-  function issue(user) {
-    const payload = Buffer.from(JSON.stringify({ sub: user.id, role: user.role, exp: Date.now() + 86400000 })).toString('base64url')
-    return { token: `${payload}.${sign(payload, config.sessionSecret)}`, expiresIn: 86400, user: { id: user.id, role: user.role, devOnly: user.role !== 'user' } }
+  function issue(user, expiresIn = 86400) {
+    const payload = Buffer.from(JSON.stringify({ sub: user.id, role: user.role, exp: Date.now() + expiresIn * 1000 })).toString('base64url')
+    return {
+      token: `${payload}.${sign(payload, config.sessionSecret)}`,
+      expiresIn,
+      user: { id: user.id, role: user.role, devOnly: user.role === 'dev' || user.role === 'admin', demoOnly: user.role === 'demo' }
+    }
   }
   function verify(token) {
     const [payload, signature] = String(token || '').split('.')
@@ -30,6 +34,37 @@ function createAuthService(db, config) {
     }
     return issue(user)
   }
+  function secureHashMatch(candidateHash, configuredHashes) {
+    const candidate = Buffer.from(candidateHash, 'hex')
+    let matched = false
+    for (const configuredHash of configuredHashes) {
+      const configured = Buffer.from(configuredHash, 'hex')
+      if (configured.length === candidate.length && crypto.timingSafeEqual(candidate, configured)) matched = true
+    }
+    return matched
+  }
+  function loginWebDemo(body) {
+    if (!config.webDemoEnabled) {
+      const error = new Error('投资人体验入口暂未开放')
+      error.code = 'WEB_DEMO_UNAVAILABLE'; error.statusCode = 503; throw error
+    }
+    const accessCode = String(body.accessCode || '').trim()
+    const candidateHash = hash(accessCode)
+    if (accessCode.length < 12 || accessCode.length > 128 || !secureHashMatch(candidateHash, config.webDemoCodeHashes)) {
+      const error = new Error('访问码无效')
+      error.code = 'WEB_DEMO_CODE_INVALID'; error.statusCode = 401; throw error
+    }
+    const identity = `web-demo:${candidateHash}`
+    const openidHash = hash(identity)
+    let user = db.prepare('SELECT * FROM users WHERE openid_hash=?').get(openidHash)
+    if (!user) {
+      user = { id: id('usr'), openid_hash: openidHash, role: 'demo', status: 'active', created_at: new Date().toISOString() }
+      db.prepare('INSERT INTO users(id,openid_hash,role,status,created_at) VALUES(?,?,?,?,?)').run(user.id,user.openid_hash,user.role,user.status,user.created_at)
+    }
+    db.prepare(`INSERT INTO dev_allowances(user_id,total,used,reserved) VALUES(?,?,0,0)
+      ON CONFLICT(user_id) DO UPDATE SET total=MAX(total,excluded.total)`).run(user.id, config.webDemoAnalysisQuota)
+    return issue(user, config.webDemoSessionSeconds)
+  }
   async function login(body) {
     if (config.allowDevAuth && body.devIdentity) return upsertIdentity(`dev:${body.devIdentity}`, 'dev')
     if (!body.code || !config.wechatAppId || !config.wechatAppSecret) {
@@ -43,7 +78,7 @@ function createAuthService(db, config) {
     if (!response.ok || !payload.openid) { const error = new Error('微信登录失败'); error.code='WECHAT_AUTH_FAILED'; error.statusCode=401; throw error }
     return upsertIdentity(`wx:${payload.openid}`, 'user')
   }
-  return { login, verify }
+  return { login, loginWebDemo, verify }
 }
 
 module.exports = { createAuthService }

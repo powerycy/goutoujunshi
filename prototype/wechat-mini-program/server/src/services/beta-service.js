@@ -16,7 +16,7 @@ function createBetaService(db, config = {}) {
   function campaign() { return db.prepare('SELECT * FROM beta_campaigns WHERE campaign_key=?').get(CAMPAIGN) }
   function member(userId) { return db.prepare('SELECT * FROM beta_cohort_members WHERE user_id=?').get(userId) }
   function devAllowance(userId, role) {
-    if (role !== 'dev' && role !== 'admin') return undefined
+    if (role !== 'dev' && role !== 'admin' && role !== 'demo') return undefined
     const row = db.prepare('SELECT total,used,reserved FROM dev_allowances WHERE user_id=?').get(userId)
     return row ? Math.max(0, row.total - row.used - row.reserved) : 0
   }
@@ -40,7 +40,11 @@ function createBetaService(db, config = {}) {
       purchaseRecords
     }
     const allowance = devAllowance(user.id, user.role)
-    if (allowance !== undefined) { result.devOnly = true; result.devAnalysisRemaining = allowance }
+    if (allowance !== undefined) {
+      result.devOnly = user.role === 'dev' || user.role === 'admin'
+      result.demoOnly = user.role === 'demo'
+      result.devAnalysisRemaining = allowance
+    }
     return result
   }
   function claim(user, input, sourceEventId) {

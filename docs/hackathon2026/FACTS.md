@@ -9,9 +9,6 @@
 | 项目名称 | 狗头军师 | 仓库 `README.md`、`SKILL.md` |
 | 报名主标题 | 狗头军师——内置13万字符关系知识与决策体系，解决亲密关系难题 | 本目录全部材料 |
 | 公开仓库 | https://github.com/powerycy/goutoujunshi | Git remote `origin` |
-| 公网体验 | https://goutoujunshi-hackathon-2026.magicyi.chatgpt.site/ | 已匿名核验首页完整加载 |
-| 在线手册 | https://goutoujunshi-hackathon-2026.magicyi.chatgpt.site/guide | 已匿名核验五节手册完整加载 |
-| 官方提交 | 已提交；唯一参赛凭证 ID `6a742ad40021911c7b60`；2026-08-06 14:34（Asia/Shanghai） | 官方“我的提交”页面 |
 | 报名通道 | 自助报名赛道 | 官方入口将该通道定义为“使用本地编程工具自部署的参赛作品” |
 | 产品形态 | 无需登录的公网 Web/H5 评委版；原 Skill 保持不变 | `web/` 与根目录 `SKILL.md` |
 | 核心实现 | TypeScript、React、Next.js/vinext、CSS；浏览器端可解释场景路由与决策规则 | `web/app/GoutouDemo.tsx` |

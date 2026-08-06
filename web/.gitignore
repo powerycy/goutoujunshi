@@ -16,7 +16,6 @@
 # next.js
 /.next/
 /.vinext/
-/.vite/
 /out/
 
 # misc

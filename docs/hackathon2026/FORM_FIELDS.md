@@ -14,14 +14,17 @@
 | 搭建平台 | 自助开发/自部署；Codex 辅助编码；不要填写“扣子” | 已核验 |
 | 编程语言/技术栈 | TypeScript、React、Next.js/vinext、CSS | 已核验 |
 | AI 参与方式 | Codex 辅助代码实现、重构、测试、部署与材料整理；封面使用 OpenAI 图像生成；不隐瞒 AI 参与。 | 已核验 |
-| 公网体验链接 | 【部署后回填】 | 待部署 |
-| 在线使用手册 | 【部署后回填】/guide | 待部署 |
+| 公网体验链接 | https://goutoujunshi-hackathon-2026.magicyi.chatgpt.site/ | 已匿名核验 |
+| 在线使用手册 | https://goutoujunshi-hackathon-2026.magicyi.chatgpt.site/guide | 已匿名核验 |
 | 源代码 | https://github.com/powerycy/goutoujunshi | 已核验 |
 | 小红书公开链接 | https://www.xiaohongshu.com/discovery/item/6a5e1c6b000000000a03a5c4?source=webshare&xhsshare=pc_web&xsec_token=ABizCQeUaYml4K8jiZNvrbgK0Hwa452cqdlBsF9WOAheo=&xsec_source=pc_share | 待核验可访问；只在表单存在对应字段时填写 |
 | 小红书 item ID | `6a5e1c6b000000000a03a5c4` | 已从用户提供链接解析 |
 | 封面 | `assets/cover.png` | 已核验 |
 | 产品快照 | `assets/desktop-hero.png`、`assets/risk-result.png`、`assets/mobile-hero.png` | 已核验 |
 | 测试账号 | 无需账号 | 已核验 |
+| 官方提交状态 | 已提交 | 已在“我的提交”核验 |
+| 唯一参赛凭证 ID | `6a742ad40021911c7b60` | 已在编辑地址核验 |
+| 提交时间 | 2026-08-06 14:34（Asia/Shanghai） | 已核验 |
 
 ## 参赛人字段
 
@@ -29,11 +32,11 @@
 
 ## 提交前复核
 
-- [ ] 公网体验链接匿名打开可用
-- [ ] `/guide` 匿名打开可用
-- [ ] 小红书链接可打开，且只填入明确的小红书链接字段
-- [ ] 姓名、手机号、年龄、省市、身份、邮箱均由参赛者确认
-- [ ] 搭建平台没有写成扣子或其他未使用平台
-- [ ] 没有用户数、收入、评价、经历、奖项或技术能力等虚构信息
-- [ ] 封面、快照和使用手册链接可访问
-- [ ] 最终提交后记录唯一参赛凭证 ID 和提交时间
+- [x] 公网体验链接匿名打开可用
+- [x] `/guide` 匿名打开可用
+- [x] 官方表单没有小红书字段，因此未把链接填入无关字段
+- [x] 姓名与手机号已在最终确认页复核；其余非必填个人字段保持未填写
+- [x] 搭建平台填写“其他”，没有写成扣子、秒哒或其他未使用平台
+- [x] 没有用户数、收入、评价、经历、奖项或技术能力等虚构信息
+- [x] 封面、快照和使用手册链接可访问
+- [x] 已记录唯一参赛凭证 ID 和提交时间

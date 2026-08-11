@@ -1,5 +1,7 @@
 # 狗头军师 · Goutoujunshi
 
+**简体中文** | [English](README_EN.md)
+
 > 把情绪支持、关系科学与可执行策略，装进一个真正站在用户一边的 AI 恋爱军师。
 
 [![GitHub Stars](https://img.shields.io/github/stars/powerycy/goutoujunshi?style=social)](https://github.com/powerycy/goutoujunshi/stargazers)

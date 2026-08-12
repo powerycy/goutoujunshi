@@ -3,6 +3,11 @@
 .vscode/
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# Local relationship-lab runtime outputs and secrets stay off the branch.
+demo/output/
+.env
 
 # The raw research workspace is intentionally not part of the distributable skill.
 /恋爱知识库/

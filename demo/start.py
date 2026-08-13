@@ -12,6 +12,7 @@ import subprocess
 import sys
 import time
 import webbrowser
+import socket
 from pathlib import Path
 
 # Windows 默认 GBK，会让中文 / emoji 输出崩。强制 UTF-8。
@@ -34,6 +35,29 @@ OPTIONAL_PROVIDERS = (
     ("anthropic", "走 Anthropic Claude"),
     ("openai",    "走 OpenAI / DeepSeek / Gemini / 国产八家（OpenAI 兼容协议）"),
 )
+
+
+def port_is_available(host: str, port: int) -> bool:
+    """Return True when the app can bind the requested local port."""
+    family = socket.AF_INET6 if ":" in host else socket.AF_INET
+    with socket.socket(family, socket.SOCK_STREAM) as sock:
+        try:
+            sock.bind((host, port))
+        except OSError:
+            return False
+    return True
+
+
+def choose_port(host: str, requested: int) -> int:
+    if port_is_available(host, requested):
+        return requested
+    # macOS Control Center commonly occupies 7000. Prefer a stable fallback
+    # so double-click / one-command startup still works without manual setup.
+    for candidate in (7700, 7001, 7701, 8787):
+        if port_is_available(host, candidate):
+            print(f"[!] 端口 {requested} 已被系统占用，自动改用 {candidate}")
+            return candidate
+    raise RuntimeError("没有可用的本地端口，请设置 RCL_PORT 后重试")
 
 
 def check_python():
@@ -98,7 +122,7 @@ def main():
     check_optional()
 
     host = "127.0.0.1"
-    port = int(os.environ.get("RCL_PORT", "7000"))
+    port = choose_port(host, int(os.environ.get("RCL_PORT", "7000")))
     url  = f"http://{host}:{port}"
 
     print()

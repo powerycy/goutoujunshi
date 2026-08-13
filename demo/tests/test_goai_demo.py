@@ -1,9 +1,17 @@
 from fastapi.testclient import TestClient
 
 from relationship_candlestick.server import app
+from start import choose_port
 
 
 client = TestClient(app)
+
+
+def test_startup_falls_back_when_requested_port_is_occupied(monkeypatch):
+    monkeypatch.setattr(
+        "start.port_is_available", lambda _host, port: port == 7700
+    )
+    assert choose_port("127.0.0.1", 7000) == 7700
 
 
 def test_judge_demo_runs_without_api_key_or_upload():

@@ -8,8 +8,8 @@ version = "0.1.0"
 description = "Convert two-person chat logs into relationship-index candlestick charts."
 readme = "README.md"
 requires-python = ">=3.9"
-authors = [{name = "RCL Authors"}]
-license = {text = "MIT"}
+authors = [{name = "Goutoujunshi Contributors"}]
+license = {text = "PolyForm Noncommercial 1.0.0; bundled upstream RCL components remain MIT"}
 dependencies = [
     "pandas>=2.0",
     "numpy>=1.24",

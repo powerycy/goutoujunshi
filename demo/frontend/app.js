@@ -433,7 +433,7 @@ async function openHistoryEntry(entry, btn) {
   } catch (e) {
     const msg = String(e && e.message || e || "未知错误");
     let hint = "无法打开该任务：" + msg;
-    if (/Failed to fetch/i.test(msg)) hint = "无法连接服务器，请检查后端是否在运行（http://127.0.0.1:7000）。";
+    if (/Failed to fetch/i.test(msg)) hint = "无法连接服务器，请检查后端是否在运行，并打开启动日志中显示的地址。";
     finish(hint);
   }
 }

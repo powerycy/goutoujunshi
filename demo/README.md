@@ -1,6 +1,6 @@
 # 狗头军师 · 关系决策实验室（GOAI 2026）
 
-这是狗头军师在 GOAI 2026「无界应用」赛道的可运行演示。它把 Relationship Candlestick Lab 的关系趋势证据层，与狗头军师的关系决策层组合成一个可验证 Agent 闭环。
+这是狗头军师在 GOAI 2026「无界应用」赛道的可运行演示。它把 Relationship Candlestick Lab 的关系 K 线图，与狗头军师的关系推进决策组合起来：回看互动历史，识别当前趋势，评估未来推进可能性，并回答“这段关系还能不能推进、下一步具体做什么”。
 
 ## 评委 90 秒体验
 
@@ -8,7 +8,7 @@
 python start.py
 ```
 
-打开 `http://127.0.0.1:7000`，点击「载入合成示例」：
+打开启动日志中显示的地址，点击「载入合成示例」。如果 macOS 的 7000 端口已被系统占用，Demo 会自动改用 `http://127.0.0.1:7700`：
 
 1. 查看 38 条公开合成消息形成的日线趋势和关键转折。
 2. 核对事实、推断、未知与四类关系信号。
@@ -41,8 +41,8 @@ python -m pytest -q
 
 ## 数据与安全
 
-详见 [DATA_AND_SAFETY.md](DATA_AND_SAFETY.md)。演示数据均为公开合成测试数据；产品不声称读取对方内心，不把趋势当作关系结果预测，不进行医疗或心理诊断，不自动发送或执行线下行动。
+详见 [DATA_AND_SAFETY.md](DATA_AND_SAFETY.md)。演示数据均为公开合成测试数据；产品根据历史互动评估未来推进可能性，但不会把趋势当成确定结局，不进行医疗或心理诊断，也不自动发送或执行线下行动。
 
 ## 许可与来源
 
-比赛分支整体遵循仓库根目录的 PolyForm Noncommercial 1.0.0 非商用许可。Relationship Candlestick Lab 原始代码为 MIT License；原许可副本保存在 `THIRD_PARTY_LICENSE.relationship-candlestick-lab`，详细贡献边界见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+本比赛新增代码与狗头军师一致，遵循仓库根目录的 PolyForm Noncommercial 1.0.0 非商用许可。复用的 Relationship Candlestick Lab 上游代码继续遵循其 MIT License；原许可副本保存在 `THIRD_PARTY_LICENSE.relationship-candlestick-lab`，详细贡献边界见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

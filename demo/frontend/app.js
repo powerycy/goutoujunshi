@@ -226,6 +226,7 @@ function showStage(name) {
   $("#btn-home").hidden = (name === "mode");
   $("#job-pill").hidden = !CURRENT_JOB || (name === "mode");
   if (CURRENT_JOB) $("#topbar-job-id").textContent = CURRENT_JOB;
+  document.body.classList.toggle("landing-active", name === "mode");
 }
 
 function navigate(hash) {

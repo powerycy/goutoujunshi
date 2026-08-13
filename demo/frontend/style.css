@@ -32,6 +32,11 @@
 
   /* 图表内部背景 */
   --chart-bg:   #0e0d0c;
+  --barbie:     #ff168f;
+  --barbie-hot: #ff3ca6;
+  --berry:      #3a061f;
+  --berry-deep: #210412;
+  --pink-ink:   #39071f;
 
   /* 字体栈 */
   --font-display: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
@@ -66,6 +71,10 @@ body { display: flex; flex-direction: column; }
   flex: 0 0 auto; backdrop-filter: blur(6px);
 }
 .brand { display: flex; align-items: baseline; gap: 16px; }
+.brand-logo {
+  width: 38px; height: 38px; object-fit: cover; border-radius: 50%;
+  background: #fff; vertical-align: middle;
+}
 .brand .title {
   font-family: var(--font-display);
   font-size: 26px; font-weight: 600; letter-spacing: 0.02em;
@@ -92,6 +101,114 @@ body { display: flex; flex-direction: column; }
 #stage-chart.active { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
 /* 强制内部内容用整宽，避免右侧出现死黑空白 */
 #stage-mode { max-width: 1320px; margin: 0 auto; }
+
+/* GOAI 比赛首页：选定的芭比粉品牌方向。其他流程继续使用深色工作台。 */
+body.landing-active {
+  background: var(--barbie);
+  color: var(--pink-ink);
+}
+body.landing-active .topbar {
+  background: var(--barbie);
+  border-bottom: 1px solid rgba(57,7,31,.4);
+  backdrop-filter: none;
+}
+body.landing-active .brand .title,
+body.landing-active .brand .brand-en { color: var(--pink-ink); }
+body.landing-active .brand-logo { border: 1px solid rgba(57,7,31,.3); }
+body.landing-active #stage-mode {
+  max-width: none; width: 100%; padding: 0; margin: 0;
+}
+.barbie-hero {
+  min-height: calc(100vh - 76px);
+  display: grid; grid-template-columns: minmax(0, 62%) minmax(380px, 38%);
+  background: var(--barbie); overflow: hidden;
+}
+.barbie-copy {
+  padding: clamp(44px, 5.2vw, 84px) clamp(42px, 5vw, 82px) 48px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  position: relative; z-index: 1;
+}
+.barbie-kicker {
+  margin: 0 0 18px; color: var(--pink-ink);
+  font: 500 12px var(--font-mono); letter-spacing: .16em;
+}
+.barbie-copy h1 {
+  margin: 0; color: var(--pink-ink); font: 700 clamp(84px, 10.5vw, 158px)/.92 var(--font-display);
+  letter-spacing: -.05em;
+}
+.barbie-rule { width: min(100%, 800px); height: 2px; background: var(--pink-ink); margin: 28px 0 34px; }
+.barbie-copy h2 {
+  margin: 0; color: #fff; font: 700 clamp(40px, 4.2vw, 66px)/1.22 var(--font-display);
+  letter-spacing: -.025em;
+}
+.barbie-question {
+  margin: 18px 0 28px; color: var(--pink-ink); font: 600 clamp(18px, 1.55vw, 25px)/1.55 var(--font-body);
+}
+.proof-strip {
+  width: min(100%, 790px); display: grid; grid-template-columns: repeat(3, 1fr);
+  margin: 4px 0 28px;
+}
+.proof-strip > div { padding: 0 28px; border-left: 1px solid rgba(255,255,255,.65); }
+.proof-strip > div:first-child { padding-left: 0; border-left: 0; }
+.proof-strip strong { display: block; color: #fff; font: 700 clamp(38px, 4vw, 58px)/1 var(--font-display); white-space: nowrap; }
+.proof-strip span { display: block; margin-top: 7px; color: var(--pink-ink); font: 700 16px var(--font-body); }
+.barbie-copy .demo-action { width: min(100%, 430px); text-align: left; }
+.barbie-copy button.demo-button {
+  background: var(--berry); color: #fff; border: 1px solid var(--berry);
+  padding: 18px 28px; font: 700 24px var(--font-body); letter-spacing: .05em;
+  box-shadow: 0 10px 0 rgba(57,7,31,.14);
+}
+.barbie-copy button.demo-button:hover { background: var(--berry-deep); filter: none; }
+.barbie-copy .demo-action small { color: rgba(57,7,31,.78); text-align: left; font-size: 10px; }
+.trend-preview {
+  position: relative; min-width: 0; color: var(--barbie-hot);
+  background: var(--berry); padding: clamp(120px, 18vh, 210px) 34px 52px 44px;
+  display: flex; flex-direction: column; justify-content: center;
+  clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);
+}
+.trend-preview p {
+  display: flex; align-items: center; gap: 18px; justify-content: center;
+  margin: 0 0 24px; color: var(--barbie-hot); font: 700 17px var(--font-body);
+}
+.trend-preview p span { flex: 1; max-width: 82px; height: 1px; background: var(--barbie-hot); }
+.trend-image-frame {
+  width: 100%; height: min(42vh, 390px); overflow: hidden;
+  border: 1px solid rgba(255,60,166,.55); background: var(--berry-deep);
+}
+.trend-image-frame img {
+  width: 100%; height: 100%; display: block; object-fit: cover; object-position: 30% center;
+}
+.trend-preview small { margin: 24px 0 0 52px; color: rgba(255,255,255,.65); font: 11px/1.6 var(--font-body); }
+body.landing-active .judge-demo {
+  margin: 0; max-width: none; padding: 42px clamp(36px, 6vw, 88px);
+  border: 0; border-top: 1px solid rgba(57,7,31,.3); box-shadow: none;
+  background: #fff; color: var(--pink-ink);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+}
+body.landing-active .demo-eyebrow { color: var(--barbie); }
+body.landing-active .judge-demo h2 { color: var(--pink-ink); }
+body.landing-active .judge-demo p { color: rgba(57,7,31,.72); }
+body.landing-active .demo-steps span { color: var(--pink-ink); }
+body.landing-active .demo-steps b { color: var(--barbie); }
+.license-note { border-left: 3px solid var(--barbie); padding: 8px 0 8px 20px; }
+.license-note strong { display: block; color: var(--pink-ink); font: 700 17px var(--font-body); }
+.license-note span { display: block; margin-top: 6px; color: rgba(57,7,31,.65); font: 12px/1.7 var(--font-body); }
+body.landing-active .mode-grid,
+body.landing-active .history-wrap,
+body.landing-active .disclaimer-foot { display: none; }
+@media (max-width: 900px) {
+  .barbie-hero { grid-template-columns: 1fr; }
+  .barbie-copy { padding: 38px 26px 44px; }
+  .barbie-copy h1 { font-size: clamp(72px, 20vw, 116px); }
+  .barbie-copy h2 { font-size: clamp(34px, 9vw, 54px); }
+  .proof-strip > div { padding: 0 12px; }
+  .proof-strip strong { font-size: clamp(28px, 9vw, 45px); }
+  .proof-strip span { font-size: 12px; }
+  .trend-preview { clip-path: none; padding: 48px 24px; min-height: 470px; }
+  .trend-image-frame { height: 340px; }
+  body.landing-active .judge-demo { grid-template-columns: 1fr; padding: 34px 26px; }
+  .license-note { margin-top: 8px; }
+}
 
 /* ─────────────────────────────────────────
    Stage 0: 模式选择（mode select / 首页）

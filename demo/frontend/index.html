@@ -3,18 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>狗头军师 · 关系决策实验室</title>
+  <title>狗头军师 · 关系还能不能推进？</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css?v=v6-2026-05-03-6">
+  <link rel="stylesheet" href="/static/style.css?v=goai-barbie-2026-08-13-1">
   <script src="/static/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <span class="title">狗头军师&nbsp;·&nbsp;关系决策实验室</span>
-      <span class="brand-en">Evidence → Decision → Observation</span>
+      <img class="brand-logo" src="/static/doghead-logo.png" alt="狗头军师 Logo">
+      <span class="title">狗头军师</span>
+      <span class="brand-en">GOAI 2026 · 无界应用</span>
     </div>
     <div class="topbar-right">
       <span class="job-pill" id="job-pill" hidden>任务 <code id="topbar-job-id">—</code></span>
@@ -24,30 +25,44 @@
 
   <!-- ─────────── Stage 0: Mode Select (landing) ─────────── -->
   <section id="stage-mode" class="stage">
-    <div class="hero">
-      <p class="kicker">GOAI 2026 · 无界应用赛道</p>
-      <h1>关系 K 线图<br><em>看历史、看现在、预测未来推进可能性</em></h1>
-      <p class="hero-sub">
-        帮你判断这段关系还能不能推进、下一步具体做什么，
-        再由狗头军师给出行动、观察窗口和停止条件。
-      </p>
-      <p class="hero-sub muted">
-        看历史趋势，评估未来可能性；行动由你确认，真实聊天默认本地处理。
-      </p>
+    <div class="barbie-hero">
+      <div class="barbie-copy">
+        <p class="barbie-kicker">开源 AI 恋爱军师 · GOAI 2026</p>
+        <h1>狗头军师</h1>
+        <div class="barbie-rule"></div>
+        <h2>不是认识更多的人，<br>而是把关系推进下去</h2>
+        <p class="barbie-question">这段关系还能不能推进？下一步具体做什么？</p>
+        <div class="proof-strip" aria-label="项目成绩">
+          <div><strong>100W+</strong><span>全网观看</span></div>
+          <div><strong>1000+</strong><span>真实评论</span></div>
+          <div><strong>2000+</strong><span>GitHub Stars</span></div>
+        </div>
+        <div class="demo-action">
+          <button id="btn-demo" class="primary demo-button">载入演示案例</button>
+          <small id="demo-status">38 条公开合成消息 · 无需 API Key · 不调用外部模型</small>
+        </div>
+      </div>
+      <div class="trend-preview" aria-label="关系趋势辅助判断预览">
+        <p><span></span>关系趋势 · 辅助判断<span></span></p>
+        <div class="trend-image-frame">
+          <img src="/static/relationship-trend-preview.png" alt="狗头军师关系趋势与下一步建议界面">
+        </div>
+        <small>关系趋势只是狗头军师的辅助证据，不是产品本身。</small>
+      </div>
     </div>
 
     <div class="judge-demo">
       <div class="demo-copy">
-        <div class="demo-eyebrow">评委一键体验 · 无需 API Key</div>
-        <h2>90 秒走完完整 Agent 闭环</h2>
-        <p>载入 38 条公开合成消息，查看证据趋势、关键转折、目标方案、人工确认与观察/停止条件。</p>
+        <div class="demo-eyebrow">评委 90 秒体验</div>
+        <h2>从关系证据到下一步行动</h2>
+        <p>查看关键转折，选择推进、确认、修复或退出，再由你确认最终行动。</p>
         <div class="demo-steps" aria-label="演示步骤">
-          <span><b>01</b> 证据趋势</span><span><b>02</b> 决策方案</span><span><b>03</b> 人工确认</span>
+          <span><b>01</b> 看关系进度</span><span><b>02</b> 判断能否推进</span><span><b>03</b> 确认下一步</span>
         </div>
       </div>
-      <div class="demo-action">
-        <button id="btn-demo" class="primary demo-button">载入合成示例 →</button>
-        <small id="demo-status">公开测试数据 · 可复现 · 不调用外部模型</small>
+      <div class="license-note">
+        <strong>公开可复核</strong>
+        <span>新增代码与狗头军师同为非商用许可；关系趋势上游代码保留 MIT 署名。</span>
       </div>
     </div>
     <div class="mode-grid">

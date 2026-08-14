@@ -1,0 +1,17 @@
+{
+  "name": "@powerycy/dsh-goutoujunshi-bundle",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "cordis.patch.yml"
+  ],
+  "dependencies": {
+    "@powerycy/dsh-goutoujunshi-plugin": "workspace:*"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

@@ -39,6 +39,26 @@ export function addObject(objects, displayName, maximum = MAX_OBJECTS) {
   return [...objects, createRelationshipObject(displayName, objects.map(item => item.id))]
 }
 
+export function archiveRelationshipObject(objects, archivedObjects, objectId, archivedAt = new Date().toISOString()) {
+  const object = objects.find(item => item.id === objectId)
+  if (!object) throw new Error('找不到要归档的关系对象')
+  return {
+    objects: objects.filter(item => item.id !== objectId),
+    archivedObjects: [...archivedObjects, { ...object, archivedAt }],
+  }
+}
+
+export function restoreRelationshipObject(objects, archivedObjects, objectId, maximum = MAX_OBJECTS) {
+  if (objects.length >= maximum) throw new Error(`最多只能建立 ${maximum} 个对象档案`)
+  const object = archivedObjects.find(item => item.id === objectId)
+  if (!object) throw new Error('找不到要恢复的关系对象')
+  const { archivedAt: _archivedAt, ...restored } = object
+  return {
+    objects: [...objects, restored],
+    archivedObjects: archivedObjects.filter(item => item.id !== objectId),
+  }
+}
+
 export function lockIdentityMapping({ previous = {}, proposed = {}, events = [] }) {
   for (const [senderId, role] of Object.entries(proposed)) {
     if (!['user', 'object'].includes(role)) {
@@ -283,9 +303,16 @@ export function publicSyntheticCase() {
     { id: 'mem_2', scope: 'relationship', subjectId: object.id, field: 'stage', value: '认识约六周，完成两次线下见面', confidence: 'high', createdAt: '2026-07-29T14:00:00Z' },
     { id: 'mem_3', scope: 'hypothesis', subjectId: object.id, field: 'pace', value: '可能更偏好低频但具体的邀约', confidence: 'low', createdAt: '2026-07-30T14:00:00Z' },
   ]
+  const demoAnalysis = analyzeTurn({ text: '要不要再约', object })
   object.messages = [
     { id: 'm1', role: 'user', text: '她最近忽冷忽热，我有点拿不准要不要再约。', at: '2026-08-03T10:00:00+08:00' },
-    { id: 'm2', role: 'assistant', text: '先别急着把一次表情回复解释成降温。你在意的是：前面已经有过具体投入，现在又出现含糊信号，怕自己继续推进会显得一厢情愿。', analysis: analyzeTurn({ text: '要不要再约', object }), at: '2026-08-03T10:00:08+08:00' },
+    {
+      id: 'm2',
+      role: 'assistant',
+      text: `先别急着把一次表情回复解释成降温。你在意的是：前面已经有过具体投入，现在又出现含糊信号，怕自己继续推进会显得一厢情愿。\n\n从记录看，小北确认过具体见面时间，也在取消后主动道歉并给了替代安排；这两件事比单独一个表情更有分量。现在更像是有回应，但还需要一次低压力行动验证。\n\n你可以发：“${demoAnalysis.script}”\n\n发出后看 48 小时，只看有没有具体回应或替代安排。明确拒绝，或者连续两次回避具体安排又不给替代时间，就停下来。`,
+      analysis: demoAnalysis,
+      at: '2026-08-03T10:00:08+08:00',
+    },
   ]
 
   const second = createRelationshipObject('阿岚', [object.id])

@@ -15,7 +15,7 @@ flowchart LR
   W --> U["狗头军师 sidebar 与 conversation slots"]
 ```
 
-`@powerycy/dsh-goutoujunshi-plugin` 符合官方 client plugin 约定：包中声明 `dsh.client`、导出 `./client` 和 `./package.json`，由 Harness 的模块加载器载入。客户端在官方 `ui-layout` 的 `sidebar` 与 `conversation` 插槽内提供关系工作区，不替换 Harness host、插件系统或运行时。
+`@powerycy/dsh-goutoujunshi-plugin` 符合官方 client plugin 约定：包中声明 `dsh.client`、导出 `./client` 和 `./package.json`，由 Harness 的模块加载器载入。客户端把对象抽屉注册进官方 `sidebar.workspaces`，把主体验注册进 `conversation`，不覆盖官方 DeepSeek 侧栏、会话、设置、模型提供方或插件系统。
 
 Host 侧注册三组模型可见工具：
 
@@ -49,6 +49,8 @@ Host 侧注册三组模型可见工具：
 
 所有写入与召回都必须携带当前对象 ID。`recallForObject` 只允许当前对象和全局用户偏好两种 subject；记忆写入若 subject 与当前对象不一致会拒绝。对象总数由 host 配置与客户端同时限制为 5。
 
+`temporary` 会话是单独的瞬时分区：它没有对象 ID，消息不进入 localStorage，也不调用长期记忆适配。页面刷新或 Harness 会话切换时清空。活动对象可被归档到独立列表；归档只改变可见状态，稳定 ID 及其会话、证据、记忆和任务保持不变，恢复后继续使用原 ID。
+
 ## 证据与记忆分层
 
 ```mermaid
@@ -62,8 +64,8 @@ flowchart TD
   M --> Z["旧事件压缩为季度阶段总结"]
 ```
 
-蜡烛开高低收只是对事件证据方向与完整度的可视化编码，不是概率模型。低于完整度阈值的事件固定归类为“证据不足”。
+K 线开高低收只是对事件证据方向与完整度的可视化编码，不是概率模型。低于完整度阈值的事件固定归类为“证据不足”。视觉沿用旧版暗色 K 线、红涨绿退和证据量柱；取消趋势预测线。
 
 ## 无 API Key 的公开演示
 
-客户端内置完全合成的公开对象、消息、证据和精简记忆。UI 中的军师分析由同一套领域函数生成，因而可在未配置模型提供方时完整演示产品闭环。配置模型后，Harness Agent 可以进一步通过上述 host tools 按需调用只读 Skill。
+客户端内置完全合成的公开对象、消息、证据和精简记忆。UI 中的军师分析由同一套领域函数生成，因而可在未配置模型提供方时完整演示产品闭环。配置模型后，Harness Agent 可以进一步通过上述 host tools 按需调用只读 Skill。连接入口完全使用官方“设置 → 模型”，支持 DeepSeek API Key、添加提供方与自定义提供方。

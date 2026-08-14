@@ -13,7 +13,7 @@
   "files": [
     "lib/",
     "src/domain.js",
-    "assets/goutoujunshi-dog-logo.png"
+    "assets/doghead-logo.png"
   ],
   "scripts": {
     "build": "node build.mjs"

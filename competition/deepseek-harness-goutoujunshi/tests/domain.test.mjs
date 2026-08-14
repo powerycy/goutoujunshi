@@ -3,6 +3,7 @@ import test from 'node:test'
 import {
   addObject,
   analyzeTurn,
+  archiveRelationshipObject,
   appendMemory,
   buildEvidenceCandles,
   compressMemories,
@@ -10,6 +11,7 @@ import {
   lockIdentityMapping,
   publicSyntheticCase,
   recallForObject,
+  restoreRelationshipObject,
   undoLastMemoryOperation,
 } from '../packages/goutoujunshi-plugin/src/domain.js'
 
@@ -19,6 +21,19 @@ test('creates at most five isolated relationship objects', () => {
   assert.equal(objects.length, 5)
   assert.equal(new Set(objects.map(item => item.id)).size, 5)
   assert.throws(() => addObject(objects, 'F'), /最多/)
+})
+
+test('archives a relationship object without deleting it and can restore it', () => {
+  const objects = addObject([], '小北')
+  objects[0].messages.push({ id: 'msg-1', role: 'user', text: '公开测试', at: '2026-08-14T00:00:00Z' })
+  const archived = archiveRelationshipObject(objects, [], objects[0].id, '2026-08-14T01:00:00Z')
+  assert.equal(archived.objects.length, 0)
+  assert.equal(archived.archivedObjects[0].messages[0].text, '公开测试')
+  assert.equal(archived.archivedObjects[0].archivedAt, '2026-08-14T01:00:00Z')
+  const restored = restoreRelationshipObject(archived.objects, archived.archivedObjects, objects[0].id)
+  assert.equal(restored.objects[0].id, objects[0].id)
+  assert.equal(restored.objects[0].archivedAt, undefined)
+  assert.equal(restored.archivedObjects.length, 0)
 })
 
 test('recalls only the active object and shared user memory', () => {

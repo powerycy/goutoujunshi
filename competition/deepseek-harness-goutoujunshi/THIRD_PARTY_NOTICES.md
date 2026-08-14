@@ -25,4 +25,4 @@ React 用于 client plugin 渲染，esbuild 用于生成 Harness 可加载的浏
 
 ## 狗头军师绿色狗头图
 
-`packages/goutoujunshi-plugin/assets/goutoujunshi-dog-logo.png` 是为本比赛项目使用 OpenAI 内置图像生成工具新生成的原创品牌素材，不包含官方 DeepSeek Logo、真实人物或第三方聊天数据。
+`packages/goutoujunshi-plugin/assets/doghead-logo.png` 复用自本仓库旧关系 K 线 Demo 的既有狗头军师品牌资产；本比赛项目只复制使用，不修改旧分支或旧 PR。

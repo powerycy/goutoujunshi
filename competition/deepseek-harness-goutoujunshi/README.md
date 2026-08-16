@@ -1,5 +1,7 @@
 # 狗头军师 × DeepSeek Harness（GOAI 参赛版）
 
+> GOAI 2026「无界应用 / Boundless Agents」初赛作品：面向个人终端的关系决策 Agent，把高情绪、低确定性的关系困惑，转化为可观察、可停止、由用户确认的行动闭环。
+
 这是一个独立、可运行的 GOAI 参赛项目：官方 DeepSeek Harness 提供 Agent、工具、插件、会话与 Web 工作区底座；仓库既有“狗头军师” Skill 作为只读能力内核，通过新建适配层按需接入。
 
 它不是一套仿 Harness 的普通页面。启动时会创建一个真实的 Harness profile，组合官方 `@deepseek-ai/dsh-base`、`@deepseek-ai/dsh-web-app` 与本项目 bundle，并由插件同时注册系统提示、Harness tools 和 Web client slots。
@@ -72,9 +74,12 @@ competition/deepseek-harness-goutoujunshi/
 
 更多说明：
 
+- [GOAI 初赛作品简介与提交信息](submission/GOAI_INITIAL_SUBMISSION.md)
+- [GOAI 初赛方案 PPT/PDF](submission/)
 - [架构与隔离设计](docs/ARCHITECTURE.md)
 - [公开 Demo 脚本](docs/DEMO.md)
 - [数据与安全边界](docs/DATA_AND_SAFETY.md)
 - [上游版本锁定](docs/UPSTREAM.md)
 - [浏览器与设计 QA](docs/DESIGN_QA.md)
 - [第三方声明](THIRD_PARTY_NOTICES.md)
+- [工程交付与审计文档](documentation/architecture.md)

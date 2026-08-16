@@ -112,12 +112,13 @@ export function classifyEvidence(event) {
 
 export function buildEvidenceCandles(events) {
   let baseline = 50
+  const movement = events.length >= 10 ? 3.7 : 8
   return [...events]
     .sort((a, b) => String(a.at).localeCompare(String(b.at)))
     .map(event => {
       const open = baseline
       const score = scoreEvidence(event)
-      const close = Math.max(8, Math.min(92, open + score * 8))
+      const close = Math.max(8, Math.min(92, open + score * movement))
       const spread = score === 0 ? 2 : Math.abs(score) * 3 + 2
       const candle = {
         ...event,
@@ -242,6 +243,61 @@ export function publicSyntheticCase() {
   const object = createRelationshipObject('小北')
   object.identity = { status: 'locked', senders: { user_01: 'user', contact_17: 'object' } }
   object.evidence = [
+    {
+      id: 'ev_pre01', at: '2026-07-01T12:10:00+08:00', senderId: 'contact_17', score: 1,
+      reason: '对方主动延续前一天的话题。', observableFact: '小北午休时主动问起用户提到的电影。',
+      summary: '“你昨天说的那部片叫什么？”', source: '公开合成聊天 / batch-pre / msg-01', completeness: 0.93,
+    },
+    {
+      id: 'ev_pre02', at: '2026-07-02T20:30:00+08:00', senderId: 'contact_17', score: 1,
+      reason: '对方主动分享近况，并留下继续交流的问题。', observableFact: '小北发来一张晚饭照片并询问用户口味。',
+      summary: '“这家辣得有点狠，你能吃辣吗？”', source: '公开合成聊天 / batch-pre / msg-06', completeness: 0.91,
+    },
+    {
+      id: 'ev_pre03', at: '2026-07-03T22:12:00+08:00', senderId: 'contact_17', score: -1,
+      reason: '话题在具体邀约出现后中断，没有回应安排。', observableFact: '用户询问周末是否见面后，当晚没有得到回复。',
+      summary: '用户：“周末要不要一起看展？”', source: '公开合成聊天 / batch-pre / msg-09', completeness: 0.86,
+    },
+    {
+      id: 'ev_pre04', at: '2026-07-04T19:05:00+08:00', senderId: 'contact_17', score: -1,
+      reason: '对方只说明忙，没有回应邀约或提供替代时间。', observableFact: '小北次日回复“昨天太忙了”，随后转移话题。',
+      summary: '“昨天太忙了，今天总算下班。”', source: '公开合成聊天 / batch-pre / msg-12', completeness: 0.92,
+    },
+    {
+      id: 'ev_pre05', at: '2026-07-05T11:30:00+08:00', senderId: 'contact_17', score: 2,
+      reason: '对方主动修复遗漏，并提出具体替代安排。', observableFact: '小北主动提出下周三晚饭并给出两个地点选项。',
+      summary: '“昨天没接住，周三晚饭可以吗？你选东边还是南门？”', source: '公开合成聊天 / batch-pre / msg-16', completeness: 1,
+    },
+    {
+      id: 'ev_pre06', at: '2026-07-07T09:18:00+08:00', senderId: 'contact_17', score: 0,
+      reason: '只有表情回应，信息不足。', observableFact: '对方对用户发来的照片点了表情，没有继续文字交流。',
+      summary: '“👍”', source: '公开合成聊天 / batch-pre / msg-21', completeness: 0.38,
+    },
+    {
+      id: 'ev_pre07', at: '2026-07-08T23:06:00+08:00', senderId: 'contact_17', score: -1,
+      reason: '具体时间临近仍未确认，投入出现下降。', observableFact: '约定前一天，小北没有回应确认时间的信息。',
+      summary: '用户：“明天还是七点吗？”', source: '公开合成聊天 / batch-pre / msg-25', completeness: 0.84,
+    },
+    {
+      id: 'ev_pre08', at: '2026-07-09T10:20:00+08:00', senderId: 'contact_17', score: 1,
+      reason: '对方补充确认，并承担具体安排。', observableFact: '小北上午确认七点并主动订位。',
+      summary: '“七点没问题，我来订位。”', source: '公开合成聊天 / batch-pre / msg-27', completeness: 0.98,
+    },
+    {
+      id: 'ev_pre09', at: '2026-07-10T22:40:00+08:00', senderId: 'contact_17', score: 1,
+      reason: '见面后主动延续交流。', observableFact: '分别后小北主动报平安并提到下次想去的地方。',
+      summary: '“到家了。下次那家书店也可以去看看。”', source: '公开合成聊天 / batch-pre / msg-33', completeness: 0.96,
+    },
+    {
+      id: 'ev_pre10', at: '2026-07-12T18:45:00+08:00', senderId: 'contact_17', score: -1,
+      reason: '对方连续结束话题，没有给出可继续的信息。', observableFact: '两次对话都以“先忙了”结束，未回应用户的问题。',
+      summary: '“我先忙了，回头说。”', source: '公开合成聊天 / batch-pre / msg-39', completeness: 0.9,
+    },
+    {
+      id: 'ev_pre11', at: '2026-07-16T21:08:00+08:00', senderId: 'contact_17', score: -1,
+      reason: '对方回避具体邀约，也没有提供替代安排。', observableFact: '小北回复最近忙，但没有回答是否见面。',
+      summary: '“这几天有点忙，之后再看吧。”', source: '公开合成聊天 / batch-pre / msg-45', completeness: 0.94,
+    },
     {
       id: 'ev_001',
       at: '2026-07-18T12:10:00+08:00',

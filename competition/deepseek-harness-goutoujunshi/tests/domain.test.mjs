@@ -57,7 +57,10 @@ test('identity mapping requires anchors and stops on cross-batch conflict', () =
 test('evidence chart uses red-positive, green-negative, gray-insufficient semantics', () => {
   const events = publicSyntheticCase().objects[0].evidence
   const candles = buildEvidenceCandles(events)
-  assert.deepEqual(candles.map(item => item.direction), ['positive', 'positive', 'negative', 'positive', 'insufficient'])
+  const directions = candles.map(item => item.direction)
+  assert.equal(candles.length, 16)
+  assert.deepEqual(directions.slice(-5), ['positive', 'positive', 'negative', 'positive', 'insufficient'])
+  assert.ok(['positive', 'negative', 'insufficient'].every(direction => directions.includes(direction)))
 })
 
 test('compresses old event details into stage summaries while keeping recent memory', () => {

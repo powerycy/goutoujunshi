@@ -105,6 +105,10 @@ class WorkspaceStore {
     this.patch({ temporaryMessages: [], notice: '临时对话已清空。' }, false)
   }
 
+  clearNotice() {
+    this.patch({ notice: null }, false)
+  }
+
   createObject(displayName) {
     const objects = addObject(this.state.objects, displayName)
     const activeObjectId = objects.at(-1).id

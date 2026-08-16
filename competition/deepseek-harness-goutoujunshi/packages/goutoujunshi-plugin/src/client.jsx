@@ -24,7 +24,7 @@ import {
 } from 'lucide-react'
 import dogLogo from '../assets/doghead-logo.png'
 import styles from './styles.css'
-import { buildEvidenceCandles, classifyEvidence } from './domain.js'
+import { buildEvidenceCandles } from './domain.js'
 import { workspaceStore } from './store.js'
 
 const PLUGIN_ID = '@powerycy/dsh-goutoujunshi-plugin'
@@ -52,7 +52,43 @@ function Brand({ collapsed }) {
   </div>
 }
 
+function findExactButton(root, label) {
+  return [...root.querySelectorAll('button')].find(button => button.textContent?.trim() === label)
+}
+
+function openModelSettings() {
+  const officialSettings = findExactButton(document, '设置')
+  officialSettings?.click()
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const dialog = document.querySelector('[role="dialog"][aria-modal="true"]')
+    if (!dialog) return
+    dialog.dataset.gjModelSettings = 'true'
+    findExactButton(dialog, '模型')?.click()
+    requestAnimationFrame(() => {
+      const openConfig = findExactButton(dialog, '打开配置文件')
+      if (openConfig) openConfig.dataset.gjSettingsHide = 'true'
+    })
+  }))
+}
+
+function useCompactModelSettings() {
+  useEffect(() => {
+    const mark = () => {
+      const settings = findExactButton(document, '设置')
+      if (settings) settings.dataset.gjOfficialSettings = 'true'
+    }
+    mark()
+    const observer = new MutationObserver(mark)
+    observer.observe(document.body, { childList: true, subtree: true })
+    return () => {
+      observer.disconnect()
+      document.querySelectorAll('[data-gj-official-settings]').forEach(node => node.removeAttribute('data-gj-official-settings'))
+    }
+  }, [])
+}
+
 function ObjectSidebar({ wide = true, expandSidebar }) {
+  useCompactModelSettings()
   const state = useWorkspace()
   const active = useActiveObject(state)
   const temporary = state.sessionMode === 'temporary' || !active
@@ -94,7 +130,7 @@ function ObjectSidebar({ wide = true, expandSidebar }) {
 
     <div className="sidebar-foot">
       {!collapsed && <button className="demo-link" onClick={() => workspaceStore.loadDemo()}><Sparkles size={14} />载入公开案例</button>}
-      {!collapsed && <div className="model-hint"><KeyRound size={14} /><span><strong>模型与 API Key</strong><small>在下方设置中连接</small></span></div>}
+      {!collapsed && <button className="model-connect-link" onClick={openModelSettings}><KeyRound size={14} /><span><strong>模型连接</strong><small>DeepSeek · API Key</small></span></button>}
     </div>
   </aside>
 }
@@ -182,14 +218,19 @@ function EvidenceKline({ object }) {
   const candles = useMemo(() => buildEvidenceCandles(object.evidence), [object.evidence])
   const [selectedId, setSelectedId] = useState(null)
   const selected = candles.find(item => item.id === selectedId) || candles.at(-1)
+  const latest = candles.at(-1)
+  const selectedIndex = Math.max(0, candles.findIndex(item => item.id === selected?.id))
+  const adviceMessage = [...object.messages].reverse().find(message => message.analysis)
+  const advice = adviceMessage?.analysis
+  const confirmed = Boolean(adviceMessage?.confirmed)
   const width = 900
-  const height = 470
-  const left = 26
+  const height = 520
+  const left = 0
   const right = 72
-  const chartTop = 32
-  const chartBottom = 330
-  const volumeTop = 358
-  const volumeBottom = 430
+  const chartTop = 18
+  const chartBottom = 350
+  const volumeTop = 382
+  const volumeBottom = 476
   const values = candles.flatMap(item => [item.low, item.high])
   const min = Math.max(0, Math.floor(((values.length ? Math.min(...values) : 40) - 3) / 4) * 4)
   const max = Math.min(100, Math.ceil(((values.length ? Math.max(...values) : 70) + 3) / 4) * 4)
@@ -198,49 +239,74 @@ function EvidenceKline({ object }) {
   const plotWidth = width - left - right
   const xFor = index => left + plotWidth * (index + .5) / Math.max(1, candles.length)
   const yFor = value => chartTop + (topValue - value) * (chartBottom - chartTop) / range
-  const ticks = Array.from({ length: 6 }, (_, index) => min + range * index / 5).reverse()
-  return <div className="kline-workspace">
-    <section className="kline-chart-card">
-      <div className="kline-toolbar">
-        <div className="timeframes"><button className="is-active">日</button><button>周</button><button>月</button></div>
-        <span>1D · {candles.length} bars · 证据指数</span>
-      </div>
-      <div className="kline-chart">
-        {candles.length ? <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${object.displayName} 的关系证据 K 线，不预测爱意或成功率`}>
-          {ticks.map(value => <g key={value}><line className="k-grid" x1={left} x2={width - right} y1={yFor(value)} y2={yFor(value)} /><text className="k-axis" x={width - right + 12} y={yFor(value) + 4}>{value.toFixed(1)}</text></g>)}
-          <line className="volume-rule" x1={left} x2={width - right} y1={volumeTop - 12} y2={volumeTop - 12} />
-          {candles.map((item, index) => {
-            const x = xFor(index)
-            const spacing = plotWidth / Math.max(1, candles.length)
-            const bodyWidth = Math.min(58, Math.max(12, spacing * .46))
-            const color = item.direction === 'positive' ? '#d04841' : item.direction === 'negative' ? '#4a8a6e' : '#8a8175'
-            const bodyTop = Math.min(yFor(item.open), yFor(item.close))
-            const bodyHeight = Math.max(3, Math.abs(yFor(item.open) - yFor(item.close)))
-            const volumeHeight = Math.max(10, item.completeness * 52 + Math.abs(item.close - item.open) * 2)
-            return <g key={item.id} className="k-candle" tabIndex="0" onMouseEnter={() => setSelectedId(item.id)} onFocus={() => setSelectedId(item.id)}>
-              <line x1={x} x2={x} y1={yFor(item.high)} y2={yFor(item.low)} stroke={color} strokeWidth="2" />
-              <rect x={x - bodyWidth / 2} y={bodyTop} width={bodyWidth} height={bodyHeight} fill={color} />
-              <rect x={x - bodyWidth / 2} y={volumeBottom - volumeHeight} width={bodyWidth} height={volumeHeight} fill={color} opacity=".58" />
-              <text className="k-date" x={x} y={height - 16} textAnchor="middle">{new Intl.DateTimeFormat('zh-CN', { month: '2-digit', day: '2-digit' }).format(new Date(item.at))}</text>
-            </g>
-          })}
-          <text className="volume-label" x={left} y={volumeTop}>证据量</text>
-        </svg> : <div className="kline-empty">还没有足够证据。回到对话，把具体互动讲给军师。</div>}
-      </div>
-    </section>
-    <aside className="kline-inspector">
-      <div><small>狗头军师 · 证据解释</small><h2>{object.displayName} 的关系进展</h2><p>只回看事实，不预测爱意、忠诚或成功率。</p></div>
-      {selected ? <>
-        <div className={`direction-block is-${selected.direction}`}><span>{selected.direction === 'positive' ? '正向进展' : selected.direction === 'negative' ? '退缩 / 冲突' : '证据不足'}</span><strong>{selected.reason}</strong></div>
-        <dl><dt>时间</dt><dd>{formatTime(selected.at, true)}</dd><dt>可观察事实</dt><dd>{selected.observableFact}</dd><dt>代表消息</dt><dd>{selected.summary}</dd><dt>来源</dt><dd>{selected.source}</dd><dt>完整度</dt><dd>{Math.round(selected.completeness * 100)}%</dd></dl>
-      </> : <p className="inspector-empty">悬停任意 K 线查看证据。</p>}
-      <button onClick={() => workspaceStore.setView('chat')}><ArrowLeft size={14} />回到军师对话</button>
-    </aside>
+  const ticks = Array.from({ length: 12 }, (_, index) => min + range * index / 11).reverse()
+  const verticals = Array.from({ length: 9 }, (_, index) => left + plotWidth * index / 8)
+  const latestAt = latest ? new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).format(new Date(latest.at)) : '—'
+  const directionLabel = selected?.direction === 'positive' ? '正向进展' : selected?.direction === 'negative' ? '退缩 / 冲突' : '证据不足'
+  return <div className="market-terminal">
+    <header className="market-terminal-head">
+      <div><h2>狗头军师 · 关系决策实验室</h2><em>Evidence → Decision → Observation</em></div>
+      <div className="market-terminal-actions"><span>对象&nbsp; {object.displayName}</span><button onClick={() => workspaceStore.setView('chat')}><ArrowLeft size={13} />回到对话</button></div>
+    </header>
+    <div className="market-timebar">
+      <div className="market-timeframes">{['5m', '15m', '30m', '1H', '2H', '4H', '日', '周', '月', '季', '年'].map(value => <button key={value} className={value === '日' ? 'is-active' : ''}>{value}</button>)}</div>
+      <span>1d · {candles.length} bars · 最新 {latestAt} · close {latest?.close.toFixed(2) || '—'}</span>
+    </div>
+    <div className="market-indicators">
+      {[['均线', '5,10,20'], ['布林带', '20,2'], ['MACD', '12,26,9'], ['RSI', '14'], ['KDJ', '9,3,3']].map(([name, value]) => <label key={name}><input type="checkbox" />{name}<b>{value}</b></label>)}
+      <button>应用</button>
+    </div>
+    <div className="kline-workspace">
+      <section className="kline-chart-card">
+        {selected && <div className="market-ohlc"><span>{formatTime(selected.at, true)}</span><span>开 <b>{selected.open.toFixed(2)}</b></span><span>高 <b>{selected.high.toFixed(2)}</b></span><span>低 <b>{selected.low.toFixed(2)}</b></span><span>收 <b>{selected.close.toFixed(2)}</b></span></div>}
+        <div className="kline-chart">
+          {candles.length ? <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${object.displayName} 的关系证据 K 线，不预测爱意或成功率`}>
+            {ticks.map(value => <g key={value}><line className="k-grid" x1={left} x2={width - right} y1={yFor(value)} y2={yFor(value)} /><text className="k-axis" x={width - right + 12} y={yFor(value) + 4}>{value.toFixed(2)}</text></g>)}
+            {verticals.map(value => <line key={value} className="k-grid is-vertical" x1={value} x2={value} y1={chartTop} y2={volumeBottom} />)}
+            <line className="volume-rule" x1={left} x2={width - right} y1={volumeTop - 12} y2={volumeTop - 12} />
+            {candles.map((item, index) => {
+              const x = xFor(index)
+              const bodyWidth = Math.min(42, Math.max(20, plotWidth / 18))
+              const color = item.direction === 'positive' ? '#d04841' : item.direction === 'negative' ? '#4a8a6e' : '#8a8175'
+              const bodyTop = Math.min(yFor(item.open), yFor(item.close))
+              const bodyHeight = Math.max(3, Math.abs(yFor(item.open) - yFor(item.close)))
+              const volumeHeight = Math.max(12, item.completeness * 64 + Math.abs(item.close - item.open) * 1.4)
+              return <g key={item.id} className="k-candle" tabIndex="0" onMouseEnter={() => setSelectedId(item.id)} onFocus={() => setSelectedId(item.id)}>
+                <line x1={x} x2={x} y1={yFor(item.high)} y2={yFor(item.low)} stroke={color} strokeWidth="2" />
+                <rect x={x - bodyWidth / 2} y={bodyTop} width={bodyWidth} height={bodyHeight} fill={color} />
+                <rect x={x - bodyWidth / 2} y={volumeBottom - volumeHeight} width={bodyWidth} height={volumeHeight} fill={color} opacity=".66" />
+                {index % 2 === 0 && <text className="k-date" x={x} y={height - 15} textAnchor="middle">{new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(item.at))}</text>}
+              </g>
+            })}
+            {selected && <>
+              <line className="k-crosshair" x1={xFor(selectedIndex)} x2={xFor(selectedIndex)} y1={chartTop} y2={volumeBottom} />
+              <line className="k-current-line" x1={left} x2={width - right} y1={yFor(selected.close)} y2={yFor(selected.close)} />
+              <rect className="k-current-label" x={width - right} y={yFor(selected.close) - 11} width={right - 7} height="22" />
+              <text className="k-current-text" x={width - right + 7} y={yFor(selected.close) + 4}>{selected.close.toFixed(2)}</text>
+            </>}
+            <text className="volume-label" x={left + 6} y={volumeTop}>证据量</text>
+            <rect className="k-volume-label" x={width - right} y={volumeBottom - 21} width={right - 7} height="21" />
+            <text className="k-current-text" x={width - right + 7} y={volumeBottom - 6}>{selected ? (selected.completeness * 3.1).toFixed(1) : '0.0'}</text>
+          </svg> : <div className="kline-empty">还没有足够证据。回到对话，把具体互动讲给军师。</div>}
+        </div>
+      </section>
+      <aside className="kline-inspector">
+        <div className="inspector-step"><small>当前一步</small><h2>步</h2></div>
+        {selected ? <>
+          <div className={`direction-block is-${selected.direction}`}><span>{directionLabel} · {formatTime(selected.at, true)}</span><strong>{selected.reason}</strong></div>
+          <ul className="evidence-points"><li>{selected.observableFact}</li><li>{selected.summary}</li><li>{selected.source} · 完整度 {Math.round(selected.completeness * 100)}%</li></ul>
+          <div className="decision-box is-window"><strong>观察窗口</strong><p>{advice?.observationWindow || '先观察下一次具体回应，不用急着定义关系。'}</p></div>
+          <div className="decision-box is-stop"><strong>停止条件</strong><p>{advice?.stopConditions?.slice(0, 2).join('；') || '明确拒绝，或持续回避具体安排。'}</p></div>
+          <button className="decision-confirm" disabled={!adviceMessage || confirmed} onClick={() => adviceMessage && workspaceStore.confirmDecision(adviceMessage.id)}>{confirmed ? '已由你确认' : '确认采用这一步'}</button>
+          <p className="inspector-foot">每根 K 线都来自可回看的证据引用。图表不预测爱意、忠诚或成功率。</p>
+        </> : <p className="inspector-empty">悬停任意 K 线查看证据。</p>}
+      </aside>
+    </div>
   </div>
 }
 
 function ProgressView({ object }) {
-  return <main className="progress-view"><EvidenceKline object={object} /><p className="kline-caveat"><CircleAlert size={14} />红色代表正向进展，绿色代表退缩或冲突，灰色代表证据不足。每根 K 线都保留来源引用。</p></main>
+  return <main className="progress-view"><EvidenceKline object={object} /><p className="kline-caveat"><CircleAlert size={14} />红色正向、绿色退缩、灰色证据不足；它是证据图，不是感情预测。</p></main>
 }
 
 function CreateObjectDialog({ suggestedName = '' }) {
@@ -295,6 +361,11 @@ function ConversationWorkspace({ sessionId }) {
       workspaceStore.startTemporary()
     }
   }, [sessionId])
+  useEffect(() => {
+    if (!state.notice) return undefined
+    const timer = window.setTimeout(() => workspaceStore.clearNotice(), 1800)
+    return () => window.clearTimeout(timer)
+  }, [state.notice])
   const active = useActiveObject(state)
   const temporary = state.sessionMode === 'temporary' || !active
   const object = temporary ? { id: 'temporary', displayName: '临时问问', messages: state.temporaryMessages, memories: [], evidence: [] } : active

@@ -15,7 +15,7 @@ flowchart LR
   W --> U["狗头军师 sidebar 与 conversation slots"]
 ```
 
-`@powerycy/dsh-goutoujunshi-plugin` 符合官方 client plugin 约定：包中声明 `dsh.client`、导出 `./client` 和 `./package.json`，由 Harness 的模块加载器载入。客户端把对象抽屉注册进官方 `sidebar.workspaces`，把主体验注册进 `conversation`，不覆盖官方 DeepSeek 侧栏、会话、设置、模型提供方或插件系统。
+`@powerycy/dsh-goutoujunshi-plugin` 符合官方 client plugin 约定：包中声明 `dsh.client`、导出 `./client` 和 `./package.json`，由 Harness 的模块加载器载入。客户端把对象抽屉注册进官方 `sidebar.workspaces`，把主体验注册进 `conversation`，不覆盖官方 DeepSeek 侧栏、会话、模型提供方或插件系统。面向参赛体验，通用设置入口被隐藏，左下角“模型连接”直接打开官方模型页，并把弹窗收敛为模型提供方内容。
 
 Host 侧注册三组模型可见工具：
 
@@ -64,8 +64,8 @@ flowchart TD
   M --> Z["旧事件压缩为季度阶段总结"]
 ```
 
-K 线开高低收只是对事件证据方向与完整度的可视化编码，不是概率模型。低于完整度阈值的事件固定归类为“证据不足”。视觉沿用旧版暗色 K 线、红涨绿退和证据量柱；取消趋势预测线。
+K 线开高低收只是对事件证据方向与完整度的可视化编码，不是概率模型。低于完整度阈值的事件固定归类为“证据不足”。公开案例使用 16 条合成证据形成可复核的股票终端视图，并保留周期栏、指标栏、OHLC、价格轴、十字线、成交量和右侧证据决策面板；取消趋势预测线。
 
 ## 无 API Key 的公开演示
 
-客户端内置完全合成的公开对象、消息、证据和精简记忆。UI 中的军师分析由同一套领域函数生成，因而可在未配置模型提供方时完整演示产品闭环。配置模型后，Harness Agent 可以进一步通过上述 host tools 按需调用只读 Skill。连接入口完全使用官方“设置 → 模型”，支持 DeepSeek API Key、添加提供方与自定义提供方。
+客户端内置完全合成的公开对象、消息、证据和精简记忆。UI 中的军师分析由同一套领域函数生成，因而可在未配置模型提供方时完整演示产品闭环。配置模型后，Harness Agent 可以进一步通过上述 host tools 按需调用只读 Skill。“模型连接”仍调用官方模型设置能力，支持 DeepSeek API Key、添加提供方与自定义提供方。

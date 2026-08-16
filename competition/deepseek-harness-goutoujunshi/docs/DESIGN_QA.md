@@ -9,7 +9,7 @@
 | 1280 × 720，临时无记忆入口 | 通过 | `artifacts/screenshots/08-temporary-light-desktop.png` |
 | 1280 × 720，普通 Agent 对话 | 通过 | `artifacts/screenshots/09-normal-agent-chat-desktop.png` |
 | 1280 × 720，K 线绿色悬停 | 通过 | `artifacts/screenshots/10-kline-desktop.png` |
-| 1280 × 720，官方模型 / API Key | 通过 | `artifacts/screenshots/11-model-settings.png` |
+| 1280 × 720，精简模型连接 / API Key | 通过 | `artifacts/screenshots/11-model-settings.png` |
 | 1280 × 720，归档确认 | 通过 | `artifacts/screenshots/12-archive-dialog.png` |
 | 390 × 844，普通 Agent 对话 | 通过 | `artifacts/screenshots/13-mobile-chat.png` |
 | 390 × 844，关系 K 线 | 通过 | `artifacts/screenshots/14-mobile-kline.png` |
@@ -19,7 +19,8 @@
 - 保留官方 DeepSeek favicon/Logo、侧栏、会话和设置；狗头军师注册在官方 workspace 插槽内，并使用旧版绿色狗头 Logo。
 - 品牌色恢复为旧版 `#ff168f` 死亡芭比粉、`#ff3ca6` 热粉、`#3a061f` 深莓色；不改变 Harness 的信息结构。
 - 桌面左侧抽屉能直接识别对象、证据量和当前选择；移动端自动收成图标轨道。
-- 对话恢复为普通 Agent 气泡和自然追问，不再用结构化分析卡堆叠；关系 K 线仍是对象级次要入口。
+- 对话恢复为普通 Agent 气泡和自然追问，不再用结构化分析卡堆叠；关系 K 线仍是对象级次要入口，并完整采用股票终端的结构与密度。
+- 设置只保留“模型连接”：默认设置按钮隐藏，点击后直接打开官方模型能力，弹窗中不再显示通用设置、插件、Agent 预设或配置文件入口。
 - 红/绿/灰不仅依靠颜色：图例、时间线摘要、方向标签与悬停文本提供冗余解释。
 - 核心按钮、选项卡、对象切换、改名、归档/恢复、输入、确认与证据冲突路径可操作；焦点状态和语义角色可被浏览器可访问性树识别。
 - 移动端提示条已下移到视图切换器下方；标题与 K 线可滚动区域复测通过。
@@ -28,13 +29,14 @@
 
 ## 参考对照
 
-旧 K 线参考与新 Harness 集成界面在同一张 1280 × 720 对照图中检查：`artifacts/qa/old-vs-new-kline.png`。新实现保留暗色工作台、实体 K 线、红涨绿退、证据量柱和右侧说明面板；差异仅来自必须保留的官方 Harness 侧栏/标题栏，以及公开案例只有 5 个证据事件。
+旧 K 线参考与新 Harness 集成界面在同一张 1280 × 720 对照图中检查：`artifacts/qa/old-vs-new-kline.png`。新实现对齐暗色工作台、16 根实体 K 线、红涨绿退、周期栏、指标栏、OHLC、价格轴、当前价线、十字线、成交量和右侧决策面板。可见差异只来自必须保留的官方 Harness 侧栏与标题栏。
 
 迭代中修复的高优先级问题：
 
 1. 首版是粉色趋势图和复杂卡片，不符合旧 K 线与正常 Agent 对话；已替换为实体 K 线和普通聊天。
 2. 首次重构曾覆盖官方侧栏，导致模型连接入口消失；已改为注册 `sidebar.workspaces`，复测“设置 → 模型”通过。
 3. 移动端提示条覆盖视图切换器；已调整到标题栏下方。
+4. 用户复核认为设置项过多、K 线仍不像股票终端；已把设置收敛成单一模型连接弹窗，并按旧版 16-bar 股票终端逐项补齐行情结构。最新同图对照无 P0/P1/P2 差异。
 
 ## 已知非阻塞限制
 

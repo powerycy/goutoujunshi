@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "relationship-candlestick-lab"
+version = "0.1.0"
+description = "Convert two-person chat logs into relationship-index candlestick charts."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{name = "Goutoujunshi Contributors"}]
+license = {text = "PolyForm Noncommercial 1.0.0; bundled upstream RCL components remain MIT"}
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "click>=8.1",
+    "python-dateutil>=2.8",
+    "PyYAML>=6.0",
+    "plotly>=5.18",
+    "anthropic>=0.40",
+    "openai>=1.30",
+    "httpx>=0.26",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.4"]
+
+[project.scripts]
+relationship-candlestick = "relationship_candlestick.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["relationship_candlestick*"]

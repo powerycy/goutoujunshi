@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>狗头军师 · 关系还能不能推进？</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css?v=goai-barbie-2026-08-13-1">
+  <script src="/static/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-logo" src="/static/doghead-logo.png" alt="狗头军师 Logo">
+      <span class="title">狗头军师</span>
+      <span class="brand-en">GOAI 2026 · 无界应用</span>
+    </div>
+    <div class="topbar-right">
+      <span class="job-pill" id="job-pill" hidden>任务 <code id="topbar-job-id">—</code></span>
+      <button class="ghost" id="btn-home" hidden>← 重新开始</button>
+    </div>
+  </header>
+
+  <!-- ─────────── Stage 0: Mode Select (landing) ─────────── -->
+  <section id="stage-mode" class="stage">
+    <div class="barbie-hero">
+      <div class="barbie-copy">
+        <p class="barbie-kicker">开源 AI 恋爱军师 · GOAI 2026</p>
+        <h1>狗头军师</h1>
+        <div class="barbie-rule"></div>
+        <h2>不是认识更多的人，<br>而是把关系推进下去</h2>
+        <p class="barbie-question">这段关系还能不能推进？下一步具体做什么？</p>
+        <div class="proof-strip" aria-label="项目成绩">
+          <div><strong>100W+</strong><span>全网观看</span></div>
+          <div><strong>1000+</strong><span>真实评论</span></div>
+          <div><strong>2000+</strong><span>GitHub Stars</span></div>
+        </div>
+        <div class="demo-action">
+          <button id="btn-demo" class="primary demo-button">载入演示案例</button>
+          <small id="demo-status">38 条公开合成消息 · 无需 API Key · 不调用外部模型</small>
+        </div>
+      </div>
+      <div class="trend-preview" aria-label="关系趋势辅助判断预览">
+        <p><span></span>关系趋势 · 辅助判断<span></span></p>
+        <div class="trend-image-frame">
+          <img src="/static/relationship-trend-preview.png" alt="狗头军师关系趋势与下一步建议界面">
+        </div>
+        <small>关系趋势只是狗头军师的辅助证据，不是产品本身。</small>
+      </div>
+    </div>
+
+    <div class="judge-demo">
+      <div class="demo-copy">
+        <div class="demo-eyebrow">评委 90 秒体验</div>
+        <h2>从关系证据到下一步行动</h2>
+        <p>查看关键转折，选择推进、确认、修复或退出，再由你确认最终行动。</p>
+        <div class="demo-steps" aria-label="演示步骤">
+          <span><b>01</b> 看关系进度</span><span><b>02</b> 判断能否推进</span><span><b>03</b> 确认下一步</span>
+        </div>
+      </div>
+      <div class="license-note">
+        <strong>公开可复核</strong>
+        <span>新增代码与狗头军师同为非商用许可；关系趋势上游代码保留 MIT 署名。</span>
+      </div>
+    </div>
+    <div class="mode-grid">
+      <div class="mode-card" data-target="skill">
+        <div class="mode-num">01</div>
+        <h2>本地分析<span class="mode-sub">（Skills 模式）</span></h2>
+        <p class="mode-tagline">使用本地 Claude&nbsp;Code / Codex 配合 Skills 完成分析，再将评分文件导入网页。</p>
+        <ul>
+          <li>在本地完成对每条消息的关系指数评分</li>
+          <li>导出评分结果文件</li>
+          <li>上传文件后直接生成关系 K 线图</li>
+          <li>聊天内容<strong>从未上传任何外部服务</strong></li>
+        </ul>
+        <div class="flow-hint">
+          已有本地评分文件？导入后即可查看 K 线、成交量与指数路径。
+        </div>
+        <button class="primary big">导入本地文件</button>
+      </div>
+
+      <div class="mode-card" data-target="api">
+        <div class="mode-num">02</div>
+        <h2>在线分析<span class="mode-sub">（API 模式）</span></h2>
+        <p class="mode-tagline">使用 API 在线分析聊天内容。</p>
+        <ul>
+          <li>上传聊天记录文件</li>
+          <li>选择分析模型</li>
+          <li>系统逐条识别暧昧、冷淡、试探、冲突与修复</li>
+          <li>自动生成多周期关系 K 线</li>
+        </ul>
+        <div class="flow-hint">
+          适合快速体验；如涉及敏感聊天内容，建议优先使用本地分析。
+        </div>
+        <button class="primary big">开始在线分析</button>
+      </div>
+    </div>
+
+    <!-- 历史分析列表 -->
+    <div class="history-wrap">
+      <div class="history-title"><span class="ht-line"></span>历史分析<span class="ht-line"></span></div>
+      <div class="history-list" id="resume-bar" hidden></div>
+      <p class="history-empty" id="history-empty">还没有任何分析记录。完成第一次分析后，会出现在这里。</p>
+    </div>
+
+    <p class="disclaimer-foot">
+      回看关系历史 · 识别当前趋势 · 评估未来推进可能性
+    </p>
+  </section>
+
+  <!-- ─────────── Stage 1A: Skill Ingest Form ─────────── -->
+  <section id="stage-skill" class="stage">
+    <div class="form-wrap narrow">
+      <div class="back-link"><a href="#mode-select">← 返回</a></div>
+      <h2>本地分析 · 导入评分文件</h2>
+
+      <div class="hint-box">
+        <p><strong>提交前你需要在本地完成评分</strong>（聊天记录不上传到任何外部服务）：</p>
+        <ol>
+          <li>在你常用的 IDE（如 Claude Code、Codex）中调用配套 Skill</li>
+          <li>把聊天记录文件交给它（CSV / JSON / TXT 都可以）</li>
+          <li>等它跑完逐条量化 + 聚合（每 1000 条约 7 分钟）</li>
+          <li>它会输出一份本地评分文件并告诉你存放路径</li>
+        </ol>
+        <p>把那个路径粘到下面的输入框，即可生成 K 线图。</p>
+      </div>
+
+      <div class="card form">
+        <label>评分文件路径
+          <input id="scored-path" type="text" autocomplete="off"
+                 placeholder="把本地评分文件的完整路径粘到这里">
+        </label>
+        <div class="row">
+          <label title="K 线起点的相对强度，默认 50；改成更高/更低不影响走势形状，只平移整张图">
+            初始指数
+            <input id="skill-initial-index" type="number" value="50" min="0" max="100">
+          </label>
+          <label title="active-only：只画有聊天的周期；calendar：每个自然周期都画 K（无消息时持平 carry-forward）">
+            日历模式
+            <select id="skill-calendar-mode">
+              <option value="active-only">仅活跃周期（active-only）</option>
+              <option value="calendar">每个自然周期（calendar）</option>
+            </select>
+          </label>
+        </div>
+        <button id="btn-ingest" class="primary big">生成关系 K 线</button>
+        <div class="error-box" id="skill-error"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Stage 1B: API Setup Form ─────────── -->
+  <section id="stage-api" class="stage">
+    <div class="form-wrap">
+      <div class="back-link"><a href="#mode-select">← 返回</a></div>
+      <h2>在线分析 · 配置任务</h2>
+
+      <div class="card form">
+        <!-- 1. 聊天文件 -->
+        <h3 class="form-section">① 聊天文件</h3>
+        <label>聊天文件绝对路径
+          <input id="chat-path" type="text" autocomplete="off"
+                 placeholder="例如 E:/path/to/chat.csv">
+        </label>
+        <label title="留空时根据扩展名自动判断；常用是微信导出 CSV">
+          文件格式
+          <select id="fmt">
+            <option value="">自动识别</option>
+            <option value="csv">CSV（如 pywxdump / Memotrace 导出）</option>
+            <option value="json">JSON</option>
+            <option value="txt">TXT（每行 YYYY-MM-DD HH:MM[:SS] sender: message）</option>
+          </select>
+        </label>
+
+        <!-- 2. 模型 -->
+        <h3 class="form-section">② 模型选择</h3>
+        <label>
+          厂商
+          <select id="provider">
+            <!-- options injected by app.js from PROVIDER_CONFIG -->
+          </select>
+          <span class="field-hint">不同厂商用各自 SDK 或 OpenAI 兼容端点。选定后下面会自动填入官方 API 端点。</span>
+        </label>
+
+        <label title="该厂商的具体模型 ID。常用最新型号已预置；如需用最新公测版可手填">
+          模型
+          <select id="model"></select>
+        </label>
+
+        <label class="custom-only" id="custom-model-label">
+          自定义模型 ID
+          <input id="custom-model" type="text" autocomplete="off"
+                 placeholder="例如 gemini-3-experimental-1101 或 qwen-max-latest">
+          <span class="field-hint">在上面"模型"下拉选了"自定义"或厂商选了"自定义"时，把要用的 model id 填到这里。</span>
+        </label>
+
+        <label id="custom-baseurl-label">
+          API Endpoint（base URL）
+          <input id="custom-baseurl" type="text" autocomplete="off"
+                 placeholder="选定厂商后会自动填入官方端点">
+          <span class="field-hint">已知厂商会自动填入官方 base URL。如果你用代理 / 镜像 / 自托管端点，可以在这里改。</span>
+        </label>
+
+        <label>API Key
+          <input id="api-key" type="password" autocomplete="off"
+                 placeholder="只在本会话使用，不写入浏览器 localStorage">
+        </label>
+
+        <!-- 3. 高级设置（默认折叠） -->
+        <details class="advanced">
+          <summary>③ 高级设置（默认即可）</summary>
+          <div class="advanced-body">
+            <label>
+              初始指数 <span class="kbd">默认 50</span>
+              <input id="api-initial-index" type="number" value="50" min="0" max="100">
+              <span class="field-hint">K 线的起点高度。它只是把整张图整体上下平移，不影响走势形状。比如设 80 表示假定关系一开始就比较亲密，从高位往后画。</span>
+            </label>
+            <label>
+              批大小 <span class="kbd">默认 50</span>
+              <input id="batch-size" type="number" value="50" min="10" max="200">
+              <span class="field-hint">每次发给模型的消息条数。越大越省钱、越快，但单次失败会丢掉整批。50 是经验最优值。</span>
+            </label>
+            <label>
+              上下文窗口 <span class="kbd">默认 30</span>
+              <input id="context-window" type="number" value="30" min="0" max="200">
+              <span class="field-hint">给模型多看几条已经打过分的旧消息（含分数和理由），方便它判断当前消息相对的语气变化。0 = 不带历史，模型只看本批。</span>
+            </label>
+            <label>
+              日历模式
+              <select id="api-calendar-mode">
+                <option value="active-only">仅活跃周期（active-only）</option>
+                <option value="calendar">每个自然周期（calendar）</option>
+              </select>
+              <span class="field-hint">仅活跃周期：跳过没有聊天的天 / 周（金融图惯例，紧凑）。每个自然周期：每天 / 每周都画一根 K，无消息时持平 carry-forward（适合看"长时间没聊"的视觉效果）。</span>
+            </label>
+          </div>
+        </details>
+
+        <button id="btn-start-api" class="primary big">开始在线分析</button>
+        <div class="error-box" id="api-error"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Stage 2: Progress (API only) ─────────── -->
+  <section id="stage-progress" class="stage">
+    <div class="card progress-card">
+      <h2>正在分析…</h2>
+      <div class="stage-line" id="stage-line">阶段：<code>—</code></div>
+      <div class="bar-wrap">
+        <div class="bar"><div class="bar-fill" id="bar-fill"></div></div>
+        <div class="bar-label" id="bar-label">0 / 0</div>
+      </div>
+      <div class="job-info">
+        <div>任务编号：<code id="job-id">—</code></div>
+        <div>状态：<code id="job-status">—</code></div>
+      </div>
+      <div class="error-box" id="progress-error"></div>
+      <a href="#mode-select" class="ghost-link">← 返回</a>
+    </div>
+  </section>
+
+  <!-- ─────────── Stage 3: Chart ─────────── -->
+  <section id="stage-chart" class="stage">
+    <div class="chart-toolbar">
+      <div class="tf-group" id="tf-group">
+        <button class="tf" data-tf="5min">5m</button>
+        <button class="tf" data-tf="15min">15m</button>
+        <button class="tf" data-tf="30min">30m</button>
+        <button class="tf" data-tf="1h">1H</button>
+        <button class="tf" data-tf="2h">2H</button>
+        <button class="tf" data-tf="4h">4H</button>
+        <button class="tf active" data-tf="1d">日</button>
+        <button class="tf" data-tf="1w">周</button>
+        <button class="tf" data-tf="1mo">月</button>
+        <button class="tf" data-tf="1q">季</button>
+        <button class="tf" data-tf="1y">年</button>
+      </div>
+      <div class="meta" id="chart-meta"></div>
+    </div>
+
+    <!-- Indicator toolbar (overlays + sub-pane studies) -->
+    <div class="ind-toolbar" id="ind-toolbar">
+      <label class="ind-chk" title="均线 Moving Average，逗号分隔多个周期">
+        <input type="checkbox" id="ind-ma" data-ind="ma">
+        均线 <input type="text" id="ind-ma-periods" value="5,10,20"
+                  size="10" placeholder="5,10,20" class="ind-input"></label>
+      <label class="ind-chk" title="布林带 Bollinger Bands，参数：周期, σ 倍数">
+        <input type="checkbox" id="ind-bb" data-ind="bb">
+        布林带 <input type="text" id="ind-bb-params" value="20,2"
+                       size="6" placeholder="20,2" class="ind-input"></label>
+      <label class="ind-chk" title="MACD，参数：快线, 慢线, 信号">
+        <input type="checkbox" id="ind-macd" data-ind="macd">
+        MACD <input type="text" id="ind-macd-params" value="12,26,9"
+                     size="8" placeholder="12,26,9" class="ind-input"></label>
+      <label class="ind-chk" title="RSI 相对强弱，参数：周期">
+        <input type="checkbox" id="ind-rsi" data-ind="rsi">
+        RSI <input type="text" id="ind-rsi-params" value="14"
+                    size="4" placeholder="14" class="ind-input"></label>
+      <label class="ind-chk" title="KDJ 随机指标，参数：n, K 平滑, D 平滑">
+        <input type="checkbox" id="ind-kdj" data-ind="kdj">
+        KDJ <input type="text" id="ind-kdj-params" value="9,3,3"
+                    size="6" placeholder="9,3,3" class="ind-input"></label>
+      <button id="ind-apply" class="ind-apply">应用</button>
+    </div>
+
+    <div class="decision-workspace">
+      <div class="chart-host">
+        <div id="chart" class="chart-pane"></div>
+        <div id="legend" class="legend"></div>
+      </div>
+      <aside class="decision-panel" aria-label="狗头军师决策面板">
+        <div class="panel-head">
+          <span class="panel-kicker">狗头军师 · 决策层</span>
+          <h2>从趋势到下一步</h2>
+          <p id="decision-scope">正在读取证据范围…</p>
+        </div>
+
+        <div class="signal-grid" id="signal-grid"></div>
+
+        <details class="evidence-block" open>
+          <summary>事实 <span>FACTS</span></summary>
+          <ul id="fact-list"></ul>
+        </details>
+        <details class="evidence-block">
+          <summary>推断 <span>INFERENCES</span></summary>
+          <ul id="inference-list"></ul>
+        </details>
+        <details class="evidence-block">
+          <summary>未知 <span>UNKNOWNS</span></summary>
+          <ul id="unknown-list"></ul>
+        </details>
+
+        <div class="goal-block">
+          <div class="goal-label">这一次，你的目标是</div>
+          <div class="goal-group" id="goal-group">
+            <button class="goal active" data-goal="推进">推进</button>
+            <button class="goal" data-goal="确认">确认</button>
+            <button class="goal" data-goal="修复">修复</button>
+            <button class="goal" data-goal="退出">退出</button>
+          </div>
+          <button id="btn-decision" class="primary decision-button">生成可逆方案</button>
+        </div>
+
+        <div id="decision-result" class="decision-result" hidden>
+          <span class="result-kicker">建议 · 等待你的确认</span>
+          <h3 id="decision-headline"></h3>
+          <blockquote id="decision-message"></blockquote>
+          <ul id="decision-reasons" class="reason-list"></ul>
+          <div class="guardrail"><b>观察窗口</b><p id="decision-window"></p></div>
+          <div class="guardrail stop"><b>停止条件</b><p id="decision-stop"></p></div>
+          <button id="btn-confirm" class="confirm-button">由我确认：采用这一步</button>
+          <p id="confirm-state" class="confirm-state" aria-live="polite"></p>
+        </div>
+        <p class="panel-disclaimer">模型只给方案；最终决定、发送与线下行动始终由你完成。</p>
+      </aside>
+    </div>
+    <!-- v5 manages MACD/RSI/KDJ as native panes inside the same chart;
+         no extra DOM container needed. -->
+  </section>
+
+  <!-- v= cache-buster: bump on every app.js change to defeat browser cache -->
+  <script src="/static/app.js?v=goai-2026-08-12-1"></script>
+</body>
+</html>

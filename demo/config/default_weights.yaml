@@ -1,0 +1,16 @@
+# Relationship Candlestick Lab — config (AI-only scoring).
+# All semantic judgment lives in skill/SKILL.md. This file only holds
+# numeric knobs the local OHLC / volume aggregator needs.
+
+initial_index: 50
+neutral_threshold: 2          # |close - open| <= threshold => "neutral" direction
+
+# Volume formula (interaction intensity, not financial volume).
+volume:
+  per_message:        1.0
+  per_character:      0.05
+  per_fast_reply:     1.5
+  fast_reply_seconds: 60        # gap <= this => "fast reply"
+  topic_gap_minutes:  30        # gap >= this => new topic / topic start (still tagged for OHLC events, just not weighted in volume)
+
+# In calendar mode, silent periods carry forward prev_close (O=H=L=C, vol=0).

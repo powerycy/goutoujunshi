@@ -1,0 +1,11 @@
+[
+  {"timestamp":"2026-05-01 09:30","sender":"A","message":"早"},
+  {"timestamp":"2026-05-01 09:31","sender":"B","message":"早呀"},
+  {"timestamp":"2026-05-02 14:30","sender":"A","message":"想你了"},
+  {"timestamp":"2026-05-02 14:31","sender":"B","message":"我也想你"},
+  {"timestamp":"2026-05-03 16:20","sender":"B","message":"哦"},
+  {"timestamp":"2026-05-05 11:30","sender":"A","message":"对不起 是我不好"},
+  {"timestamp":"2026-05-06 19:30","sender":"A","message":"我要是说我喜欢你呢"},
+  {"timestamp":"2026-05-07 22:00","sender":"A","message":"喜欢你"},
+  {"timestamp":"2026-05-07 22:05","sender":"B","message":"我也喜欢你"}
+]

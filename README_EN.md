@@ -148,4 +148,8 @@ If you are not contributing code, you can still:
 - Share an anonymized real-world scenario to help expand the case coverage;
 - Send it to the friend who always stays up late analyzing everyone else's relationships.
 
+## License
+
+This project is licensed under the [MIT License](LICENSE). Commercial use, modification, and distribution are permitted as long as the copyright and license notices are retained.
+
 This project provides relationship education and decision support. It is not a substitute for psychotherapy, medical diagnosis, legal advice, law enforcement, or emergency services.

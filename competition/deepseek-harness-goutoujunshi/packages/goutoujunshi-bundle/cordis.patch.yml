@@ -1,0 +1,7 @@
+- insert:
+    - id: goutoujunshi
+      name: '@powerycy/dsh-goutoujunshi-plugin'
+      config:
+        skillRoot: '../..'
+        memoryDirectory: './.runtime/memory'
+        maximumObjects: 5

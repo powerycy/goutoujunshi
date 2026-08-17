@@ -1,0 +1,7 @@
+node_modules/
+packages/*/node_modules/
+packages/*/lib/
+.runtime/
+.tmp/
+submission/*.pptx.inspect.ndjson
+submission/狗头军师_GOAI2026_无界应用_初赛方案/

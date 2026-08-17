@@ -1,0 +1,26 @@
+{
+  "name": "goutoujunshi-deepseek-harness-competition",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": ">=22.19"
+  },
+  "scripts": {
+    "build": "pnpm --filter @powerycy/dsh-goutoujunshi-plugin build",
+    "profile:setup": "node scripts/setup-profile.mjs",
+    "prestart": "pnpm run build && pnpm run profile:setup",
+    "start": "node scripts/start.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:all": "pnpm run build && pnpm run test",
+    "check:readonly": "node scripts/check-readonly.mjs"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh": "0.1.0-rc.6"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.9",
+    "react": "^18.3.1"
+  }
+}

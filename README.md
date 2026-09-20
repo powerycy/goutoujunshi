@@ -1,4 +1,4 @@
-<!-- README_SYNC: source=working-tree; updated=2026-08-26 -->
+<!-- README_SYNC: source=working-tree; updated=2026-09-20 -->
 
 <p align="center">
   <a href="https://github.com/shengjidaguai-china"><strong>升级打怪开源社区</strong></a> 首批开放共建项目 ·
@@ -70,6 +70,20 @@
 | 分手与特殊情境 | 失恋、背叛、复合、信任重建、多元关系与反刻板印象 |
 
 知识库会区分较强研究证据、理论框架、流行说法和经验策略。MBTI、依恋类型和网络话术可以帮助提问和生成方案，但不会被包装成诊断、命运或“必胜公式”。
+
+## 技术架构
+
+狗头军师以 Codex 为宿主，由 `SKILL.md` 组织分析流程，按当前问题读取 1–3 份知识与实用指南，再生成建议、话术、观察窗口和停止条件，交由用户决定下一步。
+
+<p align="center">
+  <a href="./assets/technical-architecture.png">
+    <img src="./assets/technical-architecture.png" width="100%" alt="狗头军师技术架构：用户材料进入 Codex Skill，按需读取知识库，可选调用 ChatLab 与经同意启用的本地 SQLite 记忆，输出建议供用户决策">
+  </a>
+</p>
+
+ChatLab 是可选工具，按用户请求分析已有聊天数据；导入文件前先预览计划。长期记忆经首次明确同意后，通过 `memory_store.py` 校验来源、限制条数并读写用户数据目录中的 SQLite，支持暂停、撤销和删除。图中箭头表示材料传递或组件调用。
+
+[查看完整图片](./assets/technical-architecture.png) · [交互版（下载后在浏览器打开）](./documentation/diagrams/architecture.html) · [图形源文件](./documentation/diagrams/architecture.json)
 
 ## 参考资料
 

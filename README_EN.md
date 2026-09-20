@@ -1,4 +1,4 @@
-<!-- README_SYNC: source=working-tree; updated=2026-08-26 -->
+<!-- README_SYNC: source=working-tree; updated=2026-09-20 -->
 
 <p align="center">
   A first-wave open co-building project from the <a href="https://github.com/shengjidaguai-china"><strong>Shengji Daguai Open Source Community</strong></a> ·
@@ -70,6 +70,20 @@ The project maintains relationship science, practical communication guidance, an
 | Breakups and special situations | Heartbreak, betrayal, reconciliation, rebuilding trust, diverse relationships, and avoiding stereotypes |
 
 The knowledge base distinguishes stronger research evidence from theoretical frameworks, popular claims, and experience-based tactics. MBTI, attachment styles, and online scripts can inform questions and generate options, but they are never presented as diagnoses, destiny, or guaranteed formulas.
+
+## Technical Architecture
+
+Goutoujunshi runs as a Codex Skill. `SKILL.md` guides the analysis and selects 1–3 relevant knowledge or practical guides for the current question. It produces recommendations, wording, observation windows, and stopping conditions for the user to decide what to do next.
+
+<p align="center">
+  <a href="./assets/technical-architecture.png">
+    <img src="./assets/technical-architecture.png" width="100%" alt="Goutoujunshi architecture: user input enters the Codex Skill, which loads relevant knowledge, optionally calls ChatLab and consent-gated local SQLite memory, and returns advice for the user to act on">
+  </a>
+</p>
+
+ChatLab is optional and analyzes existing chat data at the user's request, with an import preview before files are imported. After explicit first-time consent, `memory_store.py` checks sources, enforces limits, and reads or writes SQLite in the user's local data directory; memory can be paused, undone, or deleted. Arrows indicate input flow or component calls.
+
+[Full-size image](./assets/technical-architecture.png) · [Interactive version (download and open in a browser)](./documentation/diagrams/architecture.html) · [Diagram source](./documentation/diagrams/architecture.json)
 
 ## References
 

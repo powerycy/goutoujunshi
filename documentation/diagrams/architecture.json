@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "狗头军师 · 技术架构",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1360,
+      800
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "user-input",
+      "type": "external",
+      "label": "用户提供材料",
+      "sublabel": "叙述 / 截图 / 导出文本",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        260,
+        86
+      ]
+    },
+    {
+      "id": "codex-skill",
+      "type": "backend",
+      "label": "Codex · 行为与路由内核",
+      "sublabel": "SKILL.md · 情绪 / 事实 / 判断",
+      "pos": [
+        550,
+        320
+      ],
+      "size": [
+        260,
+        86
+      ]
+    },
+    {
+      "id": "user-decision",
+      "type": "external",
+      "label": "建议与用户决策",
+      "sublabel": "行动 / 话术 / 观察窗口 / 停止条件",
+      "pos": [
+        1060,
+        320
+      ],
+      "size": [
+        260,
+        86
+      ]
+    },
+    {
+      "id": "knowledge",
+      "type": "backend",
+      "label": "按需加载的知识库",
+      "sublabel": "references/knowledge + practical",
+      "pos": [
+        550,
+        60
+      ],
+      "size": [
+        260,
+        86
+      ]
+    },
+    {
+      "id": "chatlab",
+      "type": "external",
+      "label": "ChatLab · 可选工具",
+      "sublabel": "已有数据 / 限定范围分析",
+      "pos": [
+        40,
+        660
+      ],
+      "size": [
+        260,
+        86
+      ]
+    },
+    {
+      "id": "memory-gate",
+      "type": "security",
+      "label": "本地记忆 · 同意门禁",
+      "sublabel": "memory_store.py · 来源校验 / 限量",
+      "pos": [
+        550,
+        660
+      ],
+      "size": [
+        260,
+        86
+      ]
+    },
+    {
+      "id": "sqlite",
+      "type": "database",
+      "label": "SQLite · 精简关系档案",
+      "sublabel": "用户数据目录 / 暂停 / 撤销 / 删除",
+      "pos": [
+        1060,
+        660
+      ],
+      "size": [
+        260,
+        86
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "input-to-skill",
+      "from": "user-input",
+      "to": "codex-skill",
+      "label": "提供上下文",
+      "variant": "emphasis"
+    },
+    {
+      "id": "skill-to-advice",
+      "from": "codex-skill",
+      "to": "user-decision",
+      "label": "分析与生成",
+      "variant": "emphasis"
+    },
+    {
+      "id": "load-knowledge",
+      "from": "codex-skill",
+      "to": "knowledge",
+      "label": "默认读取 1–3 份",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "query-chatlab",
+      "from": "codex-skill",
+      "to": "chatlab",
+      "label": "按用户请求查询",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "top"
+    },
+    {
+      "id": "consent-memory",
+      "from": "codex-skill",
+      "to": "memory-gate",
+      "label": "同意后召回 / 更新",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        687,
+        600
+      ]
+    },
+    {
+      "id": "persist-memory",
+      "from": "memory-gate",
+      "to": "sqlite",
+      "label": "读写有限字段",
+      "variant": "security"
+    }
+  ],
+  "cards": []
+}
